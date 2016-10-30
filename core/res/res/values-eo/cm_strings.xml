@@ -18,139 +18,46 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- label for item that screenshots in phone options dialog -->
-  <string name="global_action_screenshot">Ekrankopio</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_receiveProtectedSms">Alvenis protektita SMS</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_receiveProtectedSms">Permesi al la aplikaĵo ricevi alvenintan protektitan SMS.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_modifyProtectedSmsList">ŝanĝi liston de protektitaj SMS</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_modifyProtectedSmsList">Permesi al la aplikaĵo ŝanĝi la liston de protektitaj SMS.</string>
   <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permgrouplab_security">Sekureco</string>
   <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permgroupdesc_security">Permesoj rilataj al aparata sekureca informo.</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_readPhoneBlacklist">legi telefonan nigran liston</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_readPhoneBlacklist">Permesas al aplikaĵo lefi informon pri telefon-numeroj, kiuj estas blokitaj por alvenantaj alvokoj aŭ mesaĝoj.</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_changePhoneBlacklist">ŝanĝi telefonan nigran liston</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_changePhoneBlacklist">Permesas al aplikaĵo ŝanĝi telefon-numerojn, kiuj estas blokitaj por alvenintaj alvokoj aŭ mesaĝoj.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
-  <string name="permlab_setKeyguardWallpaper">difini la ŝlosan ekranfonon</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_setKeyguardWallpaper">Permesas al aplikaĵo ŝanĝi la ŝlosan fonekranon.</string>
   <!-- label for item that reboots the phone in phone options dialog -->
-  <string name="global_action_reboot">Relanĉi</string>
   <!-- label for current user in phone options dialog -->
-  <string name="global_action_current_user">Nuna</string>
   <!-- Reboot menu -->
   <!-- Button to reboot the phone, within the Reboot Options dialog -->
-  <string name="reboot_reboot">Relanĉi</string>
   <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
-  <string name="reboot_recovery">Riparado</string>
   <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
-  <string name="reboot_bootloader">Praŝargilo</string>
   <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
-  <string name="reboot_download">Elŝuti</string>
   <!-- Button to soft reboot the device, within the Reboot Options dialog -->
-  <string name="reboot_soft">Varma relanĉado</string>
   <!-- Title of dialog to confirm rebooting. -->
-  <string name="reboot_title">Relanĉado</string>
   <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
          be a confirmation dialog.  This is the message. -->
-  <string name="reboot_confirm" product="tablet">Via tabulo relanĉiĝos.</string>
-  <string name="reboot_confirm" product="default">Via telefono relanĉiĝos.</string>
   <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
-  <string name="reboot_progress">Relanĉado\u2026</string>
   <!-- Long-press back kill application -->
-  <string name="app_killed_message">Aplikaĵo mortigita</string>
   <!-- ADB over network notification -->
-  <string name="adb_net_active_notification_title">reta ADB ŝaltita</string>
   <!-- ADB over USB and network notification -->
-  <string name="adb_both_active_notification_title">ADB sur USB &amp; reto aktiva</string>
   <!-- ADB notification message-->
-  <string name="adb_active_generic_notification_message">Tuŝeti por malŝalti sencimigon.</string>
   <!-- ADB custom tile -->
-  <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
-  <string name="adb_active_custom_tile_both">USB &amp; reto</string>
-  <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Reto</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
-  <string name="permlab_interceptPackageLaunch">interkapti lanĉadon de aplikaĵo</string>
   <!-- stylus gestures support -->
-  <string name="stylus_app_not_installed">%s ne estas instalita</string>
   <!-- Zen mode buttons -->
   <!-- Wifi Hotspot disabled due to subscription change -->
   <!-- WiFi turn off notification action text -->
   <!-- Privacy Guard -->
-  <string name="permlab_changePrivacyGuardState">ŝalti aŭ malsălti protektadon de datumoj</string>
-  <string name="permdesc_changePrivacyGuardState">Permesas al la aplikaĵo ŝanĝi ĉu alia aplikaĵo funkcias kun protektado de datumoj. Kiam aplikaĵo funkcias kun protektado de datumoj, ĝi ne rajtos aliri al personaj datumoj kiel kontaktuloj, protokoloj de alvokoj, aŭ mesaĝoj.</string>
-  <string name="privacy_guard_notification">Protektado de datumoj aktiva</string>
-  <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> ne povos aliri personajn datumojn</string>
-  <string name="privacy_guard_dialog_title">Protektado de datumoj</string>
-  <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> ŝatus <xliff:g id="op">%2$s</xliff:g>.</string>
   <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
-  <string name="permission_remember_choice">Memori mian elekton</string>
   <!-- App ops requests -->
-  <string name="app_ops_access_camera">aliri al fotilo</string>
-  <string name="app_ops_access_location">aliri al via loko</string>
-  <string name="app_ops_access_notifications">legi viajn atentigojn</string>
-  <string name="app_ops_activate_vpn">aktivigi VPN</string>
-  <string name="app_ops_auto_start">lanĉiĝi dum sistema ŝaltado</string>
-  <string name="app_ops_delete_call_log">forigi vian protokolon de alvokoj</string>
-  <string name="app_ops_delete_contacts">forigi viajn kontaktulojn</string>
-  <string name="app_ops_delete_mms">forigi viajn MMS mesaĝojn</string>
-  <string name="app_ops_delete_sms">forigi viajn SMS mesaĝojn</string>
-  <string name="app_ops_draw_on_top">movi fenestron supren</string>
-  <string name="app_ops_get_usage_stats">akiri statistikojn pri la uzado de aplikaĵo</string>
-  <string name="app_ops_keep_device_awake">konservi vian aparaton veka</string>
-  <string name="app_ops_make_phone_call">fari voĉan alvokon</string>
-  <string name="app_ops_modify_calendar">ĝistatigi vian kalendaron</string>
-  <string name="app_ops_modify_call_log">ĝisdatigi la protokolon de alvokoj</string>
-  <string name="app_ops_modify_clipboard">ŝanĝi la tondejon</string>
-  <string name="app_ops_modify_contacts">ĝisdatiĝi viajn kontaktulojn</string>
-  <string name="app_ops_modify_settings">ĝisdatigi sisteman agordon</string>
-  <string name="app_ops_mute_unmute_microphone">mutigi/malmutigi la mikrofonon</string>
-  <string name="app_ops_play_audio">ludi sonojn</string>
-  <string name="app_ops_post_notification">sendi atentigon</string>
-  <string name="app_ops_project_media">projetko medio</string>
-  <string name="app_ops_read_calendar">legi vian kalendaron</string>
-  <string name="app_ops_read_call_log">legi la protokolon de alvokoj</string>
-  <string name="app_ops_read_clipboard">legi la tondejon</string>
-  <string name="app_ops_read_contacts">legi viajn kontaktulojn</string>
-  <string name="app_ops_read_mms">legi viajn MMS mesaĝojn</string>
-  <string name="app_ops_read_sms">legi viajn SMS mesaĝojn</string>
-  <string name="app_ops_receive_sms">ricevi SMS mesaĝon</string>
-  <string name="app_ops_record_audio">registri sonon</string>
-  <string name="app_ops_send_mms">sendi MMS mesaĝon</string>
-  <string name="app_ops_send_sms">sendi SMS mesaĝon</string>
-  <string name="app_ops_start_at_bootup">lanĉiĝi dum sistema ŝaltado</string>
-  <string name="app_ops_toast_window">afiŝi atentigojn</string>
-  <string name="app_ops_toggle_bluetooth">(mal)ŝalti Bludenton</string>
-  <string name="app_ops_toggle_nfc">(mal)ŝalti NFC</string>
-  <string name="app_ops_use_alarm_volume">kontroli laŭtecon de alarmoj</string>
-  <string name="app_ops_use_audio_focus">kontroli sonan fokuson</string>
-  <string name="app_ops_use_bluetooth_volume">kontroli laŭtecon de Bludento</string>
-  <string name="app_ops_use_master_volume">kontroli la cêfan laŭtecon</string>
-  <string name="app_ops_use_media_buttons">uzi la aŭdvidajn butonojn</string>
-  <string name="app_ops_use_media_volume">kontroli laŭtecon de aŭdvidaj</string>
-  <string name="app_ops_use_notification_volume">kontroli laŭtecon de atentigoj</string>
-  <string name="app_ops_use_ring_volume">kontroli laŭtecon de sonoro</string>
-  <string name="app_ops_use_vibrate">uzi tuŝeblan retroefikon</string>
-  <string name="app_ops_use_voice_volume">kontroli laŭtecon de voĉaj alvokoj</string>
-  <string name="app_ops_write_mms">skribi MMS-mesaĝon</string>
-  <string name="app_ops_write_sms">skribi SMS-mesaĝon</string>
-  <string name="app_ops_su">akiri radikuzantajn permesojn</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
-  <string name="lock_to_app_toast_no_navbar">Por malŝlosi tiun ekranon, tuŝetu kaj tenu la Reen butonon.</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
-  <string name="tethered_notification_no_device_message">Neniu konektata aparato</string>
-  <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> konektita aparato</string>
-  <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> konektitaj aparatoj</string>
   <!-- Keyguard strings -->
   <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
          with spaces on either side. [CHAR LIMIT=3] -->
