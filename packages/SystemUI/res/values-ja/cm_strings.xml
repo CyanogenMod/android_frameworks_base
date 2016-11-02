@@ -37,7 +37,7 @@
   <!-- Dialog title for navigation bar button selection -->
   <string name="navbar_dialog_title">設定する動作を選択</string>
   <string name="navbar_home_button">ホームボタン</string>
-  <string name="navbar_recent_button">最近使ったアプリボタン</string>
+  <string name="navbar_recent_button">履歴ボタン</string>
   <string name="navbar_search_button">検索ボタン</string>
   <string name="navbar_back_button">戻るボタン</string>
   <string name="navbar_empty_button">ボタンなし</string>
