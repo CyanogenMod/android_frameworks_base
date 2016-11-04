@@ -1056,33 +1056,6 @@ public final class BatteryService extends SystemService {
                     org.cyanogenmod.platform.internal.R.bool.config_useSegmentedBatteryLed);
         }
 
-        private boolean isHvdcpPresent() {
-            File mChargerTypeFile = new File("/sys/class/power_supply/usb/type");
-            FileReader fileReader;
-            BufferedReader br;
-            String type;
-            boolean ret = false;
-
-            if (!mChargerTypeFile.exists()) {
-                // Device does not support HVDCP
-                return ret;
-            }
-
-            try {
-                fileReader = new FileReader(mChargerTypeFile);
-                br = new BufferedReader(fileReader);
-                type =  br.readLine();
-                if (type.regionMatches(true, 0, "USB_HVDCP", 0, 9))
-                    ret = true;
-                br.close();
-                fileReader.close();
-            } catch (IOException e) {
-                Slog.e(TAG, "Failure in reading charger type", e);
-            }
-
-            return ret;
-        }
-
         /**
          * Synchronize on BatteryService.
          */
