@@ -1665,4 +1665,12 @@
     <string name="audit_safemode_notification_details" msgid="1860601176690176413">"触摸即可了解详情。"</string>
     <string name="suspended_widget_accessibility" msgid="6712143096475264190">"已停用的<xliff:g id="LABEL">%1$s</xliff:g>"</string>
     <string name="conference_call" msgid="3751093130790472426">"电话会议"</string>
+    <string name="reboot_reboot">重启</string>
+    <string name="reboot_recovery">恢复模式</string>
+    <string name="reboot_bootloader">引导模式</string>
+    <string name="reboot_soft">软重启</string>
+    <string name="reboot_title">重启</string>
+    <string name="reboot_confirm" product="default">你的手机将会重新启动.</string>
+    <string name="reboot_progress">重启中\u2026</string>
 </resources>
+
