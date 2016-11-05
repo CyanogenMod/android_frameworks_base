@@ -6898,7 +6898,8 @@ public class PackageManagerService extends IPackageManager.Stub {
 
         if (Build.TAGS.equals("test-keys") &&
                 !pkg.applicationInfo.sourceDir.startsWith(Environment.getRootDirectory().getPath()) &&
-                !pkg.applicationInfo.sourceDir.startsWith("/vendor")) {
+                !pkg.applicationInfo.sourceDir.startsWith("/vendor") &&
+                !SystemProperties.getBoolean("ro.cm.platform_key_exemption", false)) {
             Object obj = mSettings.getUserIdLPr(1000);
             Signature[] s1 = null;
             if (obj instanceof SharedUserSetting) {
