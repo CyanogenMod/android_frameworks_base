@@ -10443,7 +10443,8 @@ public class PackageManagerService extends IPackageManager.Stub {
             // Remove protected Application components if they're explicitly queried for.
             // Implicit intent queries will be gated when the returned component is acted upon.
             int callingUid = Binder.getCallingUid();
-            List<String> packages = Arrays.asList(getPackagesForUid(callingUid));
+            String[] pkgArray = getPackagesForUid(callingUid);
+            List<String> packages = pkgArray == null ? null : Arrays.asList(pkgArray);
             final boolean isNotSystem = callingUid != Process.SYSTEM_UID &&
                     (getFlagsForUid(callingUid) & ApplicationInfo.FLAG_SYSTEM) == 0;
 
