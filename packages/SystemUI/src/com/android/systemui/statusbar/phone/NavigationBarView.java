@@ -556,7 +556,7 @@ public class NavigationBarView extends LinearLayout implements TunerService.Tuna
         }
         mCurrentView = mRotatedViews[rot];
         mCurrentView.setVisibility(View.VISIBLE);
-        mNavigationInflaterView.setAlternativeOrder(rot == Surface.ROTATION_90);
+        mNavigationInflaterView.setAlternativeOrder(rot == Surface.ROTATION_90 || rot == Surface.ROTATION_270);
         for (int i = 0; i < mButtonDisatchers.size(); i++) {
             mButtonDisatchers.valueAt(i).setCurrentView(mCurrentView);
         }

@@ -57,6 +57,8 @@ public final class LinkProperties implements Parcelable {
     private int mMtu;
     // in the format "rmem_min,rmem_def,rmem_max,wmem_min,wmem_def,wmem_max"
     private String mTcpBufferSizes;
+    private int mTcpDelayedAckSegments = 1;
+    private int mTcpUserCfg = 0;
 
     private static final int MIN_MTU    = 68;
     private static final int MIN_MTU_V6 = 1280;
@@ -160,6 +162,8 @@ public final class LinkProperties implements Parcelable {
             }
             setMtu(source.getMtu());
             mTcpBufferSizes = source.mTcpBufferSizes;
+            mTcpDelayedAckSegments = source.mTcpDelayedAckSegments;
+            mTcpUserCfg = source.mTcpUserCfg;
         }
     }
 
@@ -443,6 +447,45 @@ public final class LinkProperties implements Parcelable {
         return mTcpBufferSizes;
     }
 
+    /**
+     * Number of full MSS to receive before Acking RFC2581
+     * @param segments The number of segments to receive
+     *
+     * @hide
+     */
+    public void setTcpDelayedAckSegments(int segments) {
+        mTcpDelayedAckSegments = segments;
+    }
+
+    /**
+     * Gets the number of segments before acking
+     *
+     * @hide
+     */
+    public int getTcpDelayedAckSegments() {
+        return mTcpDelayedAckSegments;
+    }
+
+    /**
+     * Sets the value for TCP usercfg
+     *
+     * @param value 0/1 currently to disable/enable
+     *
+     * @hide
+     */
+    public void setTcpUserCfg(int value) {
+        mTcpUserCfg = value;
+    }
+
+    /**
+     * Gets the value of TCP usercfg
+     *
+     * @hide
+     */
+    public int getTcpUserCfg() {
+        return mTcpUserCfg;
+    }
+
     private RouteInfo routeWithInterface(RouteInfo route) {
         return new RouteInfo(
             route.getDestination(),
@@ -603,6 +646,8 @@ public final class LinkProperties implements Parcelable {
         mStackedLinks.clear();
         mMtu = 0;
         mTcpBufferSizes = null;
+        mTcpDelayedAckSegments = 1;
+        mTcpUserCfg = 0;
     }
 
     /**
