@@ -45,6 +45,7 @@ public class TunerFragment extends PreferenceFragment {
     private static final String KEY_BATTERY_PCT = "battery_pct";
     private static final String KEY_NAV_BAR = "nav_bar";
     private static final String KEY_STATUS_BAR = "status_bar";
+    private static final String KEY_IMPORTANCE = "importance";
 
     public static final String SETTING_SEEN_TUNER_WARNING = "seen_tuner_warning";
 

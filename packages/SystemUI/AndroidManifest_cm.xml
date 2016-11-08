@@ -46,6 +46,20 @@
             </intent-filter>
         </activity-alias>
 
+        <activity-alias
+            android:name=".tuner.TunerActivity"
+            android:targetActivity=".tuner.TunerActivity"
+            android:icon="@drawable/tuner"
+            android:theme="@style/TunerSettings"
+            android:label="@string/tuner_full_importance_settings"
+            android:process=":tuner"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.settings.action.POWER_NOTIF_CONTROLS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity-alias>
+
         <activity
             android:name=".cm.LockscreenShortcutsActivity"
             android:icon="@drawable/tuner"
