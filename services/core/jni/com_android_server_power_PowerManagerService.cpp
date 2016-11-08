@@ -70,7 +70,8 @@ static bool checkAndClearExceptionFromCallback(JNIEnv* env, const char* methodNa
 void android_server_PowerManagerService_userActivity(nsecs_t eventTime, int32_t eventType) {
     // Tell the power HAL when user activity occurs.
     if (gPowerModule && gPowerModule->powerHint) {
-        gPowerModule->powerHint(gPowerModule, POWER_HINT_INTERACTION, NULL);
+        int data_param = 0;
+        gPowerModule->powerHint(gPowerModule, POWER_HINT_INTERACTION, &data_param);
     }
 
     if (gPowerManagerServiceObj) {
