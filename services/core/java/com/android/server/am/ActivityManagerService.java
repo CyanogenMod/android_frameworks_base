@@ -3265,6 +3265,15 @@ public final class ActivityManagerService extends ActivityManagerNative
                 if (task == null) {
                     return;
                 }
+                if (mUserController.shouldConfirmCredentials(task.userId)) {
+                    mActivityStarter.showConfirmDeviceCredential(task.userId);
+                    if (task.stack != null && task.stack.mStackId == FREEFORM_WORKSPACE_STACK_ID) {
+                        mStackSupervisor.moveTaskToStackLocked(task.taskId,
+                                FULLSCREEN_WORKSPACE_STACK_ID, !ON_TOP, !FORCE_FOCUS,
+                                "setFocusedTask", ANIMATE);
+                    }
+                    return;
+                }
                 final ActivityRecord r = task.topRunningActivityLocked();
                 if (setFocusedActivityLocked(r, "setFocusedTask")) {
                     mStackSupervisor.resumeFocusedStackTopActivityLocked();
@@ -4004,16 +4013,19 @@ public final class ActivityManagerService extends ActivityManagerNative
             app.killed = false;
             app.killedByAm = false;
             checkTime(startTime, "startProcess: starting to update pids map");
+            ProcessRecord oldApp;
             synchronized (mPidsSelfLocked) {
-                ProcessRecord oldApp;
-                // If there is already an app occupying that pid that hasn't been cleaned up
-                if ((oldApp = mPidsSelfLocked.get(startResult.pid)) != null && !app.isolated) {
-                    // Clean up anything relating to this pid first
-                    Slog.w(TAG, "Reusing pid " + startResult.pid
-                            + " while app is still mapped to it");
-                    cleanUpApplicationRecordLocked(oldApp, false, false, -1,
-                            true /*replacingPid*/);
-                }
+                oldApp = mPidsSelfLocked.get(startResult.pid);
+            }
+            // If there is already an app occupying that pid that hasn't been cleaned up
+            if (oldApp != null && !app.isolated) {
+                // Clean up anything relating to this pid first
+                Slog.w(TAG, "Reusing pid " + startResult.pid
+                        + " while app is still mapped to it");
+                cleanUpApplicationRecordLocked(oldApp, false, false, -1,
+                        true /*replacingPid*/);
+            }
+            synchronized (mPidsSelfLocked) {
                 this.mPidsSelfLocked.put(startResult.pid, app);
                 if (isActivityProcess) {
                     Message msg = mHandler.obtainMessage(PROC_START_TIMEOUT_MSG);
@@ -12002,6 +12014,12 @@ public final class ActivityManagerService extends ActivityManagerNative
                 final long ident = Binder.clearCallingIdentity();
                 try {
                     final int currentUserId = mUserController.getCurrentUserIdLocked();
+
+                    // Drop locked freeform tasks out into the fullscreen stack.
+                    // TODO: Redact the tasks in place. It's much better to keep them on the screen
+                    //       where they were before, but in an obscured state.
+                    mStackSupervisor.moveProfileTasksFromFreeformToFullscreenStackLocked(userId);
+
                     if (mUserController.isLockScreenDisabled(currentUserId)) {
                         // If there is no device lock, we will show the profile's credential page.
                         mActivityStarter.showConfirmDeviceCredential(userId);
