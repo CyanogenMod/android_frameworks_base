@@ -1228,7 +1228,8 @@ public class NotificationManagerService extends SystemService {
                 R.integer.config_defaultNotificationLedOff);
 
         mMultiColorNotificationLed = resources.getBoolean(
-                R.bool.config_multiColorNotificationLed);
+                R.bool.config_multiColorNotificationLed) ||
+                SystemProperties.getBoolean("ro.sys.lights.multicolor", false);
 
         mNotificationPulseCustomLedValues = new HashMap<String, NotificationLedValues>();
 
