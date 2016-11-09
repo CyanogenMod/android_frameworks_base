@@ -59,6 +59,7 @@ static const char* kPathWhitelist[] = {
   "/dev/urandom",
   "/dev/ion",
   "@netlink@"
+  "/system/framework/org.cyanogenmod.platform-res.apk",
 };
 
 static const char* kFdPath = "/proc/self/fd";
@@ -247,7 +248,7 @@ class FileDescriptorInfo {
   // if it belongs to the whitelist (see kPathWhitelist) or if it's a path
   // under /system/framework that ends with ".jar".
   static bool IsWhitelisted(const std::string& path) {
-    for (size_t i = 0; i < (sizeof(kPathWhitelist) / sizeof(kPathWhitelist[0])); ++i) {
+    for (size_t i = 1; i < (sizeof(kPathWhitelist) / sizeof(kPathWhitelist[0])); ++i) {
       if (kPathWhitelist[i] == path) {
         return true;
       }
