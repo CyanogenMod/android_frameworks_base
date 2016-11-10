@@ -145,4 +145,7 @@
 
     <!--Exposed style for power menu -->
     <java-symbol type="style" name="Theme.Power.Dialog" />
+
+    <!-- On-device lights (LED) capabilities -->
+    <java-symbol type="array" name="config_deviceLightCapabilities" />
 </resources>
