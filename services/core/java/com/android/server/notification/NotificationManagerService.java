@@ -1137,8 +1137,7 @@ public class NotificationManagerService extends SystemService {
         mDefaultNotificationLedOff = resources.getInteger(
                 R.integer.config_defaultNotificationLedOff);
 
-        mMultiColorNotificationLed = resources.getBoolean(
-                R.bool.config_multiColorNotificationLed);
+        mMultiColorNotificationLed = doLightsSupport(NotificationManager.LIGHTS_RGB_LED);
 
         mNotificationPulseCustomLedValues = new ArrayMap<String, NotificationLedValues>();
 
@@ -1160,10 +1159,9 @@ public class NotificationManagerService extends SystemService {
                 VIBRATE_PATTERN_MAXLEN,
                 DEFAULT_VIBRATE_PATTERN);
 
-        mAdjustableNotificationLedBrightness = resources.getBoolean(
-                org.cyanogenmod.platform.internal.R.bool.config_adjustableNotificationLedBrightness);
-        mMultipleNotificationLeds = resources.getBoolean(
-                org.cyanogenmod.platform.internal.R.bool.config_multipleNotificationLeds);
+        mAdjustableNotificationLedBrightness = doLightsSupport(
+                NotificationManager.LIGHTS_ADJUSTABLE_LED_BRIGHTNESS);
+        mMultipleNotificationLeds = doLightsSupport(NotificationManager.LIGHTS_MULTIPLE_LED);
 
         mUseAttentionLight = resources.getBoolean(R.bool.config_useAttentionLight);
 
@@ -1417,6 +1415,46 @@ public class NotificationManagerService extends SystemService {
         if (interruptionFilter == mInterruptionFilter) return;
         mInterruptionFilter = interruptionFilter;
         scheduleInterruptionFilterChanged(interruptionFilter);
+    }
+
+    /** @hide */
+    public boolean doLightsSupport(int capability) {
+        return (deviceLightsCapabilities() & 1 << capability) != 0;
+    }
+
+    private int deviceLightsCapabilities() {
+        int capabilities = 0;
+        final Resources res = getContext().getResources();
+
+        final int[] deviceCapabilities = res.getIntArray(
+                org.cyanogenmod.platform.internal.R.array.config_deviceLightCapabilities);
+        for (int capability : deviceCapabilities) {
+            capabilities |= 1 << capability;
+        }
+
+        /* Legacy format */
+        if (capabilities == 0) {
+            if (res.getBoolean(com.android.internal.R.bool.config_multiColorNotificationLed)
+                || res.getBoolean(com.android.internal.R.bool.config_multiColorBatteryLed)) {
+                capabilities |= 1 << NotificationManager.LIGHTS_RGB_LED;
+            }
+            if (res.getBoolean(com.android.internal.R.bool.config_ledCanPulse)) {
+                capabilities |= 1 << NotificationManager.LIGHTS_LED_PULSE;
+            }
+            if (res.getBoolean(
+                    org.cyanogenmod.platform.internal.R.bool.config_multipleNotificationLeds)) {
+                capabilities |= 1 << NotificationManager.LIGHTS_MULTIPLE_LED;
+            }
+            if (res.getBoolean(
+                    org.cyanogenmod.platform.internal.R.bool.config_useSegmentedBatteryLed)) {
+                capabilities |= 1 << NotificationManager.LIGHTS_SEGMENTED_LED;
+            }
+            if (res.getBoolean(org.cyanogenmod.platform.internal.R.bool
+                    .config_adjustableNotificationLedBrightness)) {
+                capabilities |= 1 << NotificationManager.LIGHTS_ADJUSTABLE_LED_BRIGHTNESS;
+            }
+        }
+        return capabilities;
     }
 
     private final IBinder mService = new INotificationManager.Stub() {
@@ -2369,6 +2407,10 @@ public class NotificationManagerService extends SystemService {
             } finally {
                 Binder.restoreCallingIdentity(identity);
             }
+        }
+
+        public boolean deviceLightsCan(int lightCapability) {
+            return (deviceLightsCapabilities() & 1 << lightCapability) != 0;
         }
     };
 

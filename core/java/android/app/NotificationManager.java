@@ -1025,4 +1025,33 @@ public class NotificationManager
             default: return defValue;
         }
     }
+
+    /** @hide */
+    public static final int LIGHTS_RGB_LED = 0;
+    /** @hide */
+    public static final int LIGHTS_MULTIPLE_LED = 1;
+    /** @hide */
+    public static final int LIGHTS_LED_PULSE = 2;
+    /** @hide */
+    public static final int LIGHTS_SEGMENTED_LED = 3;
+    /** @hide */
+    public static final int LIGHTS_ADJUSTABLE_LED_BRIGHTNESS = 4;
+
+    /** @hide */
+    public boolean doLightsSupport(final int capability) {
+        final boolean supported;
+        final INotificationManager service = getService();
+        if (service == null) {
+            // If the service isn't up yet, assume everything is possible
+            supported = true;
+        }
+
+        try {
+            supported = service.doLightsSupport(capability);
+        } catch (RemoteException e) {
+            // If the service isn't up yet, assume everything is possible
+            supported = true;
+        }
+    }
+    return supported;
 }

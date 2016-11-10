@@ -78,5 +78,4 @@
     <!-- Support Samsung docks -->
     <java-symbol type="bool" name="config_forceAnalogCarDock" />
     <java-symbol type="bool" name="config_forceAnalogDeskDock" />
-
 </resources>
