@@ -56,6 +56,7 @@
 #include "ScopedPrimitiveArray.h"
 #include "ScopedUtfChars.h"
 #include "fd_utils-inl.h"
+#include <fd_utils-inl-extra.h>
 
 #include "nativebridge/native_bridge.h"
 
