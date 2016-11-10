@@ -27,7 +27,7 @@
     <java-symbol type="bool" name="config_multiColorBatteryLed" />
     <java-symbol type="array" name="notification_light_package_mapping" />
     <java-symbol type="array" name="config_notificationNoAlertsVibePattern" />
-    
+
     <!-- LED pulse -->
     <java-symbol type="bool" name="config_ledCanPulse" />
 
@@ -79,4 +79,6 @@
     <java-symbol type="bool" name="config_forceAnalogCarDock" />
     <java-symbol type="bool" name="config_forceAnalogDeskDock" />
 
+    <!-- On-device lights (LED) capabilities -->
+    <java-symbol type="array" name="config_deviceLightCapabilities" />
 </resources>
