@@ -40,9 +40,11 @@ public class NavigationBarInflaterView extends FrameLayout implements TunerServi
     public static final String NAV_BAR_VIEWS = "sysui_nav_bar";
 
     public static final String MENU_IME = "menu_ime";
+    public static final String MENU_IME_ALWAYS_SHOW = "menu_ime_always_show";
     public static final String BACK = "back";
     public static final String HOME = "home";
     public static final String RECENT = "recent";
+    public static final String SEARCH = "search";
     public static final String NAVSPACE = "space";
     public static final String CLIPBOARD = "clipboard";
     public static final String KEY = "key";
@@ -259,6 +261,10 @@ public class NavigationBarInflaterView extends FrameLayout implements TunerServi
             }
         } else if (MENU_IME.equals(button)) {
             v = inflater.inflate(R.layout.menu_ime, parent, false);
+        } else if (MENU_IME_ALWAYS_SHOW.equals(button)) {
+            v = inflater.inflate(R.layout.menu_ime_always_show, parent, false);
+        } else if (SEARCH.equals(button)) {
+            v = inflater.inflate(R.layout.search, parent, false);
         } else if (NAVSPACE.equals(button)) {
             v = inflater.inflate(R.layout.nav_key_space, parent, false);
         } else if (CLIPBOARD.equals(button)) {
