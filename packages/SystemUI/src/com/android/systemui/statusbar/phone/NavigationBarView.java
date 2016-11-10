@@ -209,6 +209,8 @@ public class NavigationBarView extends LinearLayout implements TunerService.Tuna
         mButtonDisatchers.put(R.id.home, new ButtonDispatcher(R.id.home));
         mButtonDisatchers.put(R.id.recent_apps, new ButtonDispatcher(R.id.recent_apps));
         mButtonDisatchers.put(R.id.menu, new ButtonDispatcher(R.id.menu));
+        mButtonDisatchers.put(R.id.menu_always_show, new ButtonDispatcher(R.id.menu_always_show));
+        mButtonDisatchers.put(R.id.search, new ButtonDispatcher(R.id.search));
         mButtonDisatchers.put(R.id.ime_switcher, new ButtonDispatcher(R.id.ime_switcher));
     }
 
@@ -263,6 +265,10 @@ public class NavigationBarView extends LinearLayout implements TunerService.Tuna
         return mButtonDisatchers.get(R.id.menu);
     }
 
+    public ButtonDispatcher getMenuAlwaysShowButton() {
+        return mButtonDisatchers.get(R.id.menu_always_show);
+    }
+
     public ButtonDispatcher getBackButton() {
         return mButtonDisatchers.get(R.id.back);
     }
@@ -273,6 +279,10 @@ public class NavigationBarView extends LinearLayout implements TunerService.Tuna
 
     public ButtonDispatcher getImeSwitchButton() {
         return mButtonDisatchers.get(R.id.ime_switcher);
+    }
+
+    public ButtonDispatcher getSearchButton() {
+        return mButtonDisatchers.get(R.id.search);
     }
 
     public ViewGroup getDpadView() { return (ViewGroup) getCurrentView().findViewById(R.id.dpad_group); }
@@ -414,6 +424,7 @@ public class NavigationBarView extends LinearLayout implements TunerService.Tuna
         getBackButton().setVisibility(disableBack      ? View.INVISIBLE : View.VISIBLE);
         getHomeButton().setVisibility(disableHome      ? View.INVISIBLE : View.VISIBLE);
         getRecentsButton().setVisibility(disableRecent ? View.INVISIBLE : View.VISIBLE);
+        getSearchButton().setVisibility(disableSearch ? View.INVISIBLE : View.VISIBLE);
     }
 
     private boolean inLockTask() {
@@ -482,8 +493,12 @@ public class NavigationBarView extends LinearLayout implements TunerService.Tuna
         // Only show Menu if IME switcher not shown.
         final boolean shouldShow = mShowMenu &&
                 ((mNavigationIconHints & StatusBarManager.NAVIGATION_HINT_IME_SHOWN) == 0);
+        final boolean shouldShowAlwaysMenu = (mNavigationIconHints &
+                StatusBarManager.NAVIGATION_HINT_IME_SHOWN) == 0;
 
         getMenuButton().setVisibility(shouldShow ? View.VISIBLE : View.INVISIBLE);
+        getMenuAlwaysShowButton().setVisibility(shouldShowAlwaysMenu ? View.VISIBLE : View.INVISIBLE);
+        getSearchButton().setVisibility(shouldShowAlwaysMenu ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override
