@@ -157,4 +157,7 @@
 
     <!-- Usb drive persistent notification -->
     <java-symbol type="bool" name="config_persistUsbDriveNotification" />
+
+    <!-- On-device lights (LED) capabilities -->
+    <java-symbol type="array" name="config_deviceLightCapabilities" />
 </resources>

@@ -765,4 +765,32 @@ public class NotificationManager
             default: return defValue;
         }
     }
+
+    /** @hide */
+    public static final int LIGHTS_RGB_NOTIFICATION = 0;
+    /** @hide */
+    public static final int LIGHTS_RGB_BATTERY = 1 ;
+    /** @hide */
+    public static final int LIGHTS_MULTIPLE_LED = 2;
+    /** @hide */
+    public static final int LIGHTS_LED_PULSE = 3;
+    /** @hide */
+    public static final int LIGHTS_SEGMENTED_BATTERY_LIGHTS = 4;
+    /** @hide */
+    public static final int LIGHTS_ADJUSTABLE_NOTIFICATION_BRIGHTNESS = 5;
+
+    /** @hide */
+    public boolean deviceLightsCan(int lightCapability) {
+        INotificationManager service = getService();
+        try {
+            return service.deviceLightsCan(lightCapability);
+        } catch (RemoteException e) {
+            return true;
+        } catch (NullPointerException e) {
+            return true;
+        }
+        // If the service isn't up yet, assume everything is possible
+    }
+
+
 }

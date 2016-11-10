@@ -1030,19 +1030,19 @@ public final class BatteryService extends SystemService {
         private final int mBatteryLedOff;
 
         public Led(Context context, LightsManager lights) {
+            NotificationManager nm = context.getSystemService(NotificationManager.class);
             mBatteryLight = lights.getLight(LightsManager.LIGHT_ID_BATTERY);
 
             // Does the Device support changing battery LED colors?
-            mMultiColorLed = context.getResources().getBoolean(
-                    com.android.internal.R.bool.config_multiColorBatteryLed);
+            mMultiColorLed = nm.deviceLightsCan(NotificationManager.LIGHTS_RGB_BATTERY);
 
             // Is the notification LED brightness changeable ?
-            mAdjustableNotificationLedBrightness = context.getResources().getBoolean(
-                    org.cyanogenmod.platform.internal.R.bool.config_adjustableNotificationLedBrightness);
+            mAdjustableNotificationLedBrightness = nm.deviceLightsCan(
+                                            NotificationManager.LIGHTS_ADJUSTABLE_NOTIFICATION_BRIGHTNESS);
 
             // Does the Device have multiple LEDs ?
-            mMultipleNotificationLeds = context.getResources().getBoolean(
-                    org.cyanogenmod.platform.internal.R.bool.config_multipleNotificationLeds);
+            mMultipleNotificationLeds = nm.deviceLightsCan(
+                                            NotificationManager.LIGHTS_MULTIPLE_LED);
 
             mBatteryLedOn = context.getResources().getInteger(
                     com.android.internal.R.integer.config_notificationsBatteryLedOn);
