@@ -103,4 +103,6 @@ interface INotificationManager
     void applyRestore(in byte[] payload, int user);
 
     ParceledListSlice getAppActiveNotifications(String callingPkg, int userId);
+
+    boolean deviceLightsCan(int lightCapability);
 }

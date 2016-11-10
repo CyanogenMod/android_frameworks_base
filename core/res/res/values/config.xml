@@ -2575,4 +2575,27 @@
 
     <!-- Whether to persist the notification for when a usb drive device is plugged in -->
     <bool name="config_persistUsbDriveNotification">false</bool>
+
+    <!-- What can the LEDs on this device do? If defined, this overrides all of the
+         older settings:
+
+         com.android.internal.R.bool.config_multiColorNotificationLed
+         com.android.internal.R.bool.config_multiColorBatteryLed
+         org.cyanogenmod.platform.internal.R.bool.config_multipleNotificationLeds
+         com.android.internal.R.bool.config_ledCanPulse
+         org.cyanogenmod.platform.internal.R.bool.config_useSegmentedBatteryLed
+         org.cyanogenmod.platform.internal.R.bool.config_adjustableNotificationLedBrightness
+
+         Use the following values from NotificationManager:
+         LIGHTS_RGB_NOTIFICATION = 0
+         LIGHTS_RGB_BATTERY = 1
+         LIGHTS_MULTIPLE_LED = 2
+         LIGHTS_LED_PULSE = 3
+         LIGHTS_SEGMENTED_BATTERY_LIGHTS = 4
+         LIGHTS_ADJUSTABLE_NOTIFICATION_BRIGHTNESS = 5
+    -->
+
+    <integer-array translatable="false" name="config_deviceLightCapabilities">
+    </integer-array>
+
 </resources>

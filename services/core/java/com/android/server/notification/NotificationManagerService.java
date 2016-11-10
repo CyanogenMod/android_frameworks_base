@@ -1227,8 +1227,7 @@ public class NotificationManagerService extends SystemService {
         mDefaultNotificationLedOff = resources.getInteger(
                 R.integer.config_defaultNotificationLedOff);
 
-        mMultiColorNotificationLed = resources.getBoolean(
-                R.bool.config_multiColorNotificationLed);
+        mMultiColorNotificationLed = deviceLightsCan(NotificationManager.LIGHTS_RGB_NOTIFICATION);
 
         mNotificationPulseCustomLedValues = new HashMap<String, NotificationLedValues>();
 
@@ -1250,10 +1249,10 @@ public class NotificationManagerService extends SystemService {
                 VIBRATE_PATTERN_MAXLEN,
                 DEFAULT_VIBRATE_PATTERN);
 
-        mAdjustableNotificationLedBrightness = resources.getBoolean(
-                org.cyanogenmod.platform.internal.R.bool.config_adjustableNotificationLedBrightness);
-        mMultipleNotificationLeds = resources.getBoolean(
-                org.cyanogenmod.platform.internal.R.bool.config_multipleNotificationLeds);
+        mAdjustableNotificationLedBrightness = deviceLightsCan(
+                                            NotificationManager.LIGHTS_ADJUSTABLE_NOTIFICATION_BRIGHTNESS);
+        mMultipleNotificationLeds = deviceLightsCan(
+                                            NotificationManager.LIGHTS_MULTIPLE_LED);
 
         mUseAttentionLight = resources.getBoolean(R.bool.config_useAttentionLight);
 
@@ -1394,6 +1393,47 @@ public class NotificationManagerService extends SystemService {
         if (interruptionFilter == mInterruptionFilter) return;
         mInterruptionFilter = interruptionFilter;
         scheduleInterruptionFilterChanged(interruptionFilter);
+    }
+
+    private int deviceLightsCapabilities() {
+        Resources resources = getContext().getResources();
+        int capabilities = SystemProperties.getInt("sys.lights.capabilities", 0);
+
+        if (capabilities == 0) {
+            int[] deviceCaps = resources.getIntArray(
+                    com.android.internal.R.array.config_deviceLightCapabilities);
+            for (int cap : deviceCaps) {
+                capabilities |= 1<<cap;
+            }
+        }
+
+        /* Legacy format */
+        if (capabilities == 0) {
+            if (resources.getBoolean(com.android.internal.R.bool.config_multiColorNotificationLed)) {
+                capabilities |= 1<<NotificationManager.LIGHTS_RGB_NOTIFICATION;
+            }
+            if (resources.getBoolean(com.android.internal.R.bool.config_multiColorBatteryLed)) {
+                capabilities |= 1<<NotificationManager.LIGHTS_RGB_BATTERY;
+            }
+            if (resources.getBoolean(com.android.internal.R.bool.config_ledCanPulse)) {
+                capabilities |= 1<<NotificationManager.LIGHTS_LED_PULSE;
+            }
+            if (resources.getBoolean(org.cyanogenmod.platform.internal.R.bool.config_multipleNotificationLeds)) {
+                capabilities |= 1<<NotificationManager.LIGHTS_MULTIPLE_LED;
+            }
+            if (resources.getBoolean(org.cyanogenmod.platform.internal.R.bool.config_useSegmentedBatteryLed)) {
+                capabilities |= 1<<NotificationManager.LIGHTS_SEGMENTED_BATTERY_LIGHTS;
+            }
+            if (resources.getBoolean(org.cyanogenmod.platform.internal.R.bool.config_adjustableNotificationLedBrightness)) {
+                capabilities |= 1<<NotificationManager.LIGHTS_ADJUSTABLE_NOTIFICATION_BRIGHTNESS;
+            }
+        }
+        return capabilities;
+    }
+
+    /** @hide */
+    public boolean deviceLightsCan(int lightCapability) {
+        return ( (deviceLightsCapabilities() & 1<<lightCapability) != 0 );
     }
 
     private final IBinder mService = new INotificationManager.Stub() {
@@ -2160,6 +2200,10 @@ public class NotificationManagerService extends SystemService {
             } finally {
                 Binder.restoreCallingIdentity(identity);
             }
+        }
+
+        public boolean deviceLightsCan(int lightCapability) {
+            return ( (deviceLightsCapabilities() & 1<<lightCapability) != 0 );
         }
     };
 
