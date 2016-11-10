@@ -28,6 +28,7 @@ import com.android.server.lights.Light;
 import com.android.server.lights.LightsManager;
 
 import android.app.ActivityManagerNative;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -939,18 +940,18 @@ public final class BatteryService extends SystemService {
 
         public Led(Context context, LightsManager lights) {
             mBatteryLight = lights.getLight(LightsManager.LIGHT_ID_BATTERY);
+            final NotificationManager nm = context.getSystemService(NotificationManager.class);
 
             // Does the Device support changing battery LED colors?
-            mMultiColorLed = context.getResources().getBoolean(
-                    com.android.internal.R.bool.config_multiColorBatteryLed);
+            mMultiColorLed = nm.doLightsSupport(NotificationManager.LIGHTS_RGB_BATTERY_LED);
 
             // Is the notification LED brightness changeable ?
-            mAdjustableNotificationLedBrightness = context.getResources().getBoolean(
-                    org.cyanogenmod.platform.internal.R.bool.config_adjustableNotificationLedBrightness);
+            mAdjustableNotificationLedBrightness = nm.doLightsSupport(
+                    NotificationManager.LIGHTS_ADJUSTABLE_NOTIFICATION_LED_BRIGHTNESS);
 
             // Does the Device have multiple LEDs ?
-            mMultipleNotificationLeds = context.getResources().getBoolean(
-                    org.cyanogenmod.platform.internal.R.bool.config_multipleNotificationLeds);
+            mMultipleNotificationLeds = nm.doLightsSupport(
+                    NotificationManager.LIGHTS_MULTIPLE_NOTIFICATION_LED);
 
             mBatteryLedOn = context.getResources().getInteger(
                     com.android.internal.R.integer.config_notificationsBatteryLedOn);
@@ -959,8 +960,8 @@ public final class BatteryService extends SystemService {
 
             // Does the Device have segmented battery LED support? In this case, we send the level
             // in the alpha channel of the color and let the HAL sort it out.
-            mUseSegmentedBatteryLed = context.getResources().getBoolean(
-                    org.cyanogenmod.platform.internal.R.bool.config_useSegmentedBatteryLed);
+            mUseSegmentedBatteryLed = nm.doLightsSupport(
+                    NotificationManager.LIGHTS_SEGMENTED_BATTERY_LED);
         }
 
         /**
