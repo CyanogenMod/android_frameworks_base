@@ -31,33 +31,33 @@
     <!-- label for item that opens the profile choosing dialog -->
     <string name="global_action_choose_profile">Profile</string>
 
-    <!-- label for item that reboots the phone in phone options dialog -->
-    <string name="global_action_reboot">Reboot</string>
+    <!-- label for item that restarts the phone in phone options dialog -->
+    <string name="global_action_reboot">Restart</string>
     <!-- label for current user in phone options dialog -->
     <string name="global_action_current_user">Current</string>
 
-    <!-- Reboot menu -->
-    <!-- Button to reboot the phone, within the Reboot Options dialog -->
-    <string name="reboot_reboot">Reboot</string>
-    <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
+    <!-- Restart menu -->
+    <!-- Button to restart the phone, within the Restart Options dialog -->
+    <string name="reboot_reboot">Restart</string>
+    <!-- Button to restart the phone into recovery, within the Restart Options dialog -->
     <string name="reboot_recovery">Recovery</string>
-    <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
+    <!-- Button to restart the phone into bootloader, within the Restart Options dialog -->
     <string name="reboot_bootloader">Bootloader</string>
-    <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
+    <!-- Button to restart the phone into download, within the Restart Options dialog -->
     <string name="reboot_download">Download</string>
-    <!-- Button to soft reboot the device, within the Reboot Options dialog -->
-    <string name="reboot_soft">Soft reboot</string>
+    <!-- Button to soft restart the device, within the Restart Options dialog -->
+    <string name="reboot_soft">Soft restart</string>
 
-    <!-- Title of dialog to confirm rebooting. -->
-    <string name="reboot_title">Reboot</string>
+    <!-- Title of dialog to confirm restarting. -->
+    <string name="reboot_title">Restart</string>
 
-    <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+    <!-- Restart Confirmation Dialog.  When the user chooses to restart the device, there will
          be a confirmation dialog.  This is the message. -->
-    <string name="reboot_confirm" product="tablet">Your tablet will reboot.</string>
-    <string name="reboot_confirm" product="default">Your phone will reboot.</string>
+    <string name="reboot_confirm" product="tablet">Your tablet will restart.</string>
+    <string name="reboot_confirm" product="default">Your phone will restart.</string>
 
-    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
-    <string name="reboot_progress">Rebooting\u2026</string>
+    <!-- Restart Progress Dialog. This is shown if the user chooses to restart the phone. -->
+    <string name="reboot_progress">Restarting\u2026</string>
 
     <!-- ADB over network notification -->
     <string name="adb_net_active_notification_title">ADB over network enabled</string>
