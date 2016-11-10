@@ -1137,8 +1137,8 @@ public class NotificationManagerService extends SystemService {
         mDefaultNotificationLedOff = resources.getInteger(
                 R.integer.config_defaultNotificationLedOff);
 
-        mMultiColorNotificationLed = resources.getBoolean(
-                R.bool.config_multiColorNotificationLed);
+        mMultiColorNotificationLed = doLightsSupport(
+                NotificationManager.LIGHTS_RGB_NOTIFICATION_LED);
 
         mNotificationPulseCustomLedValues = new ArrayMap<String, NotificationLedValues>();
 
@@ -1160,10 +1160,10 @@ public class NotificationManagerService extends SystemService {
                 VIBRATE_PATTERN_MAXLEN,
                 DEFAULT_VIBRATE_PATTERN);
 
-        mAdjustableNotificationLedBrightness = resources.getBoolean(
-                org.cyanogenmod.platform.internal.R.bool.config_adjustableNotificationLedBrightness);
-        mMultipleNotificationLeds = resources.getBoolean(
-                org.cyanogenmod.platform.internal.R.bool.config_multipleNotificationLeds);
+        mAdjustableNotificationLedBrightness = doLightsSupport(
+                NotificationManager.LIGHTS_ADJUSTABLE_NOTIFICATION_LED_BRIGHTNESS);
+        mMultipleNotificationLeds = doLightsSupport(
+                NotificationManager.LIGHTS_MULTIPLE_NOTIFICATION_LED);
 
         mUseAttentionLight = resources.getBoolean(R.bool.config_useAttentionLight);
 
@@ -1417,6 +1417,13 @@ public class NotificationManagerService extends SystemService {
         if (interruptionFilter == mInterruptionFilter) return;
         mInterruptionFilter = interruptionFilter;
         scheduleInterruptionFilterChanged(interruptionFilter);
+    }
+
+    /** @hide */
+    private boolean doLightsSupport(final int capability) {
+        final int capabilities = getContext().getResources().getInteger(
+                org.cyanogenmod.platform.internal.R.integer.config_deviceLightCapabilities);
+        return (capabilities & capability) != 0;
     }
 
     private final IBinder mService = new INotificationManager.Stub() {
@@ -2369,6 +2376,12 @@ public class NotificationManagerService extends SystemService {
             } finally {
                 Binder.restoreCallingIdentity(identity);
             }
+        }
+
+        public boolean doLightsSupport(final int capability) {
+            final int capabilities = getContext().getResources().getInteger(
+                    org.cyanogenmod.platform.internal.R.integer.config_deviceLightCapabilities);
+            return (capabilities & capability) != 0;
         }
     };
 
