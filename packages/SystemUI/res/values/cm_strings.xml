@@ -99,4 +99,7 @@
     <string name="accessibility_dpad_left">Cursor left</string>
     <string name="accessibility_dpad_right">Cursor right</string>
 
+    <!-- NavBar Tuner -->
+    <string name="menu_ime_always_show">Menu / Keyboard Switcher (always show)</string>
+    <string name="search">Search</string>
 </resources>
