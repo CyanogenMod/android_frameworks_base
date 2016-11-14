@@ -88,6 +88,7 @@ public class NavBarTuner extends Fragment implements TunerService.Tunable {
             Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.nav_bar_tuner, container, false);
         inflatePreview((ViewGroup) view.findViewById(R.id.nav_preview_frame));
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
         return view;
     }
 
@@ -200,6 +201,9 @@ public class NavBarTuner extends Fragment implements TunerService.Tunable {
         } else if (item.getItemId() == RESET) {
             Settings.Secure.putString(getContext().getContentResolver(),
                     NAV_BAR_VIEWS, null);
+            return true;
+        } else if (item.getItemId() == android.R.id.home) {
+            getActivity().onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);
