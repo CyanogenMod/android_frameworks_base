@@ -166,13 +166,16 @@ public class UidDetailProvider {
                     final ApplicationInfo appInfo = ipm.getApplicationInfo(packageName,
                             0 /* no flags */, userId);
 
-                    if (appInfo != null) {
+                    if (appInfo != null && packageInfo != null) {
                         detail.detailLabels[i] = appInfo.loadLabel(pm).toString();
                         detail.detailContentDescriptions[i] = um.getBadgedLabelForUser(
                                 detail.detailLabels[i], userHandle);
                         if (packageInfo.sharedUserLabel != 0) {
-                            detail.label = pm.getText(packageName, packageInfo.sharedUserLabel,
-                                    packageInfo.applicationInfo).toString();
+                            CharSequence label = pm.getText(packageName,
+                                    packageInfo.sharedUserLabel, packageInfo.applicationInfo);
+                            if (label != null) {
+                                detail.label = label.toString();
+                            }
                             detail.icon = um.getBadgedIconForUser(appInfo.loadIcon(pm), userHandle);
                         }
                     }
