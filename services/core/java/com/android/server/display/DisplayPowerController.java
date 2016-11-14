@@ -37,6 +37,7 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.SystemClock;
+import android.os.SystemProperties;
 import android.os.Trace;
 import android.util.MathUtils;
 import android.util.Slog;
@@ -554,7 +555,9 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
         switch (mPowerRequest.policy) {
             case DisplayPowerRequest.POLICY_OFF:
                 state = Display.STATE_OFF;
-                performScreenOffTransition = true;
+                if (!"1".equals(SystemProperties.get("ro.egl.nofadeoff", "0"))) {
+                    performScreenOffTransition = true;
+                }
                 break;
             case DisplayPowerRequest.POLICY_DOZE:
                 if (mPowerRequest.dozeScreenState != Display.STATE_UNKNOWN) {
