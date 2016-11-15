@@ -3964,17 +3964,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     private boolean unpinActivity(boolean checkOnly) {
-        if (!hasNavigationBar()) {
-            try {
-                if (ActivityManagerNative.getDefault().isInLockTaskMode()) {
-                    if (!checkOnly) {
-                        ActivityManagerNative.getDefault().stopSystemLockTaskMode();
-                    }
-                    return true;
+        try {
+            if (ActivityManagerNative.getDefault().isInLockTaskMode()) {
+                if (!checkOnly) {
+                    ActivityManagerNative.getDefault().stopSystemLockTaskMode();
                 }
-            } catch (RemoteException e) {
-                // ignore
+                return true;
             }
+        } catch (RemoteException e) {
+            // ignore
         }
         return false;
     }
