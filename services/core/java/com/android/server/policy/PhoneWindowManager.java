@@ -2311,6 +2311,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.END_BUTTON_BEHAVIOR,
                     Settings.System.END_BUTTON_BEHAVIOR_DEFAULT,
                     UserHandle.USER_CURRENT);
+            mIncallPowerBehavior = Settings.Secure.getIntForUser(resolver,
+                    Settings.Secure.INCALL_POWER_BUTTON_BEHAVIOR,
+                    Settings.Secure.INCALL_POWER_BUTTON_BEHAVIOR_DEFAULT,
+                    UserHandle.USER_CURRENT);
             mRingVolumeBehavior = Settings.Secure.getIntForUser(resolver,
                     Settings.Secure.RING_VOLUME_BUTTON_BEHAVIOR,
                     Settings.Secure.RING_VOLUME_BUTTON_BEHAVIOR_DEFAULT,
