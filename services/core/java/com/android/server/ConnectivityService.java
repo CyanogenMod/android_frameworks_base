@@ -78,6 +78,7 @@ import android.net.metrics.DefaultNetworkEvent;
 import android.net.metrics.IpConnectivityLog;
 import android.net.metrics.NetworkEvent;
 import android.net.util.AvoidBadWifiTracker;
+import android.net.wifi.WifiDevice;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
@@ -2995,6 +2996,14 @@ public class ConnectivityService extends IConnectivityManager.Stub
                     break;
                 }
             }
+        }
+    }
+
+    public List<WifiDevice> getTetherConnectedSta() {
+        if (isTetheringSupported()) {
+            return mTethering.getTetherConnectedSta();
+        } else {
+             return null;
         }
     }
 
