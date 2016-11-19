@@ -26,25 +26,20 @@ import android.os.Message;
 import android.os.UserHandle;
 
 import com.android.systemui.R;
-import com.android.systemui.tuner.TunerService;
 
 import java.lang.Exception;
 import java.util.ArrayList;
 
 import cyanogenmod.providers.CMSettings;
 
-public class NotificationBrightnessController
-        implements ToggleSlider.Listener, TunerService.Tunable {
+public class NotificationBrightnessController implements ToggleSlider.Listener {
     private static final String TAG = "StatusBar.NotificationBrightnessController";
-
-    private static final String NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL =
-            "cmsystem:" + CMSettings.System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL;
 
     public static final int LIGHT_BRIGHTNESS_MINIMUM = 1;
     public static final int LIGHT_BRIGHTNESS_MAXIMUM = 255;
 
     // Minimum delay between LED notification updates
-    private final static long LED_UPDATE_DELAY_MS = 250;
+    private final static long LED_UPDATE_DELAY_MS = 100;
 
     private int mCurrentBrightness;
     private final int mMinimumBrightness;
@@ -57,7 +52,6 @@ public class NotificationBrightnessController
             new ArrayList<BrightnessStateChangeCallback>();
 
     private boolean mListening;
-    private boolean mExternalChange;
 
     private boolean mNotificationAllow;
     private final Bundle mNotificationBundle;
@@ -114,12 +108,18 @@ public class NotificationBrightnessController
             return;
         }
 
+        // Read the brightness and set the maximum value for preview
+        mCurrentBrightness = CMSettings.System.getIntForUser(mContext.getContentResolver(),
+                CMSettings.System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL,
+                mMaximumBrightness, UserHandle.USER_CURRENT);
+        CMSettings.System.putIntForUser(mContext.getContentResolver(),
+                CMSettings.System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL,
+                mMaximumBrightness, UserHandle.USER_CURRENT);
+
         // Update the slider and mode before attaching the listener so we don't
         // receive the onChanged notifications for the initial values.
         mNotificationAllow = true;
-        updateSlider(null);
-
-        TunerService.get(mContext).addTunable(this, NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL);
+        updateSlider();
 
         mControl.setOnChangedListener(this);
         mListening = true;
@@ -132,7 +132,6 @@ public class NotificationBrightnessController
         }
 
         mNotificationAllow = false;
-        TunerService.get(mContext).removeTunable(this);
         mControl.setOnChangedListener(null);
         mNotificationManager.cancel(1);
         mListening = false;
@@ -145,8 +144,6 @@ public class NotificationBrightnessController
     @Override
     public void onChanged(ToggleSlider view, boolean tracking, boolean automatic, int value,
             boolean stopTracking) {
-        if (mExternalChange) return;
-
         mCurrentBrightness = value + mMinimumBrightness;
         updateNotification();
 
@@ -156,13 +153,7 @@ public class NotificationBrightnessController
     }
 
     /** Fetch the brightness from the system settings and update the slider */
-    private void updateSlider(final String value) {
-        mCurrentBrightness = value == null ? mMaximumBrightness : Integer.parseInt(value);
-
-        CMSettings.System.putIntForUser(mContext.getContentResolver(),
-                CMSettings.System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL,
-                mMaximumBrightness, UserHandle.USER_CURRENT);
-
+    private void updateSlider() {
         mControl.setMax(mMaximumBrightness - mMinimumBrightness);
         mControl.setValue(mCurrentBrightness - mMinimumBrightness);
         updateNotification();
@@ -180,25 +171,9 @@ public class NotificationBrightnessController
 
             // Instead of canceling the notification, force it to update with the color.
             // Use a white light for a better preview of the brightness.
-            int notificationColor = 0xFFFFFF | (mCurrentBrightness << 24);
+            int notificationColor = 0x00FFFFFF | (mCurrentBrightness << 24);
             mNotificationBuilder.setLights(notificationColor, 1, 0);
             mNotificationManager.notify(1, mNotificationBuilder.build());
-        }
-    }
-
-    @Override
-    public void onTuningChanged(String key, String newValue) {
-        if (!NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL.equals(key)) {
-            return;
-        }
-        try {
-            mExternalChange = true;
-            updateSlider(newValue);
-            for (BrightnessStateChangeCallback cb : mChangeCallbacks) {
-                cb.onBrightnessLevelChanged();
-            }
-        } finally {
-            mExternalChange = false;
         }
     }
 }
