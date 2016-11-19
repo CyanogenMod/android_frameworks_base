@@ -42,7 +42,7 @@ import cyanogenmod.providers.CMSettings;
 public class BatteryMeterDrawable extends Drawable implements
         BatteryController.BatteryStateChangeCallback {
 
-    private static final float ASPECT_RATIO = 9.5f / 14.5f;
+    private static final float ASPECT_RATIO = 9.5f / 14.3f;
     public static final String TAG = BatteryMeterDrawable.class.getSimpleName();
     public static final String SHOW_PERCENT_SETTING = "status_bar_show_battery_percent";
 
@@ -176,6 +176,8 @@ public class BatteryMeterDrawable extends Drawable implements
 
         mIntrinsicWidth = context.getResources().getDimensionPixelSize(R.dimen.battery_width);
         mIntrinsicHeight = context.getResources().getDimensionPixelSize(R.dimen.battery_height);
+        
+        mLessHeight = Math.round(dp2px(1, context) / 4);
     }
 
     @Override
@@ -330,6 +332,11 @@ public class BatteryMeterDrawable extends Drawable implements
     private int getColorForDarkIntensity(float darkIntensity, int lightColor, int darkColor) {
         return (int) ArgbEvaluator.getInstance().evaluate(darkIntensity, lightColor, darkColor);
     }
+    
+    private static float dp2px(int dip, Context context) {
+        float scale = context.getResources().getDisplayMetrics().density;
+        return dip * scale + 0.5f;
+    }
 
     @Override
     public void draw(Canvas c) {
@@ -338,7 +345,7 @@ public class BatteryMeterDrawable extends Drawable implements
         if (level == -1) return;
 
         float drawFrac = (float) level / 100f;
-        final int height = mHeight;
+        final int height = mHeight - mLessHeight;
         final int width = (int) (ASPECT_RATIO * mHeight);
         int px = (mWidth - width) / 2;
 
@@ -468,7 +475,7 @@ public class BatteryMeterDrawable extends Drawable implements
             mTextHeight = -mTextPaint.getFontMetrics().ascent;
             pctText = String.valueOf(SINGLE_DIGIT_PERCENT ? (level/10) : level);
             pctX = mWidth * 0.5f;
-            pctY = (mHeight + mTextHeight) * 0.47f;
+            pctY = (mHeight + mTextHeight) * 0.46f;
             pctOpaque = levelTop > pctY;
             if (!pctOpaque) {
                 mTextPath.reset();
