@@ -42,7 +42,7 @@ import cyanogenmod.providers.CMSettings;
 public class BatteryMeterDrawable extends Drawable implements
         BatteryController.BatteryStateChangeCallback {
 
-    private static final float ASPECT_RATIO = 9.5f / 14.5f;
+    private static final float ASPECT_RATIO = 9.5f / 14.3f;
     public static final String TAG = BatteryMeterDrawable.class.getSimpleName();
     public static final String SHOW_PERCENT_SETTING = "status_bar_show_battery_percent";
 
@@ -468,7 +468,7 @@ public class BatteryMeterDrawable extends Drawable implements
             mTextHeight = -mTextPaint.getFontMetrics().ascent;
             pctText = String.valueOf(SINGLE_DIGIT_PERCENT ? (level/10) : level);
             pctX = mWidth * 0.5f;
-            pctY = (mHeight + mTextHeight) * 0.47f;
+            pctY = (mHeight + mTextHeight) * 0.46f;
             pctOpaque = levelTop > pctY;
             if (!pctOpaque) {
                 mTextPath.reset();
