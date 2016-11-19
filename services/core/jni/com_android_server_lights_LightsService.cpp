@@ -130,6 +130,9 @@ static void setLight_native(JNIEnv* /* env */, jobject /* clazz */, jlong ptr,
             colorAlpha = 0xFF;
         }
         colorAlpha = (colorAlpha * brightnessLevel) / 0xFF;
+        if (colorAlpha < 1) {
+            colorAlpha = 1;
+        }
         colorARGB = (colorAlpha << 24) + (colorARGB & 0x00FFFFFF);
     }
 
