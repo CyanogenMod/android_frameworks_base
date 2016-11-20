@@ -148,4 +148,7 @@
 
     <!-- On-device lights (LED) capabilities -->
     <java-symbol type="array" name="config_deviceLightCapabilities" />
+
+    <java-symbol type="array" name="config_deviceKeyHandlerLibs" />
+    <java-symbol type="array" name="config_deviceKeyHandlerClasses" />
 </resources>
