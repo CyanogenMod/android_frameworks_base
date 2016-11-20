@@ -113,6 +113,7 @@ import android.util.DisplayMetrics;
 import android.util.EventLog;
 import android.util.Log;
 import android.util.MutableBoolean;
+import android.util.Pair;
 import android.util.Slog;
 import android.util.SparseArray;
 import android.util.LongSparseArray;
@@ -165,6 +166,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.lang.reflect.Constructor;
@@ -352,8 +354,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     /** Amount of time (in milliseconds) to wait for windows drawn before powering on. */
     static final int WAITING_FOR_DRAWN_TIMEOUT = 1000;
-
-    private DeviceKeyHandler mDeviceKeyHandler;
 
     /**
      * Lock protecting internal state.  Must not call out into window
@@ -845,6 +845,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private boolean mTopWindowIsKeyguard;
 
     private boolean mVolumeAnswerCall;
+
+    private DeviceKeyHandler[] mDeviceKeyHandlers;
 
     private class PolicyHandler extends Handler {
         @Override
@@ -2038,27 +2040,37 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mWindowManagerInternal.registerAppTransitionListener(
                 mStatusBarController.getAppTransitionListener());
 
-        String deviceKeyHandlerLib = mContext.getResources().getString(
-                com.android.internal.R.string.config_deviceKeyHandlerLib);
+        final Resources res = mContext.getResources();
+        final String[] deviceKeyHandlerLibs = res.getStringArray(
+                com.android.internal.R.array.config_deviceKeyHandlerLibs);
+        final String[] deviceKeyHandlerClasses = res.getStringArray(
+                com.android.internal.R.array.config_deviceKeyHandlerClasses);
 
-        String deviceKeyHandlerClass = mContext.getResources().getString(
-                com.android.internal.R.string.config_deviceKeyHandlerClass);
+        final List<Pair<String, String>> deviceKeyHandlerList = new ArrayList<>();
+        for (int i = 0;
+                i < deviceKeyHandlerLibs.length && i < deviceKeyHandlerClasses.length; i++) {
+            final Pair<String, String> deviceKeyHandlerPair =
+                    Pair.create(deviceKeyHandlerLibs[i], deviceKeyHandlerClasses[i]);
+            deviceKeyHandlerList.add(deviceKeyHandlerPair);
+        }
+        loadKeyHandlerLibraries(deviceKeyHandlerList);
+    }
 
-        if (!deviceKeyHandlerLib.isEmpty() && !deviceKeyHandlerClass.isEmpty()) {
-            PathClassLoader loader =  new PathClassLoader(deviceKeyHandlerLib,
-                    getClass().getClassLoader());
+    private void loadKeyHandlerLibraries(final List<Pair<String, String>> list) {
+        int i = 0;
+        for (Pair<String, String> pair : list) {
             try {
-                Class<?> klass = loader.loadClass(deviceKeyHandlerClass);
+                PathClassLoader loader =  new PathClassLoader(pair.first,
+                        getClass().getClassLoader());
+                Class<?> klass = loader.loadClass(pair.second);
                 Constructor<?> constructor = klass.getConstructor(Context.class);
-                mDeviceKeyHandler = (DeviceKeyHandler) constructor.newInstance(
-                        mContext);
-                if(DEBUG) Slog.d(TAG, "Device key handler loaded");
+                mDeviceKeyHandlers[i++] = (DeviceKeyHandler) constructor.newInstance(mContext);
             } catch (Exception e) {
                 Slog.w(TAG, "Could not instantiate device key handler "
-                        + deviceKeyHandlerClass + " from class "
-                        + deviceKeyHandlerLib, e);
+                        + pair.first + " from class " + pair.second, e);
             }
         }
+        if (DEBUG) Slog.d(TAG, "Device key handlers loaded");
     }
 
     private void updateKeyAssignments() {
@@ -3939,11 +3951,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
 
         // Specific device key handling
-        if (mDeviceKeyHandler != null) {
+        if (mDeviceKeyHandlers != null) {
             try {
-                // The device only should consume known keys.
-                if (mDeviceKeyHandler.handleKeyEvent(event)) {
-                    return -1;
+                for (DeviceKeyHandler keyHandler : mDeviceKeyHandlers) {
+                    // The device only should consume known keys.
+                    if (keyHandler.handleKeyEvent(event)) {
+                        return -1;
+                    }
                 }
             } catch (Exception e) {
                 Slog.w(TAG, "Could not dispatch event to device key handler", e);
@@ -6264,11 +6278,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 && event.getRepeatCount() == 0;
 
         // Specific device key handling
-        if (mDeviceKeyHandler != null) {
+        if (mDeviceKeyHandlers != null) {
             try {
-                // The device only should consume known keys.
-                if (mDeviceKeyHandler.handleKeyEvent(event)) {
-                    return 0;
+                for (DeviceKeyHandler keyHandler : mDeviceKeyHandlers) {
+                    // The device only should consume known keys
+                    if (keyHandler.handleKeyEvent(event)) {
+                        return 0;
+                    }
                 }
             } catch (Exception e) {
                 Slog.w(TAG, "Could not dispatch event to device key handler", e);
@@ -8625,7 +8641,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         int delta = newRotation - oldRotation;
         if (delta < 0) delta += 4;
         // Likewise we don't rotate seamlessly for 180 degree rotations
-        // in this case the surfaces never resize, and our logic to 
+        // in this case the surfaces never resize, and our logic to
         // revert the transformations on size change will fail. We could
         // fix this in the future with the "tagged" frames idea.
         if (delta == Surface.ROTATION_180) {
