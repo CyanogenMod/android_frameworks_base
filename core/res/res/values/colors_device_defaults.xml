@@ -17,19 +17,19 @@
 <!-- Colors specific to DeviceDefault themes. These are mostly pass-throughs to enable
      overlaying new theme colors. -->
 <resources>
-    <color name="primary_device_default_dark">@color/primary_material_dark</color>
+    <color name="primary_device_default_dark">#ff2d2d2d</color>
     <color name="primary_device_default_light">@color/primary_material_light</color>
-    <color name="primary_device_default_settings">@color/primary_material_settings</color>
-    <color name="primary_dark_device_default_dark">@color/primary_dark_material_dark</color>
+    <color name="primary_device_default_settings">@color/primary_device_default_dark</color>
+    <color name="primary_dark_device_default_dark">#ff242424</color>
     <color name="primary_dark_device_default_light">@color/primary_dark_material_light</color>
-    <color name="primary_dark_device_default_settings">@color/primary_dark_material_settings</color>
+    <color name="primary_dark_device_default_settings">@color/primary_dark_device_default_dark</color>
 
-    <color name="secondary_device_default_settings">@color/secondary_material_settings</color>
-    <color name="tertiary_device_default_settings">@color/tertiary_material_settings</color>
-    <color name="quaternary_device_default_settings">@color/quaternary_material_settings</color>
+    <color name="secondary_device_default_settings">#ff3a3a3a</color>
+    <color name="tertiary_device_default_settings">#ff616161</color>
+    <color name="quaternary_device_default_settings">#ff9e9e9e</color>
 
-    <color name="accent_device_default_700">@color/material_deep_teal_700</color>
-    <color name="accent_device_default_light">@color/accent_material_light</color>
-    <color name="accent_device_default_dark">@color/accent_material_dark</color>
-    <color name="accent_device_default_50">@color/material_deep_teal_50</color>
+    <color name="accent_device_default_700">#ff3367d6</color>
+    <color name="accent_device_default_light">#ff4285f4</color>
+    <color name="accent_device_default_dark">#ff5e97f6</color>
+    <color name="accent_device_default_50">#ffe8f0fe</color>
 </resources>
