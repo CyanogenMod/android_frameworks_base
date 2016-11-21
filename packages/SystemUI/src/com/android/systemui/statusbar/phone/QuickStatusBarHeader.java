@@ -18,11 +18,15 @@ package com.android.systemui.statusbar.phone;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
+import android.net.Uri;
+import android.provider.AlarmClock;
+import android.provider.CalendarContract;
 import android.os.UserManager;
 import android.util.AttributeSet;
 import android.view.View;
@@ -70,6 +74,9 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
     private boolean mExpanded;
     private boolean mAlarmShowing;
 
+    private View mClock;
+    private View mDate;
+
     private ViewGroup mDateTimeGroup;
     private ViewGroup mDateTimeAlarmGroup;
     private TextView mEmergencyOnly;
@@ -115,6 +122,11 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
         mDateTimeTranslation = getResources().getDimension(R.dimen.qs_date_time_translation);
         mShowFullAlarm = getResources().getBoolean(R.bool.quick_settings_show_full_alarm);
 
+        mClock = (View) findViewById(R.id.clock);
+        mClock.setOnClickListener(this);
+        mDate = (View) findViewById(R.id.date);
+        mDate.setOnClickListener(this);
+
         mExpandIndicator = (ExpandableIndicator) findViewById(R.id.expand_indicator);
 
         mHeaderQsPanel = (QuickQSPanel) findViewById(R.id.quick_qs_panel);
@@ -124,6 +136,7 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
         mSettingsButton.setOnClickListener(this);
 
         mAlarmStatusCollapsed = findViewById(R.id.alarm_status_collapsed);
+        mAlarmStatusCollapsed.setOnClickListener(this);
         mAlarmStatus = (TextView) findViewById(R.id.alarm_status);
         mAlarmStatus.setOnClickListener(this);
 
@@ -259,6 +272,8 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
     public void updateEverything() {
         post(() -> {
             updateVisibilities();
+            mDate.setClickable(mExpanded || mShowFullAlarm);
+            mAlarmStatus.setClickable(mExpanded && mShowFullAlarm);
             setClickable(false);
         });
     }
@@ -341,12 +356,29 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
             } else {
                 startSettingsActivity();
             }
-        } else if (v == mAlarmStatus && mNextAlarm != null) {
-            PendingIntent showIntent = mNextAlarm.getShowIntent();
-            if (showIntent != null && showIntent.isActivity()) {
-                mActivityStarter.startActivity(showIntent.getIntent(), true /* dismissShade */);
+        } else if (v == mClock || v == mAlarmStatus || v == mAlarmStatusCollapsed) {
+            Intent intent = null;
+            if ((v == mAlarmStatus || v == mAlarmStatusCollapsed) && mNextAlarm != null) {
+                PendingIntent showIntent = mNextAlarm.getShowIntent();
+                if (showIntent != null && showIntent.isActivity()) {
+                    intent = showIntent.getIntent();
+                }
             }
+            if (intent == null) {
+                intent = new Intent(AlarmClock.ACTION_SHOW_ALARMS);
+            }
+            mActivityStarter.startActivity(intent, true /* dismissShade */);
+        } else if (v == mDate) {
+            startDateActivity();
         }
+    }
+
+    private void startDateActivity() {
+        Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+        builder.appendPath("time");
+        ContentUris.appendId(builder, System.currentTimeMillis());
+        Intent intent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
+        mActivityStarter.startActivity(intent, true /* dismissShade */);
     }
 
     private void startSettingsActivity() {
