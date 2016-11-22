@@ -83,6 +83,7 @@ class SaveImageInBackgroundData {
     int previewWidth;
     int previewheight;
     int errorMsgResId;
+    int notificationId;
 
     void clearImage() {
         image = null;
@@ -112,6 +113,7 @@ class SaveImageInBackgroundTask extends AsyncTask<Void, Void, Void> {
     private final String mImageFileName;
     private final String mImageFilePath;
     private final long mImageTime;
+    private final int mNotificationId;
     private final BigPictureStyle mNotificationStyle;
     private final int mImageWidth;
     private final int mImageHeight;
@@ -145,6 +147,8 @@ class SaveImageInBackgroundTask extends AsyncTask<Void, Void, Void> {
         int iconSize = data.iconSize;
         int previewWidth = data.previewWidth;
         int previewHeight = data.previewheight;
+
+        mNotificationId = data.notificationId;
 
         Canvas c = new Canvas();
         Paint paint = new Paint();
@@ -207,7 +211,7 @@ class SaveImageInBackgroundTask extends AsyncTask<Void, Void, Void> {
         mNotificationBuilder.setFlag(Notification.FLAG_NO_CLEAR, true);
         SystemUI.overrideNotificationAppName(context, mNotificationBuilder);
 
-        mNotificationManager.notify(R.id.notification_screenshot, mNotificationBuilder.build());
+        mNotificationManager.notify(mNotificationId, mNotificationBuilder.build());
 
         /**
          * NOTE: The following code prepares the notification builder for updating the notification
@@ -274,23 +278,25 @@ class SaveImageInBackgroundTask extends AsyncTask<Void, Void, Void> {
             sharingIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
 
             // Create a share action for the notification
-            PendingIntent chooseAction = PendingIntent.getBroadcast(context, 0,
-                    new Intent(context, GlobalScreenshot.TargetChosenReceiver.class),
+            PendingIntent chooseAction = PendingIntent.getBroadcast(context, mNotificationId,
+                    new Intent(context, GlobalScreenshot.TargetChosenReceiver.class)
+                            .putExtra(GlobalScreenshot.SCREENSHOT_NOTIFICATION_ID, mNotificationId),
                     PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
             Intent chooserIntent = Intent.createChooser(sharingIntent, null,
                     chooseAction.getIntentSender())
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            PendingIntent shareAction = PendingIntent.getActivity(context, 0, chooserIntent,
-                    PendingIntent.FLAG_CANCEL_CURRENT);
+            PendingIntent shareAction = PendingIntent.getActivity(context, mNotificationId,
+                    chooserIntent, PendingIntent.FLAG_CANCEL_CURRENT);
             Notification.Action.Builder shareActionBuilder = new Notification.Action.Builder(
                     R.drawable.ic_screenshot_share,
                     r.getString(com.android.internal.R.string.share), shareAction);
             mNotificationBuilder.addAction(shareActionBuilder.build());
 
             // Create a delete action for the notification
-            PendingIntent deleteAction = PendingIntent.getBroadcast(context,  0,
+            PendingIntent deleteAction = PendingIntent.getBroadcast(context, mNotificationId,
                     new Intent(context, GlobalScreenshot.DeleteScreenshotReceiver.class)
-                            .putExtra(GlobalScreenshot.SCREENSHOT_URI_ID, uri.toString()),
+                            .putExtra(GlobalScreenshot.SCREENSHOT_URI_ID, uri.toString())
+                            .putExtra(GlobalScreenshot.SCREENSHOT_NOTIFICATION_ID, mNotificationId),
                     PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
             Notification.Action.Builder deleteActionBuilder = new Notification.Action.Builder(
                     R.drawable.ic_screenshot_delete,
@@ -353,14 +359,13 @@ class SaveImageInBackgroundTask extends AsyncTask<Void, Void, Void> {
                 .setPublicVersion(mPublicNotificationBuilder.build())
                 .setFlag(Notification.FLAG_NO_CLEAR, false);
 
-            mNotificationManager.notify(R.id.notification_screenshot, mNotificationBuilder.build());
+            mNotificationManager.notify(mNotificationId, mNotificationBuilder.build());
 
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     mNotificationBuilder.setPriority(Notification.PRIORITY_MIN);
-                    mNotificationManager.notify(R.id.notification_screenshot,
-                            mNotificationBuilder.build());
+                    mNotificationManager.notify(mNotificationId, mNotificationBuilder.build());
                 }
             }, SCREENSHOT_NOTIFICATION_HIDE_DELAY);
         }
@@ -378,7 +383,7 @@ class SaveImageInBackgroundTask extends AsyncTask<Void, Void, Void> {
         mParams.clearContext();
 
         // Cancel the posted notification
-        mNotificationManager.cancel(R.id.notification_screenshot);
+        mNotificationManager.cancel(mNotificationId);
     }
 }
 
@@ -410,6 +415,7 @@ class DeleteImageInBackgroundTask extends AsyncTask<Uri, Void, Void> {
 }
 
 class GlobalScreenshot {
+    static final String SCREENSHOT_NOTIFICATION_ID = "android:screenshot_notification_id";
     static final String SCREENSHOT_URI_ID = "android:screenshot_uri_id";
 
     private static final int SCREENSHOT_FLASH_TO_PEAK_DURATION = 130;
@@ -453,6 +459,8 @@ class GlobalScreenshot {
     private MediaActionSound mCameraSound;
 
     private final int mSfHwRotation;
+
+    private static int sNotificationCounter = 0;
 
     /**
      * @param context everything needs a context :(
@@ -539,6 +547,11 @@ class GlobalScreenshot {
         data.finisher = finisher;
         data.previewWidth = mPreviewWidth;
         data.previewheight = mPreviewHeight;
+        data.notificationId = sNotificationCounter++;
+        // better safe than sorry
+        if (Integer.MAX_VALUE - 5 <= sNotificationCounter) {
+            sNotificationCounter = 0;
+        }
         if (mSaveInBgTask != null) {
             mSaveInBgTask.cancel(false);
         }
@@ -900,10 +913,13 @@ class GlobalScreenshot {
     public static class TargetChosenReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+            final int notificationId = intent.getIntExtra(SCREENSHOT_NOTIFICATION_ID,
+                    R.id.notification_screenshot);
+
             // Clear the notification
             final NotificationManager nm =
                     (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            nm.cancel(R.id.notification_screenshot);
+            nm.cancel(notificationId);
         }
     }
 
@@ -917,11 +933,14 @@ class GlobalScreenshot {
                 return;
             }
 
+            final int notificationId = intent.getIntExtra(SCREENSHOT_NOTIFICATION_ID,
+                    R.id.notification_screenshot);
+
             // Clear the notification
             final NotificationManager nm =
                     (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             final Uri uri = Uri.parse(intent.getStringExtra(SCREENSHOT_URI_ID));
-            nm.cancel(R.id.notification_screenshot);
+            nm.cancel(notificationId);
 
             // And delete the image from the media store
             new DeleteImageInBackgroundTask(context).execute(uri);
