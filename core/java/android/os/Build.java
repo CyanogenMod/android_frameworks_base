@@ -720,7 +720,7 @@ public class Build {
     }
 
     /** The type of build, like "user" or "eng". */
-    public static final String TYPE = getString("ro.build.type");
+    public static final String TYPE = determineBuildType();
 
     /** Comma-separated tags describing the build, like "unsigned,debug". */
     public static final String TAGS = getString("ro.build.tags");
@@ -745,6 +745,29 @@ public class Build {
                     getString("ro.build.tags");
         }
         return finger;
+    }
+
+    private static String determineBuildType() {
+        final String actualBuildType = getString("ro.build.type");
+        if (Process.isApplicationUid(Process.myUid())) {
+            // Some apps like to compare the build type embedded in fingerprint
+            // to the actual build type. As the fingerprint in our case is almost
+            // always hardcoded to the stock ROM fingerprint, provide that instead
+            // of the actual one if possible.
+            final String fingerprint = SystemProperties.get("ro.build.fingerprint");
+            if (!TextUtils.isEmpty(fingerprint)) {
+                Pattern fingerprintPattern =
+                        Pattern.compile("(.*)\\/(.*)\\/(.*):(.*)\\/(.*)\\/(.*):(.*)\\/(.*)");
+                Matcher matcher = fingerprintPattern.matcher(fingerprint);
+                if (matcher.matches()) {
+                    String fingerprintBuildType = matcher.group(7);
+                    if (!TextUtils.isEmpty(fingerprintBuildType)) {
+                        return fingerprintBuildType;
+                    }
+                }
+            }
+        }
+        return actualBuildType;
     }
 
     /**
