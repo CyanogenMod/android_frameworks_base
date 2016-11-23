@@ -731,6 +731,44 @@ public class Build {
         }
     }
 
+    /*
+     * Some apps like to compare the build type embedded in fingerprint
+     * to the actual build type. As the fingerprint in our case is almost
+     * always hardcoded to the stock ROM fingerprint, provide that instead
+     * of the actual one if possible.
+     */
+    private static String parseBuildTypeFromFingerprint() {
+        final String fingerprint = SystemProperties.get("ro.build.fingerprint");
+        if (TextUtils.isEmpty(fingerprint)) {
+            return null;
+        }
+        Pattern fingerprintPattern =
+                Pattern.compile("(.*)\\/(.*)\\/(.*):(.*)\\/(.*)\\/(.*):(.*)\\/(.*)");
+        Matcher matcher = fingerprintPattern.matcher(fingerprint);
+        return matcher.matches() ? matcher.group(7) : null;
+    }
+
+    /** @hide */
+    public static void adjustBuildTypeIfNeeded() {
+        if (Process.isApplicationUid(Process.myUid()) && !TextUtils.isEmpty(TYPE_FOR_APPS)) {
+            try {
+                // This is sick. TYPE is final (which can't be changed because it's an API
+                // guarantee), but we have to reassign it. Resort to reflection to unset the
+                // final modifier, change the value and restore the final modifier afterwards.
+                Field typeField = Build.class.getField("TYPE");
+                Field accessFlagsField = Field.class.getDeclaredField("accessFlags");
+                accessFlagsField.setAccessible(true);
+                int currentFlags = accessFlagsField.getInt(typeField);
+                accessFlagsField.setInt(typeField, currentFlags & ~Modifier.FINAL);
+                typeField.set(null, TYPE_FOR_APPS);
+                accessFlagsField.setInt(typeField, currentFlags);
+                accessFlagsField.setAccessible(false);
+            } catch (Exception e) {
+                // shouldn't happen, but we don't want to crash the app even if it does happen
+            }
+        }
+    }
+
     /**
      * Ensure that raw fingerprint system property is defined. If it was derived
      * dynamically by {@link #deriveFingerprint()} this is where we push the
