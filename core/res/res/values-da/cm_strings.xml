@@ -28,10 +28,12 @@
   <!-- label for item that opens the profile choosing dialog -->
   <string name="global_action_choose_profile">Profil</string>
   <!-- label for item that restarts the phone in phone options dialog -->
+  <string name="global_action_reboot">Genstart</string>
   <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Aktuel</string>
   <!-- Restart menu -->
   <!-- Button to restart the phone, within the Restart Options dialog -->
+  <string name="reboot_reboot">Genstart</string>
   <!-- Button to restart the phone into recovery, within the Restart Options dialog -->
   <string name="reboot_recovery">Recovery</string>
   <!-- Button to restart the phone into bootloader, within the Restart Options dialog -->
@@ -39,10 +41,15 @@
   <!-- Button to restart the phone into download, within the Restart Options dialog -->
   <string name="reboot_download">Download</string>
   <!-- Button to soft restart the device, within the Restart Options dialog -->
+  <string name="reboot_soft">Blød genstart</string>
   <!-- Title of dialog to confirm restarting. -->
+  <string name="reboot_title">Genstart</string>
   <!-- Restart Confirmation Dialog.  When the user chooses to restart the device, there will
          be a confirmation dialog.  This is the message. -->
+  <string name="reboot_confirm" product="tablet">Din tablet vil genstarte.</string>
+  <string name="reboot_confirm" product="default">Din telefon vil genstarte.</string>
   <!-- Restart Progress Dialog. This is shown if the user chooses to restart the phone. -->
+  <string name="reboot_progress">Genstarter\u2026</string>
   <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ADB via netværk aktiveret</string>
   <!-- ADB over USB and network notification -->
@@ -112,6 +119,7 @@
   <string name="app_ops_use_fingerprint">brug fingeraftryk</string>
   <string name="app_ops_add_voicemail">tilføj en voicemail</string>
   <string name="app_ops_read_phone_state">tilgå telefon status</string>
+  <string name="app_ops_scan_wifi">scan Wi-Fi-netværk</string>
   <string name="app_ops_change_wallpaper">skift baggrund</string>
   <string name="app_ops_assist_structure">brug hjælpe struktur</string>
   <string name="app_ops_assist_screenshot">tag et skærmbillede</string>
@@ -122,6 +130,7 @@
   <string name="app_ops_write_external_storage">skriv eksternt lager</string>
   <string name="app_ops_turn_on_screen">tænd skærmen</string>
   <string name="app_ops_get_accounts">hent enhedskonti</string>
+  <string name="app_ops_run_in_background">kør i baggrunden</string>
   <string name="app_ops_wifi_change">ændre Wi-Fi tilstand</string>
   <string name="app_ops_su">få root-adgang</string>
   <!-- Protected Apps Notification -->
