@@ -24,13 +24,9 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/alarms/ogg/Argon.ogg:system/media/audio/alarms/Argon.ogg \
     $(LOCAL_PATH)/alarms/ogg/Barium.ogg:system/media/audio/alarms/Barium.ogg \
     $(LOCAL_PATH)/alarms/ogg/Carbon.ogg:system/media/audio/alarms/Carbon.ogg \
-    $(LOCAL_PATH)/alarms/ogg/Hassium.ogg:system/media/audio/alarms/Hassium.ogg \
     $(LOCAL_PATH)/alarms/ogg/Krypton.ogg:system/media/audio/alarms/Krypton.ogg \
     $(LOCAL_PATH)/alarms/ogg/Neon.ogg:system/media/audio/alarms/Neon.ogg \
-    $(LOCAL_PATH)/alarms/ogg/Neptunium.ogg:system/media/audio/alarms/Neptunium.ogg \
     $(LOCAL_PATH)/alarms/ogg/Osmium.ogg:system/media/audio/alarms/Osmium.ogg \
-    $(LOCAL_PATH)/alarms/ogg/Platinum.ogg:system/media/audio/alarms/Platinum.ogg \
-    $(LOCAL_PATH)/alarms/ogg/Plutonium.ogg:system/media/audio/alarms/Plutonium.ogg \
     $(LOCAL_PATH)/alarms/ogg/Scandium.ogg:system/media/audio/alarms/Scandium.ogg \
     $(LOCAL_PATH)/notifications/ogg/Adara.ogg:system/media/audio/notifications/Adara.ogg \
     $(LOCAL_PATH)/notifications/Aldebaran.ogg:system/media/audio/notifications/Aldebaran.ogg \
@@ -70,7 +66,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/notifications/ogg/Iridium.ogg:system/media/audio/notifications/Iridium.ogg \
     $(LOCAL_PATH)/notifications/ogg/Krypton.ogg:system/media/audio/notifications/Krypton.ogg \
     $(LOCAL_PATH)/newwavelabs/KzurbSonar.ogg:system/media/audio/notifications/KzurbSonar.ogg \
-    $(LOCAL_PATH)/notifications/ogg/Lalande.ogg:system/media/audio/notifications/Lalande.ogg \
     $(LOCAL_PATH)/notifications/Merope.ogg:system/media/audio/notifications/Merope.ogg \
     $(LOCAL_PATH)/notifications/ogg/Mira.ogg:system/media/audio/notifications/Mira.ogg \
     $(LOCAL_PATH)/newwavelabs/OnTheHunt.ogg:system/media/audio/notifications/OnTheHunt.ogg \
@@ -91,7 +86,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/notifications/ogg/Syrma.ogg:system/media/audio/notifications/Syrma.ogg \
     $(LOCAL_PATH)/notifications/TaDa.ogg:system/media/audio/notifications/TaDa.ogg \
     $(LOCAL_PATH)/notifications/ogg/Talitha.ogg:system/media/audio/notifications/Talitha.ogg \
-    $(LOCAL_PATH)/notifications/ogg/Tejat.ogg:system/media/audio/notifications/Tejat.ogg \
     $(LOCAL_PATH)/notifications/ogg/Thallium.ogg:system/media/audio/notifications/Thallium.ogg \
     $(LOCAL_PATH)/notifications/Tinkerbell.ogg:system/media/audio/notifications/Tinkerbell.ogg \
     $(LOCAL_PATH)/notifications/ogg/Upsilon.ogg:system/media/audio/notifications/Upsilon.ogg \
@@ -217,14 +211,12 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/effects/ogg/WirelessChargingStarted.ogg:system/media/audio/ui/WirelessChargingStarted.ogg \
     $(LOCAL_PATH)/effects/ogg/camera_click_48k.ogg:system/media/audio/ui/camera_click.ogg \
     $(LOCAL_PATH)/effects/ogg/camera_focus.ogg:system/media/audio/ui/camera_focus.ogg \
-    $(LOCAL_PATH)/ringtones/material/ogg/Atria.ogg:system/media/audio/ringtones/AtriaMaterial.ogg \
     $(LOCAL_PATH)/ringtones/material/ogg/Callisto.ogg:system/media/audio/ringtones/Callisto.ogg \
     $(LOCAL_PATH)/ringtones/material/ogg/Dione.ogg:system/media/audio/ringtones/Dione.ogg \
     $(LOCAL_PATH)/ringtones/material/ogg/Ganymede.ogg:system/media/audio/ringtones/Ganymede.ogg \
     $(LOCAL_PATH)/ringtones/material/ogg/Luna.ogg:system/media/audio/ringtones/Luna.ogg \
     $(LOCAL_PATH)/ringtones/material/ogg/Oberon.ogg:system/media/audio/ringtones/Oberon.ogg \
-    $(LOCAL_PATH)/ringtones/material/ogg/Phobos.ogg:system/media/audio/ringtones/Phobos.oggg \
-    $(LOCAL_PATH)/ringtones/material/ogg/Pyxis.ogg:system/media/audio/ringtones/PyxisMaterial.ogg \
+    $(LOCAL_PATH)/ringtones/material/ogg/Phobos.ogg:system/media/audio/ringtones/Phobos.ogg \
     $(LOCAL_PATH)/ringtones/material/ogg/Sedna.ogg:system/media/audio/ringtones/Sedna.ogg \
     $(LOCAL_PATH)/ringtones/material/ogg/Titania.ogg:system/media/audio/ringtones/Titania.ogg \
     $(LOCAL_PATH)/ringtones/material/ogg/Triton.ogg:system/media/audio/ringtones/Triton.ogg \
