@@ -503,6 +503,7 @@
 
     <protected-broadcast android:name="com.android.server.retaildemo.ACTION_RESET_DEMO" />
 
+    <protected-broadcast android:name="cyanogenmod.intent.action.ACTION_COVER_CHANGE" />
     <!-- ====================================================================== -->
     <!--                          RUNTIME PERMISSIONS                           -->
     <!-- ====================================================================== -->

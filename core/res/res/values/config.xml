@@ -696,6 +696,11 @@
          The default is false. -->
     <bool name="config_lidControlsSleep">false</bool>
 
+    <!-- Indicate whether opening/closing the lid should send an intent for a add-on
+         cover app to handle.
+         The default is false. -->
+    <bool name="config_lidSendsIntent">false</bool>
+
     <!-- Desk dock behavior -->
 
     <!-- The number of degrees to rotate the display when the device is in a desk dock.

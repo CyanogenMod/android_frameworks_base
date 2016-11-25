@@ -520,6 +520,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     int mLidNavigationAccessibility;
     boolean mLidControlsScreenLock;
     boolean mLidControlsSleep;
+    boolean mLidSendsIntent;
     int mShortPressOnPowerBehavior;
     int mLongPressOnPowerBehavior;
     int mDoublePressOnPowerBehavior;
@@ -1855,6 +1856,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 com.android.internal.R.bool.config_lidControlsScreenLock);
         mLidControlsSleep = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_lidControlsSleep);
+        mLidSendsIntent = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_lidSendsIntent);
         mTranslucentDecorEnabled = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_enableTranslucentDecor);
 
@@ -7958,9 +7961,20 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mWindowManagerFuncs.lockDeviceNow();
         }
 
+        if (mLidSendsIntent) {
+            sendLidIntent();
+        }
+
         synchronized (mLock) {
             updateWakeGestureListenerLp();
         }
+    }
+
+    void sendLidIntent() {
+        Log.d(TAG, "Sending cover intent, mLidState:" + mLidState);
+        Intent intent = new Intent(cyanogenmod.content.Intent.ACTION_COVER_CHANGE);
+        intent.putExtra(cyanogenmod.content.Intent.EXTRA_COVER_STATE, mLidState);
+        mContext.sendBroadcastAsUser(intent, UserHandle.SYSTEM);
     }
 
     void updateUiMode() {
