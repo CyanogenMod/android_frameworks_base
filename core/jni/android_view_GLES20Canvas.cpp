@@ -966,7 +966,7 @@ static void android_view_GLES20Canvas_flushLayerUpdates(JNIEnv* env, jobject cla
 static jboolean android_view_GLES20Canvas_isAvailable(JNIEnv* env, jobject clazz) {
 #ifdef USE_OPENGL_RENDERER
     char prop[PROPERTY_VALUE_MAX];
-    if (property_get("ro.kernel.qemu", prop, NULL) == 0) {
+    if (property_get("ro.kernel.qemu", prop, NULL) == 0 || atoi(prop) == 0) {
         // not in the emulator
         return JNI_TRUE;
     }
