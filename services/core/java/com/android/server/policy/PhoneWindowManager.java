@@ -5944,6 +5944,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         if (lidOpen) {
             wakeUp(SystemClock.uptimeMillis(), mAllowTheaterModeWakeFromLidSwitch,
                     "android.policy:LID");
+            if (mCMHardware.isSupported(CMHardwareManager.FEATURE_FLIP_COVER)) {
+                Log.e(TAG, "FLIP_COVER SUPPORTED");
+                Intent intent = new Intent(cyanogenmod.content.Intent.ACTION_COVER_CHANGE);
+                intent.putExtra(cyanogenmod.content.Intent.EXTRA_COVER_STATE, mLidState);
+                mContext.sendBroadcastAsUser(intent, UserHandle.SYSTEM);
+            }
         } else if (!mLidControlsSleep) {
             mPowerManager.userActivity(SystemClock.uptimeMillis(), false);
         }
@@ -7920,10 +7926,18 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private void applyLidSwitchState() {
         mPowerManager.setKeyboardVisibility(isBuiltInKeyboardVisible());
 
-        if (mLidState == LID_CLOSED && mLidControlsSleep) {
-            mPowerManager.goToSleep(SystemClock.uptimeMillis(),
-                    PowerManager.GO_TO_SLEEP_REASON_LID_SWITCH,
-                    PowerManager.GO_TO_SLEEP_FLAG_NO_DOZE);
+        if (mLidState == LID_CLOSED) {
+        Log.e(TAG, "mLidState=" + mLidState);
+            if (mLidControlsSleep) {
+                mPowerManager.goToSleep(SystemClock.uptimeMillis(),
+                        PowerManager.GO_TO_SLEEP_REASON_LID_SWITCH,
+                        PowerManager.GO_TO_SLEEP_FLAG_NO_DOZE);
+            } else if (mCMHardware.isSupported(CMHardwareManager.FEATURE_FLIP_COVER)) {
+                Log.e(TAG, "FlipCover Supportted, sending cover closed intent");
+                Intent intent = new Intent(cyanogenmod.content.Intent.ACTION_COVER_CHANGE);
+                intent.putExtra(cyanogenmod.content.Intent.EXTRA_COVER_STATE, mLidState);
+                mContext.sendBroadcastAsUser(intent, UserHandle.SYSTEM);
+            }
         } else if (mLidState == LID_CLOSED && mLidControlsScreenLock) {
             mWindowManagerFuncs.lockDeviceNow();
         }
