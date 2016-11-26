@@ -723,9 +723,9 @@ public class ConnectivityService extends IConnectivityManager.Stub
         //                       DEVICE_HOSTNAME
         //                       android-ANDROID_ID
         //                       android-r-RANDOM_NUMBER
+        String hostname = CMSettings.Secure.getString(context.getContentResolver(),
+                CMSettings.Secure.DEVICE_HOSTNAME);
         if (TextUtils.isEmpty(SystemProperties.get("net.hostname"))) {
-            String hostname = CMSettings.Secure.getString(context.getContentResolver(),
-                    CMSettings.Secure.DEVICE_HOSTNAME);
             String id = Settings.Secure.getString(context.getContentResolver(),
                     Settings.Secure.ANDROID_ID);
             if (!TextUtils.isEmpty(hostname)) {
@@ -736,6 +736,8 @@ public class ConnectivityService extends IConnectivityManager.Stub
             } else {
                 SystemProperties.set("net.hostname", "android-r-" + new Random().nextInt());
             }
+        } else if (!TextUtils.isEmpty(hostname)) {
+            SystemProperties.set("net.hostname", hostname);
         }
 
         mReleasePendingIntentDelayMs = Settings.Secure.getInt(context.getContentResolver(),
