@@ -726,13 +726,14 @@ public class ConnectivityService extends IConnectivityManager.Stub
         mTrackerHandler = new NetworkStateTrackerHandler(mHandlerThread.getLooper());
 
         // setup our unique device name
-        // either to (in order): current net.hostname
-        //                       DEVICE_HOSTNAME
+        // either to (in order): DEVICE_HOSTNAME
+        //                       current net.hostname
         //                       android-ANDROID_ID
         //                       android-r-RANDOM_NUMBER
-        if (TextUtils.isEmpty(SystemProperties.get("net.hostname"))) {
-            String hostname = CMSettings.Secure.getString(context.getContentResolver(),
-                    CMSettings.Secure.DEVICE_HOSTNAME);
+        String hostname = CMSettings.Secure.getString(context.getContentResolver(),
+                CMSettings.Secure.DEVICE_HOSTNAME);
+        if (TextUtils.isEmpty(SystemProperties.get("net.hostname"))
+                || !TextUtils.isEmpty(hostname)) {
             String id = Settings.Secure.getString(context.getContentResolver(),
                     Settings.Secure.ANDROID_ID);
             if (!TextUtils.isEmpty(hostname)) {
