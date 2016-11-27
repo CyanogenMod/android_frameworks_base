@@ -712,7 +712,7 @@ public class Build {
 
     /** @hide */
     public static void adjustBuildTypeIfNeeded() {
-        if (Process.isApplicationUid(Process.myUid()) && !TextUtils.isEmpty(TYPE_FOR_APPS)) {
+        if (UserHandle.isApp(Process.myUid()) && !TextUtils.isEmpty(TYPE_FOR_APPS)) {
             try {
                 // This is sick. TYPE is final (which can't be changed because it's an API
                 // guarantee), but we have to reassign it. Resort to reflection to unset the
