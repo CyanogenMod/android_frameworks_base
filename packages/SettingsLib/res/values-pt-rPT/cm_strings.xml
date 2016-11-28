@@ -20,7 +20,9 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Description for the screen zoom level that makes interface elements smaller. [CHAR LIMIT=24] -->
+  <string name="screen_zoom_summary_smaller">Menor</string>
   <!-- Description for the screen zoom level that makes interface elements smallest. [CHAR LIMIT=24] -->
+  <string name="screen_zoom_summary_smallest">Minúsculo</string>
   <string name="profile_applist_title">Aplicações</string>
   <string name="picker_activities">Atividades</string>
   <string name="select_custom_app_title">Selecione uma aplicação personalizada</string>

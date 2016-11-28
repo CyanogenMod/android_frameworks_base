@@ -29,13 +29,47 @@
   <string name="led_notification_title">Definições de luz</string>
   <string name="led_notification_text">Luz do LED ativada pelas definições</string>
   <!-- Content description of the superuser tile -->
+  <string name="accessibility_su_active">Sessão de superuser ativa</string>
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">A lanterna está ligada</string>
   <string name="quick_settings_tile_flashlight_not_summary">Toque para desligar</string>
   <!-- [CHAR LIMIT=NONE] Importance Tuner setting title -->
+  <string name="cm_power_notification_controls_description">Com os controlos avançados de notificações pode definir um nível de importância entre 0 e 6 para as notificações das aplicações.
+        \n\n<b>Nível 6</b>
+        \n- Mostrar no topo da lista de notificações
+        \n- Permitir interrupções do ecrã inteiro
+        \n- Apresentação rápida: sempre
+        \n\n<b>Nível 5</b>
+        \n- Prevenir interrupções do ecrã inteiro
+        \n- Apresentação rápida: sempre
+        \n\n<b>Nível 4</b>
+        \n- Prevenir interrupções do ecrã inteiro
+        \n- Apresentação rápida: nunca
+        \n\n<b>Nível 3</b>
+        \n- Prevenir interrupções do ecrã inteiro
+        \n- Apresentação rápida: nunca
+        \n- Nunca tocar sons ou vibrar
+        \n\n<b>Nível 2</b>
+        \n- Prevenir interrupções do ecrã inteiro
+        \n- Apresentação rápida: nunca
+        \n- Nunca tocar sons ou vibrar
+        \n- Ocultar do ecrã de bloqueio
+        \n- Mostrar no fundo da lista de notificações
+        \n\n<b>Nível 1</b>
+        \n- Prevenir interrupções do ecrã inteiro
+        \n- Apresentação rápida: nunca
+        \n- Nunca tocar sons ou vibrar
+        \n- Ocultar do ecrã de bloqueio e da barra de estado
+        \n- Mostrar no fundo da lista de notificações
+        \n\n<b>Nível 0</b>
+        \n- Bloquear todas as notificações da aplicação
+    </string>
   <!-- Notification importance level title-->
+  <string name="importance_level_title">Importância: Nível %1$d</string>
   <!-- [CHAR LIMIT=100] Notification Importance slider: very low importance level description -->
+  <string name="notification_importance_very_low">Sem interrupção do ecrã inteiro, apresentação rápida, som ou vibração. Ocultar no ecrã de bloqueio.</string>
   <!-- Screen pinning dialog description (for devices without navbar) -->
+  <string name="screen_pinning_description_no_navbar">Irá ficar visível até que o solte. Toque e segure o botão Anterior para soltar.</string>
   <!-- Strings for lockscreen shortcut hints -->
   <string name="left_shortcut_hint">Deslizar para a direita para %1$s</string>
   <string name="right_shortcut_hint">Deslizar para a esquerda para %1$s</string>
@@ -51,4 +85,6 @@
   <string name="accessibility_dpad_left">Cursor à esquerda</string>
   <string name="accessibility_dpad_right">Cursor à direita</string>
   <!-- NavBar Tuner -->
+  <string name="menu_ime_always_show">Alternador de Menu / Teclado (mostrar sempre)</string>
+  <string name="search">Pesquisar</string>
 </resources>
