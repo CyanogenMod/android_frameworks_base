@@ -222,7 +222,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/ringtones/material/ogg/Ganymede.ogg:system/media/audio/ringtones/Ganymede.ogg \
     $(LOCAL_PATH)/ringtones/material/ogg/Luna.ogg:system/media/audio/ringtones/Luna.ogg \
     $(LOCAL_PATH)/ringtones/material/ogg/Oberon.ogg:system/media/audio/ringtones/Oberon.ogg \
-    $(LOCAL_PATH)/ringtones/material/ogg/Phobos.ogg:system/media/audio/ringtones/Phobos.oggg \
+    $(LOCAL_PATH)/ringtones/material/ogg/Phobos.ogg:system/media/audio/ringtones/Phobos.ogg \
     $(LOCAL_PATH)/ringtones/material/ogg/Pyxis.ogg:system/media/audio/ringtones/PyxisMaterial.ogg \
     $(LOCAL_PATH)/ringtones/material/ogg/Sedna.ogg:system/media/audio/ringtones/Sedna.ogg \
     $(LOCAL_PATH)/ringtones/material/ogg/Titania.ogg:system/media/audio/ringtones/Titania.ogg \
