@@ -53,26 +53,26 @@
 \n- Interruzioni a schermo intero non consentite
 \n- Nessun\'anteprima
 \n- Nessun suono o vibrazione
-\n- Visualizzazione sulla schermata di blocco non consentita 
+\n- Visualizzazione nel blocco schermo non consentita 
 \n- Visualizza in fondo all\'elenco delle notifiche
 \n\n <b>Livello 1</b>
 \n- Interruzioni a schermo intero non consentite
 \n- Nessun\'anteprima
 \n- Nessun suono o vibrazione
-\n- Visualizzazione sulla schermata di blocco e nella barra di stato non consentita 
+\n- Visualizzazione nel blocco schermo e nella barra di stato non consentita 
 \n- Visualizza in fondo all\'elenco delle notifiche
 \n\n <b>Livello 0</b>
 \n- Tutte le notifiche vengono bloccate</string>
   <!-- Notification importance level title-->
   <string name="importance_level_title">Importanza: Livello %1$d</string>
   <!-- [CHAR LIMIT=100] Notification Importance slider: very low importance level description -->
-  <string name="notification_importance_very_low">Nessuna interruzione a schermo intero, anteprima, soni o vibrazioni. Nascosta nella schermata di blocco.</string>
+  <string name="notification_importance_very_low">Nessuna interruzione a schermo intero, anteprima, suoni o vibrazioni. Nascosta nel blocco schermo.</string>
   <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">Tienilo in vista fino a quando non sblocchi. Tieni premuto il tasto Indietro per sbloccare.</string>
   <!-- Strings for lockscreen shortcut hints -->
   <string name="left_shortcut_hint">Scorri a destra per %1$s</string>
   <string name="right_shortcut_hint">Scorri a sinistra per %1$s</string>
-  <string name="lockscreen_message">Tocca un\'icona per riassegnare un collegamento alla schermata di blocco.</string>
+  <string name="lockscreen_message">Tocca un\'icona per riassegnare un collegamento nel blocco schermo.</string>
   <string name="lockscreen_default_target">Predefinito</string>
   <string name="select_application">Seleziona applicazione</string>
   <string name="lockscreen_choose_action_title">Scegli un\'azione</string>
