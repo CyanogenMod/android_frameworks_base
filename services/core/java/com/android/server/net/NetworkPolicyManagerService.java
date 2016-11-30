@@ -48,6 +48,7 @@ import static android.net.NetworkPolicyManager.FIREWALL_RULE_DEFAULT;
 import static android.net.NetworkPolicyManager.FIREWALL_RULE_DENY;
 import static android.net.NetworkPolicyManager.POLICY_NONE;
 import static android.net.NetworkPolicyManager.POLICY_REJECT_METERED_BACKGROUND;
+import static android.net.NetworkPolicyManager.POLICY_REJECT_APP_METERED_USAGE;
 import static android.net.NetworkPolicyManager.RULE_ALLOW_ALL;
 import static android.net.NetworkPolicyManager.RULE_ALLOW_METERED;
 import static android.net.NetworkPolicyManager.MASK_METERED_NETWORKS;
@@ -3524,6 +3525,10 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
         if (!mUserManager.hasUserRestriction(UserManager.DISALLOW_APPS_CONTROL)) {
             // Remove app's "restrict background data" flag
             for (int uid : getUidsWithPolicy(POLICY_REJECT_METERED_BACKGROUND)) {
+                setUidPolicy(uid, POLICY_NONE);
+            }
+            // Remove app's "restrict metered data" flag
+            for (int uid : getUidsWithPolicy(POLICY_REJECT_APP_METERED_USAGE)) {
                 setUidPolicy(uid, POLICY_NONE);
             }
         }

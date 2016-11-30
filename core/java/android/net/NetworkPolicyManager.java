@@ -48,6 +48,8 @@ public class NetworkPolicyManager {
     public static final int POLICY_REJECT_METERED_BACKGROUND = 0x1;
     /** Allow network use (metered or not) in the background in battery save mode. */
     public static final int POLICY_ALLOW_BACKGROUND_BATTERY_SAVE = 0x2;
+    /** Reject all network usage on metered networks for an application */
+    public static final int POLICY_REJECT_APP_METERED_USAGE = 0x4;
 
     /*
      * Rules defining whether an uid has access to a network given its type (metered / non-metered).
