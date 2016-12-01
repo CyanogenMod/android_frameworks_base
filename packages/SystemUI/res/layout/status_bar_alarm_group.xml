@@ -31,10 +31,16 @@
         android:orientation="horizontal"
         android:focusable="true" >
 
-        <include layout="@layout/split_clock_view"
+        <FrameLayout
+            android:id="@+id/clock"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:layout_above="@id/date_time_alarm_group"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/clock" />
+            android:layout_height="wrap_content">
+            <include layout="@layout/split_clock_view"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+        </FrameLayout>
 
         <com.android.systemui.statusbar.AlphaOptimizedImageView
             android:id="@+id/alarm_status_collapsed"
@@ -43,6 +49,7 @@
             android:src="@drawable/ic_access_alarms_small"
             android:paddingStart="6dp"
             android:gravity="center"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
             android:visibility="gone" />
     </LinearLayout>
 
@@ -55,6 +62,7 @@
         android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Clock"
         android:textSize="@dimen/qs_time_collapsed_size"
         android:gravity="top"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
         systemui:datePattern="@string/abbrev_wday_month_day_no_year_alarm" />
 
     <com.android.systemui.statusbar.AlphaOptimizedButton
@@ -68,7 +76,7 @@
         android:textColor="#64ffffff"
         android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Date"
         android:gravity="top"
-        android:background="?android:attr/selectableItemBackground"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
         android:visibility="gone" />
 
 </LinearLayout>
