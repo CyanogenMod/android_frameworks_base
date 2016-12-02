@@ -50,6 +50,8 @@ public class KeyguardStatusBarView extends RelativeLayout
 
     private static final String STATUS_BAR_SHOW_BATTERY_PERCENT =
             "cmsystem:" + CMSettings.System.STATUS_BAR_SHOW_BATTERY_PERCENT;
+    private static final String STATUS_BAR_BATTERY_STYLE =
+            "cmsystem:" + CMSettings.System.STATUS_BAR_BATTERY_STYLE;
 
     private boolean mBatteryCharging;
     private boolean mKeyguardUserSwitcherShowing;
@@ -70,6 +72,8 @@ public class KeyguardStatusBarView extends RelativeLayout
     private View mSystemIconsContainer;
 
     private boolean mShowBatteryText;
+    private boolean mForceBatteryText;
+    private boolean mAllowBatteryText;
 
     public KeyguardStatusBarView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -174,7 +178,8 @@ public class KeyguardStatusBarView extends RelativeLayout
             }
         }
         mBatteryLevel.setVisibility(
-                mBatteryCharging || mShowBatteryText ? View.VISIBLE : View.GONE);
+                (mBatteryCharging || mShowBatteryText || mForceBatteryText) && mAllowBatteryText
+                        ? View.VISIBLE : View.GONE);
     }
 
     private void updateSystemIconsLayoutParams() {
@@ -199,7 +204,8 @@ public class KeyguardStatusBarView extends RelativeLayout
         }
         mBatteryListening = listening;
         if (mBatteryListening) {
-            TunerService.get(getContext()).addTunable(this, STATUS_BAR_SHOW_BATTERY_PERCENT);
+            TunerService.get(getContext()).addTunable(this,
+                    STATUS_BAR_SHOW_BATTERY_PERCENT, STATUS_BAR_BATTERY_STYLE);
             mBatteryController.addStateChangedCallback(this);
         } else {
             mBatteryController.removeStateChangedCallback(this);
@@ -334,9 +340,18 @@ public class KeyguardStatusBarView extends RelativeLayout
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        if (key.equals(STATUS_BAR_SHOW_BATTERY_PERCENT)) {
-            mShowBatteryText = newValue == null ? false : Integer.parseInt(newValue) == 2;
-            updateVisibilities();
+        switch (key) {
+            case STATUS_BAR_SHOW_BATTERY_PERCENT:
+                mShowBatteryText = newValue != null && Integer.parseInt(newValue) == 2;
+                break;
+            case STATUS_BAR_BATTERY_STYLE:
+                if (newValue != null) {
+                    final int value = Integer.parseInt(newValue);
+                    mForceBatteryText = value == BatteryMeterDrawable.BATTERY_STYLE_TEXT;
+                    mAllowBatteryText = value == BatteryMeterDrawable.BATTERY_STYLE_HIDDEN;
+                }
+                break;
         }
+        updateVisibilities();
     }
 }
