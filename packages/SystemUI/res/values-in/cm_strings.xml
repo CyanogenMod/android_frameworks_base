@@ -52,4 +52,8 @@
   <string name="accessibility_dpad_left">Kursor kiri</string>
   <string name="accessibility_dpad_right">Kursor kanan</string>
   <!-- NavBar Tuner -->
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="other">%1$d klien</item>
+  </plurals>
 </resources>

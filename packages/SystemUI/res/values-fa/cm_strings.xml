@@ -43,4 +43,5 @@
   <string name="accessibility_dpad_left">نشانگر چپ</string>
   <string name="accessibility_dpad_right">نشانگر راست</string>
   <!-- NavBar Tuner -->
+  <!-- Wi-Fi hotspot label when enabled -->
 </resources>

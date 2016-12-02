@@ -49,4 +49,5 @@
   <string name="accessibility_dpad_left">Курсор ліворуч</string>
   <string name="accessibility_dpad_right">Курсор праворуч</string>
   <!-- NavBar Tuner -->
+  <!-- Wi-Fi hotspot label when enabled -->
 </resources>

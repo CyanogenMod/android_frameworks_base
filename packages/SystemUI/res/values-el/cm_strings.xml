@@ -52,4 +52,9 @@
   <string name="accessibility_dpad_left">Κέρσορας αριστερά</string>
   <string name="accessibility_dpad_right">Κέρσορας δεξιά</string>
   <!-- NavBar Tuner -->
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d συνδεδεμένος</item>
+    <item quantity="other">%1$d συνδεδεμένοι</item>
+  </plurals>
 </resources>
