@@ -1300,13 +1300,23 @@ public class DeviceIdleController extends SystemService
         return new File(Environment.getDataDirectory(), "system");
     }
 
+    private boolean isGmsEnabled() {
+        final PackageManager pm = getContext().getPackageManager();
+        try {
+            final ApplicationInfo info = pm.getApplicationInfo("com.google.android.gms", 0);
+            return info != null && info.enabled;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
     @Override
     public void onStart() {
         final PackageManager pm = getContext().getPackageManager();
 
         synchronized (this) {
             mLightEnabled = mDeepEnabled = getContext().getResources().getBoolean(
-                    com.android.internal.R.bool.config_enableAutoPowerModes);
+                    com.android.internal.R.bool.config_enableAutoPowerModes) && isGmsEnabled();
             SystemConfig sysConfig = SystemConfig.getInstance();
             ArraySet<String> allowPowerExceptIdle = sysConfig.getAllowInPowerSaveExceptIdle();
             for (int i=0; i<allowPowerExceptIdle.size(); i++) {

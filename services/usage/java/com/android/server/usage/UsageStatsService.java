@@ -189,7 +189,7 @@ public class UsageStatsService extends SystemService implements
                 null, mHandler);
 
         mAppIdleEnabled = getContext().getResources().getBoolean(
-                com.android.internal.R.bool.config_enableAutoPowerModes);
+                com.android.internal.R.bool.config_enableAutoPowerModes) && isGmsEnabled();
         if (mAppIdleEnabled) {
             IntentFilter deviceStates = new IntentFilter(BatteryManager.ACTION_CHARGING);
             deviceStates.addAction(BatteryManager.ACTION_DISCHARGING);
@@ -238,6 +238,16 @@ public class UsageStatsService extends SystemService implements
             mSystemServicesReady = true;
         } else if (phase == PHASE_BOOT_COMPLETED) {
             setAppIdleParoled(getContext().getSystemService(BatteryManager.class).isCharging());
+        }
+    }
+
+    private boolean isGmsEnabled() {
+        final PackageManager pm = getContext().getPackageManager();
+        try {
+            final ApplicationInfo info = pm.getApplicationInfo("com.google.android.gms", 0);
+            return info != null && info.enabled;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
         }
     }
 
