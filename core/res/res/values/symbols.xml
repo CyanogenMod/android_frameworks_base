@@ -2785,4 +2785,6 @@
 
   <java-symbol type="drawable" name="ic_restart" />
 
+  <!-- config softap extention feature -->
+  <java-symbol type="bool" name="config_softap_extention" />
 </resources>
