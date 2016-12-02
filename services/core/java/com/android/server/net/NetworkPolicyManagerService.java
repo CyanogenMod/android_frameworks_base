@@ -1,4 +1,4 @@
-/*
+R/*
  * Copyright (C) 2011 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,6 +48,8 @@ import static android.net.NetworkPolicyManager.FIREWALL_RULE_DEFAULT;
 import static android.net.NetworkPolicyManager.FIREWALL_RULE_DENY;
 import static android.net.NetworkPolicyManager.POLICY_NONE;
 import static android.net.NetworkPolicyManager.POLICY_REJECT_METERED_BACKGROUND;
+import static android.net.NetworkPolicyManager.POLICY_REJECT_ON_DATA;
+import static android.net.NetworkPolicyManager.POLICY_REJECT_ON_WLAN;
 import static android.net.NetworkPolicyManager.RULE_ALLOW_ALL;
 import static android.net.NetworkPolicyManager.RULE_ALLOW_METERED;
 import static android.net.NetworkPolicyManager.MASK_METERED_NETWORKS;
@@ -2929,7 +2931,15 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
             }
         } else {
             if (isBlacklisted) {
-                newRule = RULE_REJECT_METERED;
+				try {
+						mNetworkManager.restrictAppOnWlan(uid, (uidPolicy & POLICY_REJECT_ON_WLAN) != 0);
+						mNetworkManager.restrictAppOnData(uid, (uidPolicy & POLICY_REJECT_ON_DATA) != 0);
+					} catch (RemoteException e) {
+						// ignored; service lives in system_server
+					}
+				finally {	
+						newRule = RULE_REJECT_METERED;
+					}
             } else if (mRestrictBackground && isWhitelisted) {
                 newRule = RULE_ALLOW_METERED;
             }
