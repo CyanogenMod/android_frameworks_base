@@ -86,4 +86,12 @@
   <!-- NavBar Tuner -->
   <string name="menu_ime_always_show">Menú / Intercanviador de teclat (mostra sempre)</string>
   <string name="search">Cerca</string>
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d client</item>
+    <item quantity="other">%1$d clients</item>
+  </plurals>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

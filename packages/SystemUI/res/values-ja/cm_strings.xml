@@ -87,4 +87,11 @@
   <!-- NavBar Tuner -->
   <string name="menu_ime_always_show">メニュー/キーボード切り替え（常時表示）</string>
   <string name="search">検索</string>
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="other">%1$d台</item>
+  </plurals>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

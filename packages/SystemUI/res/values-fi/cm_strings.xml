@@ -87,4 +87,12 @@
   <!-- NavBar Tuner -->
   <string name="menu_ime_always_show">Valikko / Näppäimistön vaihto (näytä aina)</string>
   <string name="search">Haku</string>
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d yhdistetty laite</item>
+    <item quantity="other">%1$d yhdistettyä laitetta</item>
+  </plurals>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

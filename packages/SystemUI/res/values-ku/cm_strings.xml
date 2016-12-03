@@ -42,4 +42,8 @@
   <string name="accessibility_dpad_left">جێنیشانده‌ر بۆ لای چه‌پ</string>
   <string name="accessibility_dpad_right">جێنیشانده‌ر بۆ لای ڕاست</string>
   <!-- NavBar Tuner -->
+  <!-- Wi-Fi hotspot label when enabled -->
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

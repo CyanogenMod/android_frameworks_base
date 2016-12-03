@@ -87,4 +87,12 @@
   <!-- NavBar Tuner -->
   <string name="menu_ime_always_show">Menu- / tastaturskifter (Vis altid)</string>
   <string name="search">Søg</string>
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d klient</item>
+    <item quantity="other">%1$d klienter</item>
+  </plurals>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

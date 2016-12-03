@@ -52,4 +52,12 @@
   <string name="accessibility_dpad_left">കർസർ ഇടത്</string>
   <string name="accessibility_dpad_right">കർസർ വലത്</string>
   <!-- NavBar Tuner -->
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d കക്ഷി</item>
+    <item quantity="other">%1$d കക്ഷികള്‍</item>
+  </plurals>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>
