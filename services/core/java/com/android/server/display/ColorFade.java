@@ -36,6 +36,7 @@ import android.opengl.EGLDisplay;
 import android.opengl.EGLSurface;
 import android.opengl.GLES20;
 import android.opengl.GLES11Ext;
+import android.os.SystemProperties;
 import android.util.Slog;
 import android.view.DisplayInfo;
 import android.view.Surface.OutOfResourcesException;
@@ -69,6 +70,9 @@ final class ColorFade {
     // be ready to run smoothly.  We use 3 frames because we are triple-buffered.
     // See code for details.
     private static final int DEJANK_FRAMES = 3;
+
+    private static final boolean DESTROY_SURFACE_AFTER_DETACH =
+            SystemProperties.getBoolean("ro.egl.destroy_after_detach", false);
 
     private final int mDisplayId;
 
@@ -331,9 +335,14 @@ final class ColorFade {
                 destroyScreenshotTexture();
                 destroyGLShaders();
                 destroyGLBuffers();
-                destroyEglSurface();
+                if (!DESTROY_SURFACE_AFTER_DETACH) {
+                    destroyEglSurface();
+                }
             } finally {
                 detachEglContext();
+            }
+            if (DESTROY_SURFACE_AFTER_DETACH) {
+                destroyEglSurface();
             }
             // This is being called with no active context so shouldn't be
             // needed but is safer to not change for now.
