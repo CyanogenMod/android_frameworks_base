@@ -51,4 +51,12 @@
   <string name="accessibility_dpad_left">ಕರ್ಸರ್ ಎಡ</string>
   <string name="accessibility_dpad_right">ಕರ್ಸರ್ ಬಲ</string>
   <!-- NavBar Tuner -->
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d ಕ್ಲೈಂಟ್</item>
+    <item quantity="other">%1$d ಕ್ಲೈಂಟ್</item>
+  </plurals>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

@@ -87,4 +87,13 @@
   <!-- NavBar Tuner -->
   <string name="menu_ime_always_show">Меню или выбор метода ввода (всегда)</string>
   <string name="search">Поиск</string>
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">Подключено %1$d устройство</item>
+    <item quantity="few">Подключены %1$d устройства</item>
+    <item quantity="other">Подключено %1$d устройств</item>
+  </plurals>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

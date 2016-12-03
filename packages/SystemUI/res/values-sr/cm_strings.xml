@@ -52,4 +52,13 @@
   <string name="accessibility_dpad_left">Курсор лево</string>
   <string name="accessibility_dpad_right">Курсор десно</string>
   <!-- NavBar Tuner -->
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d клијент</item>
+    <item quantity="few">%1$d клијента</item>
+    <item quantity="other">%1$d клијента</item>
+  </plurals>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

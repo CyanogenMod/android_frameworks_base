@@ -33,4 +33,8 @@
   <!-- Play queue -->
   <!-- Weather string format in keyguard -->
   <!-- NavBar Tuner -->
+  <!-- Wi-Fi hotspot label when enabled -->
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

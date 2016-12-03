@@ -53,4 +53,13 @@
   <string name="accessibility_dpad_right">Kursor w prawo</string>
   <!-- NavBar Tuner -->
   <string name="search">Szukaj</string>
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d klient</item>
+    <item quantity="few">%1$d klientów</item>
+    <item quantity="other">%1$d klientów</item>
+  </plurals>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

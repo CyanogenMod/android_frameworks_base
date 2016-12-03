@@ -87,4 +87,14 @@
   <!-- NavBar Tuner -->
   <string name="menu_ime_always_show">Meni/preklopnik tipkovnice (vedno prikaži)</string>
   <string name="search">Išči</string>
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d odjemalec</item>
+    <item quantity="two">%1$d odjemalca</item>
+    <item quantity="few">%1$d odjemalci</item>
+    <item quantity="other">%1$d odjemalcev</item>
+  </plurals>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

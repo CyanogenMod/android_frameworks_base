@@ -29,12 +29,44 @@
   <string name="led_notification_title">Nastavení jasu</string>
   <string name="led_notification_text">LED světlo povoleno v nastavení</string>
   <!-- Content description of the superuser tile -->
+  <string name="accessibility_su_active">Aktivní relace Superuser</string>
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">Svítilna zapnuta</string>
   <string name="quick_settings_tile_flashlight_not_summary">Dotykem vypněte</string>
   <!-- [CHAR LIMIT=NONE] Importance Tuner setting title -->
+  <string name="cm_power_notification_controls_description">S ovládání upozornění můžete aplikaci zvolit úroveň důležitosti od 0 do 6.
+        \n\n<b>Úroveň 6</b>
+        \n- Zobrazit zcela nahoře v seznamu upozornění
+        \n- Umožnit přerušení obrazovky
+        \n- Vždy upozornit
+        \n\n<b>Úroveň 5</b>
+        \n- Zabránit přerušení obrazovky
+        \n- Vždy upozornit
+        \n\n<b>Úroveň 4</b>
+        \n- Zabránit přerušení obrazovky
+        \n- Neupozorňovat
+        \n\n<b>Úroveň 3</b>
+        \n- Zabránit přerušení obrazovky
+        \n- Neupozorňovat
+        \n- Nepřehrávat zvuky a nevibrovat
+        \n\n<b>Úroveň 2</b>
+        \n- Zabránit přerušení obrazovky
+        \n- Neupozorňovat
+        \n- Nepřehrávat zvuky a nevibrovat
+        \n- Skrýt ze zámku obrazovky
+        \n- Zobrazit zcela dole na seznamu upozornění
+        \n\n<b>Úroveň 1</b>
+        \n- Zabránit přerušení obrazovky
+        \n- Neupozorňovat
+        \n- Nepřehrávat zvuky a nevibrovat
+        \n- Skrýt ze zámku obrazovky
+        \n- Zobrazit zcela dole na seznamu upozornění
+        \n\n<b>Úroveň 0</b>
+        \n- Blokovat z aplikace všechny upozornění</string>
   <!-- Notification importance level title-->
+  <string name="importance_level_title">Důležitost: úroveň %1$d</string>
   <!-- [CHAR LIMIT=100] Notification Importance slider: very low importance level description -->
+  <string name="notification_importance_very_low">Žádné přerušení na obrazovce, upozorňování, zvuk či vibrace. Skrýt ze zamykací obrazovky.</string>
   <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">Zůstává zobrazeno, dokud není uvolněn. Dotykem a podržením tlačítka Zpět bude provedeno uvolnění.</string>
   <!-- Strings for lockscreen shortcut hints -->
@@ -52,4 +84,15 @@
   <string name="accessibility_dpad_left">Kurzor doleva</string>
   <string name="accessibility_dpad_right">Kurzor doprava</string>
   <!-- NavBar Tuner -->
+  <string name="menu_ime_always_show">Menu / Přepínač klávesnice (vždy zobrazovat)</string>
+  <string name="search">Vyhledat</string>
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d klient</item>
+    <item quantity="few">%1$d klienti</item>
+    <item quantity="other">%1$d klientů</item>
+  </plurals>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

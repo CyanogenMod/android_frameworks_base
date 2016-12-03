@@ -28,10 +28,12 @@
   <!-- label for item that opens the profile choosing dialog -->
   <string name="global_action_choose_profile">Profil</string>
   <!-- label for item that restarts the phone in phone options dialog -->
+  <string name="global_action_reboot">Restartovat</string>
   <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Aktuální</string>
   <!-- Restart menu -->
   <!-- Button to restart the phone, within the Restart Options dialog -->
+  <string name="reboot_reboot">Restart</string>
   <!-- Button to restart the phone into recovery, within the Restart Options dialog -->
   <string name="reboot_recovery">Recovery</string>
   <!-- Button to restart the phone into bootloader, within the Restart Options dialog -->
@@ -39,10 +41,15 @@
   <!-- Button to restart the phone into download, within the Restart Options dialog -->
   <string name="reboot_download">Download</string>
   <!-- Button to soft restart the device, within the Restart Options dialog -->
+  <string name="reboot_soft">Soft restart</string>
   <!-- Title of dialog to confirm restarting. -->
+  <string name="reboot_title">Restart</string>
   <!-- Restart Confirmation Dialog.  When the user chooses to restart the device, there will
          be a confirmation dialog.  This is the message. -->
+  <string name="reboot_confirm" product="tablet">Tablet bude restartován.</string>
+  <string name="reboot_confirm" product="default">Telefon bude restartován.</string>
   <!-- Restart Progress Dialog. This is shown if the user chooses to restart the phone. -->
+  <string name="reboot_progress">Restartování\u2026</string>
   <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ADB po síti povoleno</string>
   <!-- ADB over USB and network notification -->
@@ -112,6 +119,7 @@
   <string name="app_ops_use_fingerprint">použít otisk prstu</string>
   <string name="app_ops_add_voicemail">přidat hlasovou zprávu</string>
   <string name="app_ops_read_phone_state">přístup ke stavu telefonu</string>
+  <string name="app_ops_scan_wifi">prohledávání Wi\u2011Fi sítí</string>
   <string name="app_ops_change_wallpaper">změnit tapetu</string>
   <string name="app_ops_assist_structure">použít asistenční strukturu</string>
   <string name="app_ops_assist_screenshot">sejmout obrazovku</string>
@@ -122,6 +130,7 @@
   <string name="app_ops_write_external_storage">zapsat na externí úložiště</string>
   <string name="app_ops_turn_on_screen">zapnout obrazovku</string>
   <string name="app_ops_get_accounts">získat účty zařízení</string>
+  <string name="app_ops_run_in_background">spustit na pozadí</string>
   <string name="app_ops_wifi_change">změna stavu Wi\u2011Fi</string>
   <string name="app_ops_su">získat root přístup</string>
   <!-- Protected Apps Notification -->

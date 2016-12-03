@@ -35,4 +35,8 @@
   <string name="accessibility_dpad_left">වම් කර්සරය</string>
   <string name="accessibility_dpad_right">දකුණු කර්සරය</string>
   <!-- NavBar Tuner -->
+  <!-- Wi-Fi hotspot label when enabled -->
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

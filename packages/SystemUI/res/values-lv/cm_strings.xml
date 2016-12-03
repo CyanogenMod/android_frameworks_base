@@ -35,4 +35,8 @@
   <string name="accessibility_dpad_left">Kursoru pa kreisi</string>
   <string name="accessibility_dpad_right">Kursoru pa labi</string>
   <!-- NavBar Tuner -->
+  <!-- Wi-Fi hotspot label when enabled -->
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

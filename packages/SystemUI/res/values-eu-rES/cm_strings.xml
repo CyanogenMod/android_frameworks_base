@@ -87,4 +87,12 @@
   <!-- NavBar Tuner -->
   <string name="menu_ime_always_show">Menu / Teklatu aldatzailea (erakutsi beti)</string>
   <string name="search">Bilatu</string>
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">bezero %1$d</item>
+    <item quantity="other">%1$d bezero</item>
+  </plurals>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

@@ -51,4 +51,11 @@
   <string name="accessibility_dpad_left">Trỏ trái</string>
   <string name="accessibility_dpad_right">Trỏ phải</string>
   <!-- NavBar Tuner -->
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="other">%1$d máy khách</item>
+  </plurals>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>
