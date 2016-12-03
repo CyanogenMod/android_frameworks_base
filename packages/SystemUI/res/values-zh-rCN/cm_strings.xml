@@ -87,4 +87,8 @@
   <!-- NavBar Tuner -->
   <string name="menu_ime_always_show">菜单 / 键盘切换器 (总是显示)</string>
   <string name="search">搜索</string>
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="other">%1$d 台设备</item>
+  </plurals>
 </resources>

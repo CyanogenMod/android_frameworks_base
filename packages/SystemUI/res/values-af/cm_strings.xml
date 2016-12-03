@@ -52,4 +52,9 @@
   <string name="accessibility_dpad_left">Wyser na links</string>
   <string name="accessibility_dpad_right">Wyser na regs</string>
   <!-- NavBar Tuner -->
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d klient</item>
+    <item quantity="other">%1$d kliente</item>
+  </plurals>
 </resources>

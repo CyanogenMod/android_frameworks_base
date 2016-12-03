@@ -43,4 +43,5 @@
   <string name="accessibility_dpad_left">Sol kursor</string>
   <string name="accessibility_dpad_right">Sağ kursor</string>
   <!-- NavBar Tuner -->
+  <!-- Wi-Fi hotspot label when enabled -->
 </resources>

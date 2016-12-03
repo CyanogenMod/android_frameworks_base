@@ -52,4 +52,9 @@
   <string name="accessibility_dpad_left">Kursor vasakule</string>
   <string name="accessibility_dpad_right">Kursor paremale</string>
   <!-- NavBar Tuner -->
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d seade</item>
+    <item quantity="other">%1$d seadmed</item>
+  </plurals>
 </resources>
