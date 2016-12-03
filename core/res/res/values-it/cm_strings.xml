@@ -42,7 +42,7 @@
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">imposta sfondo sblocco schermo</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_setKeyguardWallpaper">Consente all\'app di cambiare lo sfondo della schermata di sblocco.</string>
+  <string name="permdesc_setKeyguardWallpaper">Consente all\'app di cambiare lo sfondo del blocco schermo.</string>
   <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">Riavvia</string>
   <!-- label for current user in phone options dialog -->

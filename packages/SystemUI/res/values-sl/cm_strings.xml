@@ -70,7 +70,7 @@
   <string name="qs_tile_edit_header_instruction">Pritisnite in pridržite ploščice za preurejanje</string>
   <string name="quick_settings_edit_label">Uredi ploščice</string>
   <string name="quick_settings_cannot_delete_edit_tile">Ploščice za urejanje ni mogoče izbrisati</string>
-  <string name="qs_tiles_reset_confirmation">Ponastavi ploščice hitrih nastavitev na privzeto nastavitev?</string>
+  <string name="qs_tiles_reset_confirmation">Ponastavi ploščice Hitrih nastavitev na privzeto nastavitev?</string>
   <string name="quick_settings_tile_reset_to_default">Ponastavi na privzeto razporeditev</string>
   <string name="quick_settings_title_header">Glava</string>
   <string name="quick_settings_title_tiles">Ploščice</string>

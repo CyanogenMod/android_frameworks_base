@@ -167,7 +167,7 @@
   <string name="app_ops_wifi_change">alterar o estado do Wi-Fi</string>
   <string name="app_ops_su">obter acesso root</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
-  <string name="lock_to_app_toast_no_navbar">Para soltar este ecrã, toque e segure o botão Voltar.</string>
+  <string name="lock_to_app_toast_no_navbar">Para soltar este ecrã, toque e segure o botão Anterior.</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Nenhum dispositivo conectado</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> dispositivo conectado</string>
