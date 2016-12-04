@@ -51,4 +51,12 @@
   <string name="accessibility_dpad_left">কাৰ্ছৰ বাওঁফালে</string>
   <string name="accessibility_dpad_right">কাৰ্ছৰ সোঁফালে</string>
   <!-- NavBar Tuner -->
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d ক্লায়েণ্ট</item>
+    <item quantity="other">%1$d ক্লায়েন্ট</item>
+  </plurals>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

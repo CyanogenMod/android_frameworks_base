@@ -51,4 +51,12 @@
   <string name="accessibility_dpad_left">Sol imleç</string>
   <string name="accessibility_dpad_right">Sağ imleç</string>
   <!-- NavBar Tuner -->
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d istemci</item>
+    <item quantity="other">%1$d istemci</item>
+  </plurals>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

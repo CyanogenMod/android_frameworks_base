@@ -49,4 +49,11 @@
   <string name="accessibility_dpad_left">游標左移</string>
   <string name="accessibility_dpad_right">游標右移</string>
   <!-- NavBar Tuner -->
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="other">%1$d 用戶</item>
+  </plurals>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>
