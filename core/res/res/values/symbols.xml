@@ -1465,6 +1465,7 @@
   <java-symbol type="anim" name="dock_top_exit" />
   <java-symbol type="anim" name="dock_bottom_enter" />
   <java-symbol type="anim" name="dock_bottom_exit" />
+  <java-symbol type="anim" name="dock_bottom_exit_keyguard" />
   <java-symbol type="anim" name="dock_left_enter" />
   <java-symbol type="anim" name="dock_left_exit" />
   <java-symbol type="anim" name="dock_right_enter" />
@@ -1884,6 +1885,7 @@
   <java-symbol type="string" name="vpn_title_long" />
   <java-symbol type="string" name="vpn_lockdown_connecting" />
   <java-symbol type="string" name="vpn_lockdown_connected" />
+  <java-symbol type="string" name="vpn_lockdown_disconnected" />
   <java-symbol type="string" name="vpn_lockdown_error" />
   <java-symbol type="string" name="vpn_lockdown_config" />
   <java-symbol type="string" name="wallpaper_binding_label" />
@@ -1960,6 +1962,7 @@
   <java-symbol type="anim" name="lock_screen_behind_enter_fade_in" />
   <java-symbol type="anim" name="lock_screen_wallpaper_exit" />
   <java-symbol type="anim" name="launch_task_behind_source" />
+  <java-symbol type="anim" name="wallpaper_open_exit" />
 
   <java-symbol type="bool" name="config_alwaysUseCdmaRssi" />
   <java-symbol type="dimen" name="status_bar_icon_size" />
@@ -2233,6 +2236,7 @@
   <java-symbol type="bool" name="config_carrier_volte_provisioned" />
   <java-symbol type="bool" name="config_carrier_volte_tty_supported" />
   <java-symbol type="bool" name="config_device_vt_available" />
+  <java-symbol type="bool" name="config_device_respects_hold_carrier_config" />
   <java-symbol type="bool" name="config_carrier_vt_available" />
   <java-symbol type="bool" name="config_device_wfc_ims_available" />
   <java-symbol type="bool" name="config_carrier_wfc_ims_available" />
@@ -2528,6 +2532,7 @@
   <java-symbol type="menu" name="language_selection_list" />
   <java-symbol type="string" name="country_selection_title" />
   <java-symbol type="string" name="language_picker_section_all" />
+  <java-symbol type="string" name="region_picker_section_all" />
   <java-symbol type="string" name="language_picker_section_suggested" />
   <java-symbol type="string" name="language_selection_title" />
   <java-symbol type="string" name="search_language_hint" />
@@ -2749,6 +2754,13 @@
 
   <java-symbol type="string" name="lockscreen_storage_locked" />
 
+  <java-symbol type="string" name="global_action_emergency" />
+  <java-symbol type="string" name="config_emergency_call_number" />
+  <java-symbol type="array" name="config_emergency_mcc_codes" />
+
+  <java-symbol type="string" name="config_dozeDoubleTapSensorType" />
+  <java-symbol type="bool" name="config_dozePulsePickup" />
+
   <!-- Used for MimeIconUtils. -->
   <java-symbol type="drawable" name="ic_doc_apk" />
   <java-symbol type="drawable" name="ic_doc_audio" />
@@ -2784,6 +2796,16 @@
   <java-symbol type="array" name="config_defaultFirstUserRestrictions" />
 
   <java-symbol type="drawable" name="ic_restart" />
+
+  <java-symbol type="drawable" name="emergency_icon" />
+
+  <java-symbol type="array" name="config_convert_to_emergency_number_map" />
+
+  <java-symbol type="array" name="config_nonBlockableNotificationPackages" />
+
+  <!-- Screen-size-dependent modes for picker dialogs. -->
+  <java-symbol type="integer" name="time_picker_mode" />
+  <java-symbol type="integer" name="date_picker_mode" />
 
   <!-- config softap extention feature -->
   <java-symbol type="bool" name="config_softap_extention" />

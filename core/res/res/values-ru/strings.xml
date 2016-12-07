@@ -218,6 +218,7 @@
     <string name="global_actions" product="default" msgid="2406416831541615258">"Параметры телефона"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Блокировка экрана"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Отключить питание"</string>
+    <string name="global_action_emergency" msgid="7112311161137421166">"Экстренный вызов"</string>
     <string name="global_action_bug_report" msgid="7934010578922304799">"Отчет об ошибке"</string>
     <string name="bugreport_title" msgid="2667494803742548533">"Отчет об ошибке"</string>
     <string name="bugreport_message" msgid="398447048750350456">"Информация о текущем состоянии вашего устройства будет собрана и отправлена по электронной почте. Подготовка отчета займет некоторое время."</string>
@@ -1126,6 +1127,17 @@
     <skip />
     <string name="wifi_no_internet" msgid="8451173622563841546">"Сеть Wi-Fi не подключена к Интернету"</string>
     <string name="wifi_no_internet_detailed" msgid="8083079241212301741">"Нажмите, чтобы показать варианты."</string>
+    <string name="network_switch_metered" msgid="4671730921726992671">"Новое подключение: <xliff:g id="NETWORK_TYPE">%1$s</xliff:g>"</string>
+    <string name="network_switch_metered_detail" msgid="5325661434777870353">"Устройство использует <xliff:g id="NEW_NETWORK">%1$s</xliff:g>, если подключение к сети <xliff:g id="PREVIOUS_NETWORK">%2$s</xliff:g> недоступно. Может взиматься плата за передачу данных."</string>
+    <string name="network_switch_metered_toast" msgid="5779283181685974304">"Устройство отключено от сети <xliff:g id="NEW_NETWORK">%2$s</xliff:g> и теперь использует <xliff:g id="PREVIOUS_NETWORK">%1$s</xliff:g>"</string>
+  <string-array name="network_switch_type_name">
+    <item msgid="2952042958050315394">"мобильные данные"</item>
+    <item msgid="75483255295529161">"Wi-Fi"</item>
+    <item msgid="6862614801537202646">"Bluetooth"</item>
+    <item msgid="5447331121797802871">"Ethernet"</item>
+    <item msgid="8257233890381651999">"VPN"</item>
+  </string-array>
+    <string name="network_switch_type_name_unknown" msgid="4552612897806660656">"неизвестный тип сети"</string>
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Не удалось подключиться к сети Wi-Fi"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" – плохое интернет-соединение."</string>
     <string name="wifi_connect_alert_title" msgid="8455846016001810172">"Разрешить подключение?"</string>
@@ -1203,7 +1215,6 @@
     <string name="select_keyboard_layout_notification_message" msgid="8084622969903004900">"Нажмите, чтобы выбрать язык и раскладку"</string>
     <string name="fast_scroll_alphabet" msgid="5433275485499039199">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
     <string name="fast_scroll_numeric_alphabet" msgid="4030170524595123610">" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
-    <string name="candidates_style" msgid="4333913089637062257"><u>"варианты"</u></string>
     <string name="ext_media_checking_notification_title" msgid="5734005953288045806">"Подготовка карты \"<xliff:g id="NAME">%s</xliff:g>\"…"</string>
     <string name="ext_media_checking_notification_message" msgid="4747432538578886744">"Поиск ошибок"</string>
     <string name="ext_media_new_notification_message" msgid="7589986898808506239">"Обнаружена новая карта \"<xliff:g id="NAME">%s</xliff:g>\""</string>
@@ -1282,8 +1293,9 @@
     <string name="vpn_text_long" msgid="4907843483284977618">"Подключено: \"<xliff:g id="SESSION">%s</xliff:g>\". Нажмите здесь, чтобы изменить настройки сети."</string>
     <string name="vpn_lockdown_connecting" msgid="6443438964440960745">"Подключение…"</string>
     <string name="vpn_lockdown_connected" msgid="8202679674819213931">"Подключено"</string>
+    <string name="vpn_lockdown_disconnected" msgid="4532298952570796327">"Отключено"</string>
     <string name="vpn_lockdown_error" msgid="6009249814034708175">"Ошибка"</string>
-    <string name="vpn_lockdown_config" msgid="4655589351146766608">"Нажмите, чтобы настроить."</string>
+    <string name="vpn_lockdown_config" msgid="5099330695245008680">"Нажмите, чтобы настроить"</string>
     <string name="upload_file" msgid="2897957172366730416">"Выбрать файл"</string>
     <string name="no_file_chosen" msgid="6363648562170759465">"Не выбран файл"</string>
     <string name="reset" msgid="2448168080964209908">"Сбросить"</string>
@@ -1369,7 +1381,7 @@
     <string name="storage_usb_drive_label" msgid="4501418548927759953">"USB-накопитель <xliff:g id="MANUFACTURER">%s</xliff:g>"</string>
     <string name="storage_usb" msgid="3017954059538517278">"USB-накопитель"</string>
     <string name="extract_edit_menu_button" msgid="8940478730496610137">"Изменить"</string>
-    <string name="data_usage_warning_title" msgid="1955638862122232342">"Осталось мало трафика"</string>
+    <string name="data_usage_warning_title" msgid="3620440638180218181">"Лимит на передачу данных"</string>
     <string name="data_usage_warning_body" msgid="6660692274311972007">"Нажмите, чтобы проверить трафик и настройки."</string>
     <string name="data_usage_3g_limit_title" msgid="4361523876818447683">"Достигнут лимит трафика 2G/3G"</string>
     <string name="data_usage_4g_limit_title" msgid="4609566827219442376">"Достигнут лимит трафика 4G"</string>
@@ -1708,6 +1720,7 @@
     <string name="search_language_hint" msgid="7042102592055108574">"Введите язык"</string>
     <string name="language_picker_section_suggested" msgid="8414489646861640885">"Рекомендуемые"</string>
     <string name="language_picker_section_all" msgid="3097279199511617537">"Все языки"</string>
+    <string name="region_picker_section_all" msgid="8966316787153001779">"Все регионы"</string>
     <string name="locale_search_menu" msgid="2560710726687249178">"Поиск"</string>
     <string name="work_mode_off_title" msgid="8954725060677558855">"Рабочий режим отключен"</string>
     <string name="work_mode_off_message" msgid="3286169091278094476">"Включить рабочий профиль: приложения, фоновую синхронизацию и связанные функции."</string>

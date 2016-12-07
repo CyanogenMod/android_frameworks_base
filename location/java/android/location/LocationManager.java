@@ -1479,7 +1479,7 @@ public class LocationManager {
             mGpsNmeaListener = null;
             mNmeaBuffer = null;
             mOldGnssCallback = null;
-            mGnssCallback = new GnssStatus.Callback() {
+            mGnssCallback = mGpsListener != null ? new GnssStatus.Callback() {
                 @Override
                 public void onStarted() {
                     mGpsListener.onGpsStatusChanged(GpsStatus.GPS_EVENT_STARTED);
@@ -1499,7 +1499,7 @@ public class LocationManager {
                 public void onSatelliteStatusChanged(GnssStatus status) {
                     mGpsListener.onGpsStatusChanged(GpsStatus.GPS_EVENT_SATELLITE_STATUS);
                 }
-            };
+            } : null;
             mOldGnssNmeaListener = null;
             mGnssNmeaListener = null;
         }
@@ -1516,12 +1516,12 @@ public class LocationManager {
             mOldGnssCallback = null;
             mGnssCallback = null;
             mOldGnssNmeaListener = null;
-            mGnssNmeaListener = new OnNmeaMessageListener() {
+            mGnssNmeaListener = mGpsNmeaListener != null ? new OnNmeaMessageListener() {
                 @Override
                 public void onNmeaMessage(String nmea, long timestamp) {
                     mGpsNmeaListener.onNmeaReceived(timestamp, nmea);
                 }
-            };
+            } : null;
         }
 
         GnssStatusListenerTransport(GnssStatusCallback callback) {
@@ -1530,7 +1530,7 @@ public class LocationManager {
 
         GnssStatusListenerTransport(GnssStatusCallback callback, Handler handler) {
             mOldGnssCallback = callback;
-            mGnssCallback = new GnssStatus.Callback() {
+            mGnssCallback = mOldGnssCallback != null ? new GnssStatus.Callback() {
                 @Override
                 public void onStarted() {
                     mOldGnssCallback.onStarted();
@@ -1550,7 +1550,7 @@ public class LocationManager {
                 public void onSatelliteStatusChanged(GnssStatus status) {
                     mOldGnssCallback.onSatelliteStatusChanged(status);
                 }
-            };
+            } : null;
             mGnssHandler = new GnssHandler(handler);
             mOldGnssNmeaListener = null;
             mGnssNmeaListener = null;
@@ -1583,12 +1583,12 @@ public class LocationManager {
             mOldGnssCallback = null;
             mGnssHandler = new GnssHandler(handler);
             mOldGnssNmeaListener = listener;
-            mGnssNmeaListener = new OnNmeaMessageListener() {
+            mGnssNmeaListener = mOldGnssNmeaListener != null ? new OnNmeaMessageListener() {
                 @Override
                 public void onNmeaMessage(String message, long timestamp) {
                     mOldGnssNmeaListener.onNmeaReceived(timestamp, message);
                 }
-            };
+            } : null;
             mGpsListener = null;
             mGpsNmeaListener = null;
             mNmeaBuffer = new ArrayList<Nmea>();
@@ -1611,7 +1611,7 @@ public class LocationManager {
 
         @Override
         public void onGnssStarted() {
-            if (mGpsListener != null) {
+            if (mGnssCallback != null) {
                 Message msg = Message.obtain();
                 msg.what = GpsStatus.GPS_EVENT_STARTED;
                 mGnssHandler.sendMessage(msg);
@@ -1620,7 +1620,7 @@ public class LocationManager {
 
         @Override
         public void onGnssStopped() {
-            if (mGpsListener != null) {
+            if (mGnssCallback != null) {
                 Message msg = Message.obtain();
                 msg.what = GpsStatus.GPS_EVENT_STOPPED;
                 mGnssHandler.sendMessage(msg);
@@ -1629,7 +1629,7 @@ public class LocationManager {
 
         @Override
         public void onFirstFix(int ttff) {
-            if (mGpsListener != null) {
+            if (mGnssCallback != null) {
                 mTimeToFirstFix = ttff;
                 Message msg = Message.obtain();
                 msg.what = GpsStatus.GPS_EVENT_FIRST_FIX;

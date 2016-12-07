@@ -228,8 +228,6 @@ class WindowStateAnimator {
     int mAttrType;
 
     static final long PENDING_TRANSACTION_FINISH_WAIT_TIME = 100;
-    long mDeferTransactionUntilFrame = -1;
-    long mDeferTransactionTime = -1;
 
     boolean mForceScaleUntilResize;
 
@@ -1433,7 +1431,7 @@ class WindowStateAnimator {
         // If we are undergoing seamless rotation, the surface has already
         // been set up to persist at it's old location. We need to freeze
         // updates until a resize occurs.
-        w.mSeamlesslyRotated = w.mSeamlesslyRotated && !mSurfaceResized;
+        mService.markForSeamlessRotation(w, w.mSeamlesslyRotated && !mSurfaceResized);
 
         calculateSurfaceWindowCrop(mTmpClipRect, mTmpFinalClipRect);
 
@@ -2055,33 +2053,9 @@ class WindowStateAnimator {
         if (!mWin.isChildWindow()) {
             return;
         }
-        mDeferTransactionUntilFrame = frameNumber;
-        mDeferTransactionTime = System.currentTimeMillis();
         mSurfaceController.deferTransactionUntil(
                 mWin.mAttachedWindow.mWinAnimator.mSurfaceController.getHandle(),
                 frameNumber);
-    }
-
-    // Defer the current transaction to the frame number of the last saved transaction.
-    // We do this to avoid shooting through an unsynchronized transaction while something is
-    // pending. This is generally fine, as either we will get in on the synchronization,
-    // or SurfaceFlinger will see that the frame has already occured. The only
-    // potential problem is in frame number resets so we reset things with a timeout
-    // every so often to be careful.
-    void deferToPendingTransaction() {
-        if (mDeferTransactionUntilFrame < 0) {
-            return;
-        }
-        long time = System.currentTimeMillis();
-        if (time > mDeferTransactionTime + PENDING_TRANSACTION_FINISH_WAIT_TIME) {
-            mDeferTransactionTime = -1;
-            mDeferTransactionUntilFrame = -1;
-        } else if (mWin.mAttachedWindow != null &&
-                mWin.mAttachedWindow.mWinAnimator.hasSurface()) {
-            mSurfaceController.deferTransactionUntil(
-                    mWin.mAttachedWindow.mWinAnimator.mSurfaceController.getHandle(),
-                    mDeferTransactionUntilFrame);
-        }
     }
 
     /**
@@ -2128,24 +2102,8 @@ class WindowStateAnimator {
         // Compute a transform matrix to undo the coordinate space transformation,
         // and present the window at the same physical position it previously occupied.
         final int deltaRotation = DisplayContent.deltaRotation(newRotation, oldRotation);
-        switch (deltaRotation) {
-        case Surface.ROTATION_0:
-            transform.reset();
-            break;
-        case Surface.ROTATION_270:
-            transform.setRotate(270, 0, 0);
-            transform.postTranslate(0, displayHeight);
-            transform.postTranslate(y, 0);
-            break;
-        case Surface.ROTATION_180:
-            transform.reset();
-            break;
-        case Surface.ROTATION_90:
-            transform.setRotate(90, 0, 0);
-            transform.postTranslate(displayWidth, 0);
-            transform.postTranslate(-y, x);
-            break;
-        }
+        DisplayContent.createRotationMatrix(deltaRotation, x, y, displayWidth, displayHeight,
+                transform);
 
         // We have two cases:
         //  1. Windows with NATIVE_WINDOW_TRANSFORM_INVERSE_DISPLAY:
@@ -2182,7 +2140,7 @@ class WindowStateAnimator {
             cropRect.set(0, 0, w.mRequestedWidth, w.mRequestedWidth + w.mRequestedHeight);
             mSurfaceController.setCropInTransaction(cropRect, false);
         } else {
-            w.mSeamlesslyRotated = true;
+            mService.markForSeamlessRotation(w, true);
             transform.getValues(mService.mTmpFloats);
 
             float DsDx = mService.mTmpFloats[Matrix.MSCALE_X];

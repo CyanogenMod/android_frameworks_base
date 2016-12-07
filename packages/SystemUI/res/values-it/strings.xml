@@ -240,7 +240,7 @@
     <string name="data_usage_disabled_dialog_4g_title" msgid="1601769736881078016">"Dati 4G sospesi"</string>
     <string name="data_usage_disabled_dialog_mobile_title" msgid="4651001290947318931">"Dati cellulari sospesi"</string>
     <string name="data_usage_disabled_dialog_title" msgid="3932437232199671967">"Dati sospesi"</string>
-    <string name="data_usage_disabled_dialog" msgid="8453242888903772524">"Hai raggiunto il tuo limite di dati, pertanto sul dispositivo è stato sospeso l\'utilizzo di dati per la parte rimanente del ciclo.\n\nSe riprendi a utilizzare i dati, l\'operatore potrebbe addebitarti costi."</string>
+    <string name="data_usage_disabled_dialog" msgid="1841738975235283398">"È stato raggiunto il limite di dati impostato. La rete dati è stata disattivata.\n\nSe la riattivi, potrebbero essere applicati costi per l\'utilizzo dei dati."</string>
     <string name="data_usage_disabled_dialog_enable" msgid="1412395410306390593">"Riprendi"</string>
     <string name="status_bar_settings_signal_meter_disconnected" msgid="1940231521274147771">"Nessuna connessione"</string>
     <string name="status_bar_settings_signal_meter_wifi_nossid" msgid="6557486452774597820">"Wi-Fi connesso"</string>
@@ -347,7 +347,7 @@
     <string name="description_target_search" msgid="3091587249776033139">"Ricerca"</string>
     <string name="description_direction_up" msgid="7169032478259485180">"Su per <xliff:g id="TARGET_DESCRIPTION">%s</xliff:g>."</string>
     <string name="description_direction_left" msgid="7207478719805562165">"A sinistra per <xliff:g id="TARGET_DESCRIPTION">%s</xliff:g>."</string>
-    <string name="zen_priority_introduction" msgid="3070506961866919502">"Non verrai disturbato da suoni e vibrazioni, ad eccezione di sveglie, promemoria, eventi e chiamate da contatti da te specificati."</string>
+    <string name="zen_priority_introduction" msgid="3070506961866919502">"Non ti disturberanno: suoni e vibrazioni, ad eccezione di sveglie, promemoria, eventi e chiamate da contatti da te specificati."</string>
     <string name="zen_priority_customize_button" msgid="7948043278226955063">"Personalizza"</string>
     <string name="zen_silence_introduction_voice" msgid="2284540992298200729">"Verranno bloccati TUTTI i suoni e le vibrazioni, anche di sveglie, musica, video e giochi. Potrai ancora telefonare."</string>
     <string name="zen_silence_introduction" msgid="3137882381093271568">"Verranno bloccati TUTTI i suoni e le vibrazioni, anche di sveglie, musica, video e giochi."</string>
@@ -406,6 +406,7 @@
     <string name="device_owned_footer" msgid="3802752663326030053">"Il dispositivo potrebbe essere monitorato"</string>
     <string name="profile_owned_footer" msgid="8021888108553696069">"Il profilo potrebbe essere monitorato"</string>
     <string name="vpn_footer" msgid="2388611096129106812">"La rete potrebbe essere monitorata"</string>
+    <string name="branded_vpn_footer" msgid="2168111859226496230">"La rete potrebbe essere monitorata"</string>
     <string name="monitoring_title_device_owned" msgid="7121079311903859610">"Monitoraggio del dispositivo"</string>
     <string name="monitoring_title_profile_owned" msgid="6790109874733501487">"Monitoraggio del profilo"</string>
     <string name="monitoring_title" msgid="169206259253048106">"Monitoraggio rete"</string>
@@ -418,6 +419,7 @@
     <string name="legacy_vpn_name" msgid="6604123105765737830">"VPN"</string>
     <string name="monitoring_description_app" msgid="6259179342284742878">"Sei connesso a <xliff:g id="APPLICATION">%1$s</xliff:g>, da cui è possibile monitorare la tua attività di rete, inclusi email, app e siti web."</string>
     <string name="monitoring_description_app_personal" msgid="484599052118316268">"Sei connesso a <xliff:g id="APPLICATION">%1$s</xliff:g>, da cui è possibile monitorare la tua attività di rete personale, inclusi email, app e siti web."</string>
+    <string name="branded_monitoring_description_app_personal" msgid="2669518213949202599">"Sei collegato a <xliff:g id="APPLICATION">%1$s</xliff:g>, che consente di monitorare la tua attività di rete personale, inclusi siti web, email e app."</string>
     <string name="monitoring_description_app_work" msgid="1754325860918060897">"Il tuo profilo di lavoro è gestito da <xliff:g id="ORGANIZATION">%1$s</xliff:g>. È connesso a <xliff:g id="APPLICATION">%2$s</xliff:g>, da cui è possibile monitorare la tua attività di rete lavorativa, inclusi email, app e siti web.\n\nPer ulteriori informazioni, contatta il tuo amministratore."</string>
     <string name="monitoring_description_app_personal_work" msgid="4946600443852045903">"Il tuo profilo di lavoro è gestito da <xliff:g id="ORGANIZATION">%1$s</xliff:g>. È connesso a <xliff:g id="APPLICATION_WORK">%2$s</xliff:g>, da cui è possibile monitorare la tua attività di rete lavorativa, inclusi email, app e siti web.\n\nSei connesso anche a <xliff:g id="APPLICATION_PERSONAL">%3$s</xliff:g>, da cui è possibile monitorare la tua attività di rete personale."</string>
     <string name="monitoring_description_vpn_app_device_owned" msgid="4970443827043261703">"Il tuo dispositivo è gestito da <xliff:g id="ORGANIZATION">%1$s</xliff:g>.\n\nL\'amministratore può monitorare e gestire impostazioni, accesso aziendale, app e dati associati al dispositivo, incluse le informazioni sulla posizione del dispositivo.\n\nSei connesso a <xliff:g id="APPLICATION">%2$s</xliff:g>, da cui è possibile monitorare la tua attività di rete, inclusi email, app e siti web.\n\nPer ulteriori informazioni, contatta l\'amministratore."</string>
@@ -494,8 +496,6 @@
     <string name="clock_seconds_desc" msgid="6282693067130470675">"Mostra i secondi nell\'orologio nella barra di stato. Ciò potrebbe ridurre la durata della carica della batteria."</string>
     <string name="qs_rearrange" msgid="8060918697551068765">"Riorganizza Impostazioni rapide"</string>
     <string name="show_brightness" msgid="6613930842805942519">"Mostra luminosità in Impostazioni rapide"</string>
-    <string name="overview_nav_bar_gesture" msgid="8579814204727917764">"Attiva Schermo diviso mediante scorrimento verso l\'alto"</string>
-    <string name="overview_nav_bar_gesture_desc" msgid="6329167382305102615">"Consente di attivare la modalità Schermo diviso scorrendo verso l\'alto dal pulsante Panoramica"</string>
     <string name="experimental" msgid="6198182315536726162">"Sperimentali"</string>
     <string name="enable_bluetooth_title" msgid="5027037706500635269">"Attivare il Bluetooth?"</string>
     <string name="enable_bluetooth_message" msgid="9106595990708985385">"Per connettere la tastiera al tablet, devi prima attivare il Bluetooth."</string>
@@ -653,4 +653,5 @@
     <string name="accessibility_quick_settings_open_settings" msgid="7806613775728380737">"Apri le impostazioni <xliff:g id="ID_1">%s</xliff:g>."</string>
     <string name="accessibility_quick_settings_edit" msgid="7839992848995240393">"Modifica l\'ordine delle impostazioni."</string>
     <string name="accessibility_quick_settings_page" msgid="5032979051755200721">"Pagina <xliff:g id="ID_1">%1$d</xliff:g> di <xliff:g id="ID_2">%2$d</xliff:g>"</string>
+    <string name="cant_silence_or_block" msgid="999689262131488625">"Le notifiche non possono essere disattivate o bloccate"</string>
 </resources>

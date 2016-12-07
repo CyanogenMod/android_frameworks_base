@@ -214,6 +214,7 @@
     <string name="global_actions" product="default" msgid="2406416831541615258">"Telefoninnstillinger"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Lås skjermen"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Slå av"</string>
+    <string name="global_action_emergency" msgid="7112311161137421166">"Nødssituasjon"</string>
     <string name="global_action_bug_report" msgid="7934010578922304799">"Feilrapport"</string>
     <string name="bugreport_title" msgid="2667494803742548533">"Utfør feilrapport"</string>
     <string name="bugreport_message" msgid="398447048750350456">"Informasjon om tilstanden til enheten din samles inn og sendes som en e-post. Det tar litt tid fra du starter feilrapporten til e-posten er klar, så vær tålmodig."</string>
@@ -1076,6 +1077,17 @@
     <skip />
     <string name="wifi_no_internet" msgid="8451173622563841546">"Wi-Fi har ikke Internett-tilgang"</string>
     <string name="wifi_no_internet_detailed" msgid="8083079241212301741">"Trykk for å få alternativer"</string>
+    <string name="network_switch_metered" msgid="4671730921726992671">"Byttet til <xliff:g id="NETWORK_TYPE">%1$s</xliff:g>"</string>
+    <string name="network_switch_metered_detail" msgid="5325661434777870353">"Enheten bruker <xliff:g id="NEW_NETWORK">%1$s</xliff:g> når <xliff:g id="PREVIOUS_NETWORK">%2$s</xliff:g> ikke har Internett-tilgang. Avgifter kan påløpe."</string>
+    <string name="network_switch_metered_toast" msgid="5779283181685974304">"Byttet fra <xliff:g id="PREVIOUS_NETWORK">%1$s</xliff:g> til <xliff:g id="NEW_NETWORK">%2$s</xliff:g>"</string>
+  <string-array name="network_switch_type_name">
+    <item msgid="2952042958050315394">"mobildata"</item>
+    <item msgid="75483255295529161">"Wi-Fi"</item>
+    <item msgid="6862614801537202646">"Bluetooth"</item>
+    <item msgid="5447331121797802871">"Ethernet"</item>
+    <item msgid="8257233890381651999">"VPN"</item>
+  </string-array>
+    <string name="network_switch_type_name_unknown" msgid="4552612897806660656">"en ukjent nettverkstype"</string>
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Kan ikke koble til Wi-Fi"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" har en dårlig Internett-tilkobling."</string>
     <string name="wifi_connect_alert_title" msgid="8455846016001810172">"Vil du tillat tilkoblingen?"</string>
@@ -1153,7 +1165,6 @@
     <string name="select_keyboard_layout_notification_message" msgid="8084622969903004900">"Trykk for å velge språk og layout"</string>
     <string name="fast_scroll_alphabet" msgid="5433275485499039199">" ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ"</string>
     <string name="fast_scroll_numeric_alphabet" msgid="4030170524595123610">" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ"</string>
-    <string name="candidates_style" msgid="4333913089637062257">"TAG_FONT"<u>"kandidater"</u>"CLOSE_FONT"</string>
     <string name="ext_media_checking_notification_title" msgid="5734005953288045806">"Forbereder <xliff:g id="NAME">%s</xliff:g>"</string>
     <string name="ext_media_checking_notification_message" msgid="4747432538578886744">"Sjekker for feil"</string>
     <string name="ext_media_new_notification_message" msgid="7589986898808506239">"<xliff:g id="NAME">%s</xliff:g> ble oppdaget"</string>
@@ -1232,8 +1243,9 @@
     <string name="vpn_text_long" msgid="4907843483284977618">"Koblet til <xliff:g id="SESSION">%s</xliff:g>. Trykk for å administrere nettverket."</string>
     <string name="vpn_lockdown_connecting" msgid="6443438964440960745">"Alltid-på VPN kobler til ..."</string>
     <string name="vpn_lockdown_connected" msgid="8202679674819213931">"Alltid-på VPN er tilkoblet"</string>
+    <string name="vpn_lockdown_disconnected" msgid="4532298952570796327">"Alltid på-VPN er frakoblet"</string>
     <string name="vpn_lockdown_error" msgid="6009249814034708175">"Alltid-på VPN-feil"</string>
-    <string name="vpn_lockdown_config" msgid="4655589351146766608">"Trykk for å konfigurere"</string>
+    <string name="vpn_lockdown_config" msgid="5099330695245008680">"Trykk for å konfigurere"</string>
     <string name="upload_file" msgid="2897957172366730416">"Velg fil"</string>
     <string name="no_file_chosen" msgid="6363648562170759465">"Ingen fil er valgt"</string>
     <string name="reset" msgid="2448168080964209908">"Tilbakestill"</string>
@@ -1317,7 +1329,7 @@
     <string name="storage_usb_drive_label" msgid="4501418548927759953">"<xliff:g id="MANUFACTURER">%s</xliff:g> USB-stasjon"</string>
     <string name="storage_usb" msgid="3017954059538517278">"USB-lagring"</string>
     <string name="extract_edit_menu_button" msgid="8940478730496610137">"Rediger"</string>
-    <string name="data_usage_warning_title" msgid="1955638862122232342">"Advarsel for høyt dataforbruk"</string>
+    <string name="data_usage_warning_title" msgid="3620440638180218181">"Varsel om databruk"</string>
     <string name="data_usage_warning_body" msgid="6660692274311972007">"Trykk for å se bruken og innstillingene."</string>
     <string name="data_usage_3g_limit_title" msgid="4361523876818447683">"Datagrensen for 2G-3G er nådd"</string>
     <string name="data_usage_4g_limit_title" msgid="4609566827219442376">"Datagrensen for 4G er nådd"</string>
@@ -1636,6 +1648,7 @@
     <string name="search_language_hint" msgid="7042102592055108574">"Skriv inn språknavn"</string>
     <string name="language_picker_section_suggested" msgid="8414489646861640885">"Foreslått"</string>
     <string name="language_picker_section_all" msgid="3097279199511617537">"Alle språk"</string>
+    <string name="region_picker_section_all" msgid="8966316787153001779">"Alle områder"</string>
     <string name="locale_search_menu" msgid="2560710726687249178">"Søk"</string>
     <string name="work_mode_off_title" msgid="8954725060677558855">"Jobbmodus er AV"</string>
     <string name="work_mode_off_message" msgid="3286169091278094476">"Slå på jobbprofilen, inkludert apper, synkronisering i bakgrunnen og relaterte funksjoner."</string>

@@ -101,6 +101,10 @@ class WindowSurfacePlacer {
     static final int SET_WALLPAPER_ACTION_PENDING       = 1 << 5;
 
     boolean mWallpaperMayChange = false;
+    // During an orientation change, we track whether all windows have rendered
+    // at the new orientation, and this will be false from changing orientation until that occurs.
+    // For seamless rotation cases this always stays true, as the windows complete their orientation
+    // changes 1 by 1 without disturbing global state.
     boolean mOrientationChangeComplete = true;
     boolean mWallpaperActionPending = false;
 
@@ -717,11 +721,13 @@ class WindowSurfacePlacer {
                     final boolean adjustedForMinimizedDockOrIme = task != null
                                 && (task.mStack.isAdjustedForMinimizedDockedStack()
                                     || task.mStack.isAdjustedForIme());
-                    if ((w.mAttrs.privateFlags & PRIVATE_FLAG_NO_MOVE_ANIMATION) == 0
-                            && !w.isDragResizing() && !adjustedForMinimizedDockOrIme
-                            && (task == null || w.getTask().mStack.hasMovementAnimations())
-                            && !w.mWinAnimator.mLastHidden) {
-                        winAnimator.setMoveAnimation(left, top);
+                    if (mService.okToDisplay()) {
+                        if ((w.mAttrs.privateFlags & PRIVATE_FLAG_NO_MOVE_ANIMATION) == 0
+                                && !w.isDragResizing() && !adjustedForMinimizedDockOrIme
+                                && (task == null || w.getTask().mStack.hasMovementAnimations())
+                                && !w.mWinAnimator.mLastHidden) {
+                            winAnimator.setMoveAnimation(left, top);
+                        }
                     }
 
                     //TODO (multidisplay): Accessibility supported only for the default display.
@@ -742,10 +748,6 @@ class WindowSurfacePlacer {
 
                 // Moved from updateWindowsAndWallpaperLocked().
                 if (w.mHasSurface) {
-                    // If we have recently synchronized a previous transaction for this
-                    // window ensure we don't push through an unsynchronized one now.
-                    winAnimator.deferToPendingTransaction();
-
                     // Take care of the window being ready to display.
                     final boolean committed = winAnimator.commitFinishDrawingLocked();
                     if (isDefaultDisplay && committed) {
@@ -1357,8 +1359,25 @@ class WindowSurfacePlacer {
                 "Checking " + appsCount + " opening apps (frozen="
                         + mService.mDisplayFrozen + " timeout="
                         + mService.mAppTransition.isTimeout() + ")...");
+        final ScreenRotationAnimation screenRotationAnimation =
+            mService.mAnimator.getScreenRotationAnimationLocked(
+                    Display.DEFAULT_DISPLAY);
+
         int reason = APP_TRANSITION_TIMEOUT;
         if (!mService.mAppTransition.isTimeout()) {
+            // Imagine the case where we are changing orientation due to an app transition, but a previous
+            // orientation change is still in progress. We won't process the orientation change
+            // for our transition because we need to wait for the rotation animation to finish.
+            // If we start the app transition at this point, we will interrupt it halfway with a new rotation
+            // animation after the old one finally finishes. It's better to defer the
+            // app transition.
+            if (screenRotationAnimation != null && screenRotationAnimation.isAnimating() &&
+                    mService.rotationNeedsUpdateLocked()) {
+                if (DEBUG_APP_TRANSITIONS) {
+                    Slog.v(TAG, "Delaying app transition for screen rotation animation to finish");
+                }
+                return false;
+            }
             for (int i = 0; i < appsCount; i++) {
                 AppWindowToken wtoken = mService.mOpeningApps.valueAt(i);
                 if (DEBUG_APP_TRANSITIONS) Slog.v(TAG,

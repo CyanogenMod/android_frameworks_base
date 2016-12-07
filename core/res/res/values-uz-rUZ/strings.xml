@@ -214,6 +214,7 @@
     <string name="global_actions" product="default" msgid="2406416831541615258">"Telefon sozlamalari"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Ekran qulfi"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"O‘chirish"</string>
+    <string name="global_action_emergency" msgid="7112311161137421166">"Favqulodda chaqiruv"</string>
     <string name="global_action_bug_report" msgid="7934010578922304799">"Nosozlik haqida ma’lumot berish"</string>
     <string name="bugreport_title" msgid="2667494803742548533">"Xatoliklar hisoboti"</string>
     <string name="bugreport_message" msgid="398447048750350456">"Qurilmangiz holati haqidagi ma’lumotlar to‘planib, e-pochta orqali yuboriladi. Hisobotni tayyorlash biroz vaqt olishi mumkin."</string>
@@ -1076,6 +1077,17 @@
     <skip />
     <string name="wifi_no_internet" msgid="8451173622563841546">"Wi-Fi tarmog‘ida internet aloqasi yo‘q"</string>
     <string name="wifi_no_internet_detailed" msgid="8083079241212301741">"Variantlarni ko‘rsatish uchun bosing"</string>
+    <string name="network_switch_metered" msgid="4671730921726992671">"<xliff:g id="NETWORK_TYPE">%1$s</xliff:g> tarmog‘iga ulanildi"</string>
+    <string name="network_switch_metered_detail" msgid="5325661434777870353">"Qurilma <xliff:g id="PREVIOUS_NETWORK">%2$s</xliff:g> tarmog‘ida internet o‘chganda, <xliff:g id="NEW_NETWORK">%1$s</xliff:g> tarmog‘iga ulaniladi. To‘lov olinishi mumkin."</string>
+    <string name="network_switch_metered_toast" msgid="5779283181685974304">"<xliff:g id="PREVIOUS_NETWORK">%1$s</xliff:g> tarmog‘idan <xliff:g id="NEW_NETWORK">%2$s</xliff:g> tarmog‘iga o‘tildi"</string>
+  <string-array name="network_switch_type_name">
+    <item msgid="2952042958050315394">"mobil internet"</item>
+    <item msgid="75483255295529161">"Wi-Fi"</item>
+    <item msgid="6862614801537202646">"Bluetooth"</item>
+    <item msgid="5447331121797802871">"Ethernet"</item>
+    <item msgid="8257233890381651999">"VPN"</item>
+  </string-array>
+    <string name="network_switch_type_name_unknown" msgid="4552612897806660656">"noma’lum tarmoq turi"</string>
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Wi-Fi’ga ulana olmadi"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" tezligi past Internetga ulangan."</string>
     <string name="wifi_connect_alert_title" msgid="8455846016001810172">"Ulanishga ruxsat berilsinmi?"</string>
@@ -1087,7 +1099,7 @@
     <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"Wi-Fi Direct yoniq"</string>
     <string name="wifi_p2p_enabled_notification_message" msgid="8064677407830620023">"Sozlamalarni ochish uchun bosing"</string>
     <string name="accept" msgid="1645267259272829559">"Qabul qilish"</string>
-    <string name="decline" msgid="2112225451706137894">"Rad qilish"</string>
+    <string name="decline" msgid="2112225451706137894">"Rad etish"</string>
     <string name="wifi_p2p_invitation_sent_title" msgid="1318975185112070734">"taklif jo‘natildi"</string>
     <string name="wifi_p2p_invitation_to_connect_title" msgid="4958803948658533637">"ulanish taklifi"</string>
     <string name="wifi_p2p_from_message" msgid="570389174731951769">"Kimdan:"</string>
@@ -1101,7 +1113,7 @@
     <string name="sms_control_title" msgid="7296612781128917719">"SMS xabarlar yuborilmoqda"</string>
     <string name="sms_control_message" msgid="3867899169651496433">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; katta miqdordagi SMS xabarlarini jo‘natmoqda. Ushbu ilovaga xabarlar jo‘natishni davom ettirishga ruxsat berasizmi?"</string>
     <string name="sms_control_yes" msgid="3663725993855816807">"Ruxsat berish"</string>
-    <string name="sms_control_no" msgid="625438561395534982">"Rad qilish"</string>
+    <string name="sms_control_no" msgid="625438561395534982">"Rad etish"</string>
     <string name="sms_short_code_confirm_message" msgid="1645436466285310855">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; &lt;b&gt;<xliff:g id="DEST_ADDRESS">%2$s</xliff:g>&lt;/b&gt;ga xabar jo‘natishni xohlaydi."</string>
     <string name="sms_short_code_details" msgid="5873295990846059400">"Bunda, mobil hisobingizdan "<b>"to‘lov olinishi mumkin"</b>"."</string>
     <string name="sms_premium_short_code_details" msgid="7869234868023975"><b>"Bunda, mobil hisobingizdan to‘lov olinishi mumkin."</b></string>
@@ -1153,7 +1165,6 @@
     <string name="select_keyboard_layout_notification_message" msgid="8084622969903004900">"Til va sxemani belgilash uchun bosing"</string>
     <string name="fast_scroll_alphabet" msgid="5433275485499039199">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
     <string name="fast_scroll_numeric_alphabet" msgid="4030170524595123610">" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
-    <string name="candidates_style" msgid="4333913089637062257"><u>"nomzodlar"</u></string>
     <string name="ext_media_checking_notification_title" msgid="5734005953288045806">"<xliff:g id="NAME">%s</xliff:g> tayyorlanmoqda"</string>
     <string name="ext_media_checking_notification_message" msgid="4747432538578886744">"Xatolar qidirilmoqda"</string>
     <string name="ext_media_new_notification_message" msgid="7589986898808506239">"Yangi <xliff:g id="NAME">%s</xliff:g> kartasi aniqlandi"</string>
@@ -1212,7 +1223,7 @@
     <string name="grant_credentials_permission_message_footer" msgid="3125211343379376561">"Ushbu so‘rovga ruxsat berishni xohlaysizmi?"</string>
     <string name="grant_permissions_header_text" msgid="6874497408201826708">"Ruxsat so‘rovi"</string>
     <string name="allow" msgid="7225948811296386551">"Ruxsat berish"</string>
-    <string name="deny" msgid="2081879885755434506">"Rad qilish"</string>
+    <string name="deny" msgid="2081879885755434506">"Rad etish"</string>
     <string name="permission_request_notification_title" msgid="6486759795926237907">"Ruxsat so‘raldi"</string>
     <string name="permission_request_notification_with_subtitle" msgid="8530393139639560189">"<xliff:g id="ACCOUNT">%s</xliff:g> hisobi uchun\nruxsat so‘raldi"</string>
     <string name="forward_intent_to_owner" msgid="1207197447013960896">"Siz ushbu ilovadan ishchi profilingizdan tashqarida foydalanmoqdasiz"</string>
@@ -1232,8 +1243,9 @@
     <string name="vpn_text_long" msgid="4907843483284977618">"<xliff:g id="SESSION">%s</xliff:g> ulandi. Tarmoq sozlamalarini o‘zgartirish uchun bu yerni bosing."</string>
     <string name="vpn_lockdown_connecting" msgid="6443438964440960745">"Ulanmoqda…"</string>
     <string name="vpn_lockdown_connected" msgid="8202679674819213931">"Ulandi"</string>
+    <string name="vpn_lockdown_disconnected" msgid="4532298952570796327">"Doimiy VPN o‘chirildi"</string>
     <string name="vpn_lockdown_error" msgid="6009249814034708175">"Xato"</string>
-    <string name="vpn_lockdown_config" msgid="4655589351146766608">"Sozlash uchun bosing"</string>
+    <string name="vpn_lockdown_config" msgid="5099330695245008680">"Sozlash uchun bosing"</string>
     <string name="upload_file" msgid="2897957172366730416">"Faylni tanlash"</string>
     <string name="no_file_chosen" msgid="6363648562170759465">"Hech qanday fayl tanlanmadi"</string>
     <string name="reset" msgid="2448168080964209908">"Asliga qaytarish"</string>
@@ -1317,7 +1329,7 @@
     <string name="storage_usb_drive_label" msgid="4501418548927759953">"<xliff:g id="MANUFACTURER">%s</xliff:g> USB xotira qurilmasi"</string>
     <string name="storage_usb" msgid="3017954059538517278">"USB xotira"</string>
     <string name="extract_edit_menu_button" msgid="8940478730496610137">"Tahrirlash"</string>
-    <string name="data_usage_warning_title" msgid="1955638862122232342">"Trafik kam qoldi"</string>
+    <string name="data_usage_warning_title" msgid="3620440638180218181">"Trafik sarfi bo‘yicha ogohlantirish"</string>
     <string name="data_usage_warning_body" msgid="6660692274311972007">"Trafik sarfi va sozlamalarni ko‘rish uchun bosing."</string>
     <string name="data_usage_3g_limit_title" msgid="4361523876818447683">"2G-3G trafik chekloviga yetdi"</string>
     <string name="data_usage_4g_limit_title" msgid="4609566827219442376">"4G trafik chekloviga yetdi"</string>
@@ -1636,6 +1648,7 @@
     <string name="search_language_hint" msgid="7042102592055108574">"Til nomini kiriting"</string>
     <string name="language_picker_section_suggested" msgid="8414489646861640885">"Taklif etiladi"</string>
     <string name="language_picker_section_all" msgid="3097279199511617537">"Barcha tillar"</string>
+    <string name="region_picker_section_all" msgid="8966316787153001779">"Barcha hududlar"</string>
     <string name="locale_search_menu" msgid="2560710726687249178">"Qidiruv"</string>
     <string name="work_mode_off_title" msgid="8954725060677558855">"Ish rejimi O‘CHIQ"</string>
     <string name="work_mode_off_message" msgid="3286169091278094476">"Ishchi profilini yoqish: ilovalar, fonda sinxronlash va bog‘liq funksiyalar."</string>

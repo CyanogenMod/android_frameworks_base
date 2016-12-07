@@ -104,6 +104,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.PowerManagerInternal;
+import android.os.Process;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.UserHandle;
@@ -132,6 +133,9 @@ class ActivityStarter {
     private static final String TAG_FOCUS = TAG + POSTFIX_FOCUS;
     private static final String TAG_CONFIGURATION = TAG + POSTFIX_CONFIGURATION;
     private static final String TAG_USER_LEAVING = TAG + POSTFIX_USER_LEAVING;
+
+    // TODO b/30204367 remove when the platform fully supports ephemeral applications
+    private static final boolean USE_DEFAULT_EPHEMERAL_LAUNCHER = false;
 
     private final ActivityManagerService mService;
     private final ActivityStackSupervisor mSupervisor;
@@ -479,39 +483,13 @@ class ActivityStarter {
         // starts either the intent we resolved here [on install error] or the ephemeral
         // app [on install success].
         if (rInfo != null && rInfo.ephemeralResolveInfo != null) {
-            // Create a pending intent to start the intent resolved here.
-            final IIntentSender failureTarget = mService.getIntentSenderLocked(
-                    ActivityManager.INTENT_SENDER_ACTIVITY, callingPackage,
-                    Binder.getCallingUid(), userId, null, null, 0, new Intent[]{ intent },
-                    new String[]{ resolvedType },
-                    PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT
-                            | PendingIntent.FLAG_IMMUTABLE, null);
-
-            // Create a pending intent to start the ephemeral application; force it to be
-            // directed to the ephemeral package.
-            ephemeralIntent.setPackage(rInfo.ephemeralResolveInfo.getPackageName());
-            final IIntentSender ephemeralTarget = mService.getIntentSenderLocked(
-                    ActivityManager.INTENT_SENDER_ACTIVITY, callingPackage,
-                    Binder.getCallingUid(), userId, null, null, 0, new Intent[]{ ephemeralIntent },
-                    new String[]{ resolvedType },
-                    PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT
-                            | PendingIntent.FLAG_IMMUTABLE, null);
-
-            int flags = intent.getFlags();
-            intent = new Intent();
-            intent.setFlags(flags
-                    | Intent.FLAG_ACTIVITY_NEW_TASK
-                    | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-            intent.putExtra(Intent.EXTRA_PACKAGE_NAME,
-                    rInfo.ephemeralResolveInfo.getPackageName());
-            intent.putExtra(Intent.EXTRA_EPHEMERAL_FAILURE, new IntentSender(failureTarget));
-            intent.putExtra(Intent.EXTRA_EPHEMERAL_SUCCESS, new IntentSender(ephemeralTarget));
-
+            intent = buildEphemeralInstallerIntent(intent, ephemeralIntent,
+                    rInfo.ephemeralResolveInfo.getPackageName(), callingPackage, resolvedType,
+                    userId);
             resolvedType = null;
             callingUid = realCallingUid;
             callingPid = realCallingPid;
 
-            rInfo = rInfo.ephemeralInstaller;
             aInfo = mSupervisor.resolveActivity(intent, rInfo, startFlags, null /*profilerInfo*/);
         }
 
@@ -566,6 +544,58 @@ class ActivityStarter {
         return err;
     }
 
+    /**
+     * Builds and returns an intent to launch the ephemeral installer.
+     */
+    private Intent buildEphemeralInstallerIntent(Intent launchIntent, Intent origIntent,
+            String ephemeralPackage, String callingPackage, String resolvedType, int userId) {
+        final Intent nonEphemeralIntent = new Intent(origIntent);
+        nonEphemeralIntent.setFlags(nonEphemeralIntent.getFlags() | Intent.FLAG_IGNORE_EPHEMERAL);
+        // Intent that is launched if the ephemeral package couldn't be installed
+        // for any reason.
+        final IIntentSender failureIntentTarget = mService.getIntentSenderLocked(
+                ActivityManager.INTENT_SENDER_ACTIVITY, callingPackage,
+                Binder.getCallingUid(), userId, null /*token*/, null /*resultWho*/, 1,
+                new Intent[]{ nonEphemeralIntent }, new String[]{ resolvedType },
+                PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT
+                | PendingIntent.FLAG_IMMUTABLE, null /*bOptions*/);
+
+        final Intent ephemeralIntent;
+        if (USE_DEFAULT_EPHEMERAL_LAUNCHER) {
+            // Force the intent to be directed to the ephemeral package
+            ephemeralIntent = new Intent(origIntent);
+            ephemeralIntent.setPackage(ephemeralPackage);
+        } else {
+            // Success intent goes back to the installer
+            ephemeralIntent = new Intent(launchIntent);
+        }
+
+        // Intent that is eventually launched if the ephemeral package was
+        // installed successfully. This will actually be launched by a platform
+        // broadcast receiver.
+        final IIntentSender successIntentTarget = mService.getIntentSenderLocked(
+                ActivityManager.INTENT_SENDER_ACTIVITY, callingPackage,
+                Binder.getCallingUid(), userId, null /*token*/, null /*resultWho*/, 0,
+                new Intent[]{ ephemeralIntent }, new String[]{ resolvedType },
+                PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT
+                | PendingIntent.FLAG_IMMUTABLE, null /*bOptions*/);
+
+        // Finally build the actual intent to launch the ephemeral installer
+        int flags = launchIntent.getFlags();
+        final Intent intent = new Intent();
+        intent.setFlags(flags
+                | Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_CLEAR_TASK
+                | Intent.FLAG_ACTIVITY_NO_HISTORY
+                | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        intent.putExtra(Intent.EXTRA_PACKAGE_NAME, ephemeralPackage);
+        intent.putExtra(Intent.EXTRA_EPHEMERAL_FAILURE, new IntentSender(failureIntentTarget));
+        intent.putExtra(Intent.EXTRA_EPHEMERAL_SUCCESS, new IntentSender(successIntentTarget));
+        // TODO: Remove when the platform has fully implemented ephemeral apps
+        intent.setData(origIntent.getData().buildUpon().clearQuery().build());
+        return intent;
+    }
+
     void postStartActivityUncheckedProcessing(
             ActivityRecord r, int result, int prevFocusedStackId, ActivityRecord sourceRecord,
             ActivityStack targetStack) {
@@ -595,6 +625,9 @@ class ActivityStarter {
         // If we launched the activity from a no display activity that was launched from the home
         // screen, we also need to start recents to un-minimize the docked stack, since the
         // noDisplay activity will be finished shortly after.
+        // Note that some apps have trampoline activities without noDisplay being set. In that case,
+        // we have another heuristic in DockedStackDividerController.notifyAppTransitionStarting
+        // that tries to detect that case.
         // TODO: We should prevent noDisplay activities from affecting task/stack ordering and
         // visibility instead of using this flag.
         final boolean noDisplayActivityOverHome = sourceRecord != null

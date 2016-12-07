@@ -29,6 +29,7 @@ import static android.content.pm.ActivityInfo.CONFIG_SMALLEST_SCREEN_SIZE;
 import static android.content.pm.ActivityInfo.FLAG_RESUME_WHILE_PAUSING;
 import static android.content.pm.ActivityInfo.FLAG_SHOW_FOR_ALL_USERS;
 import static android.content.res.Configuration.SCREENLAYOUT_UNDEFINED;
+import static android.view.Display.DEFAULT_DISPLAY;
 import static com.android.server.am.ActivityManagerDebugConfig.DEBUG_ADD_REMOVE;
 import static com.android.server.am.ActivityManagerDebugConfig.DEBUG_ALL;
 import static com.android.server.am.ActivityManagerDebugConfig.DEBUG_APP;
@@ -68,6 +69,7 @@ import static com.android.server.am.ActivityManagerDebugConfig.POSTFIX_VISIBILIT
 import static com.android.server.am.ActivityManagerDebugConfig.TAG_AM;
 import static com.android.server.am.ActivityManagerDebugConfig.TAG_WITH_CLASS_NAME;
 import static com.android.server.am.ActivityManagerService.LOCK_SCREEN_SHOWN;
+import static com.android.server.am.ActivityManagerService.TAKE_FULLSCREEN_SCREENSHOTS;
 import static com.android.server.am.ActivityRecord.APPLICATION_ACTIVITY_TYPE;
 import static com.android.server.am.ActivityRecord.HOME_ACTIVITY_TYPE;
 import static com.android.server.am.ActivityRecord.STARTING_WINDOW_REMOVED;
@@ -676,7 +678,7 @@ final class ActivityStack {
 
     final boolean isOnHomeDisplay() {
         return isAttached() &&
-                mActivityContainer.mActivityDisplay.mDisplayId == Display.DEFAULT_DISPLAY;
+                mActivityContainer.mActivityDisplay.mDisplayId == DEFAULT_DISPLAY;
     }
 
     void moveToFront(String reason) {
@@ -1048,22 +1050,32 @@ final class ActivityStack {
 
         int w = mService.mThumbnailWidth;
         int h = mService.mThumbnailHeight;
-        float scale = 1f;
-        if (w > 0) {
-            if (DEBUG_SCREENSHOTS) Slog.d(TAG_SCREENSHOTS, "\tTaking screenshot");
 
-            // When this flag is set, we currently take the fullscreen screenshot of the activity
-            // but scaled to half the size.  This gives us a "good-enough" fullscreen thumbnail to
-            // use within SystemUI while keeping memory usage low.
-            if (ActivityManagerService.TAKE_FULLSCREEN_SCREENSHOTS) {
-                w = h = -1;
-                scale = mService.mFullscreenThumbnailScale;
-            }
-            return mWindowManager.screenshotApplications(who.appToken, Display.DEFAULT_DISPLAY,
-                    w, h, scale);
+        if (w <= 0) {
+            Slog.e(TAG, "\tInvalid thumbnail dimensions: " + w + "x" + h);
+            return null;
         }
-        Slog.e(TAG, "Invalid thumbnail dimensions: " + w + "x" + h);
-        return null;
+
+        if (mStackId == DOCKED_STACK_ID && mStackSupervisor.mIsDockMinimized) {
+            // When the docked stack is minimized its app windows are cropped significantly so any
+            // screenshot taken will not display the apps contain. So, we avoid taking a screenshot
+            // in that case.
+            if (DEBUG_SCREENSHOTS) Slog.e(TAG, "\tIn minimized docked stack");
+            return null;
+        }
+
+        float scale = 1f;
+        if (DEBUG_SCREENSHOTS) Slog.d(TAG_SCREENSHOTS, "\tTaking screenshot");
+
+        // When this flag is set, we currently take the fullscreen screenshot of the activity but
+        // scaled to half the size. This gives us a "good-enough" fullscreen thumbnail to use within
+        // SystemUI while keeping memory usage low.
+        if (TAKE_FULLSCREEN_SCREENSHOTS) {
+            w = h = -1;
+            scale = mService.mFullscreenThumbnailScale;
+        }
+
+        return mWindowManager.screenshotApplications(who.appToken, DEFAULT_DISPLAY, w, h, scale);
     }
 
     /**
@@ -1315,7 +1327,9 @@ final class ActivityStack {
             // It is possible the activity was freezing the screen before it was paused.
             // In that case go ahead and remove the freeze this activity has on the screen
             // since it is no longer visible.
-            prev.stopFreezingScreenLocked(true /*force*/);
+            if (prev != null) {
+                prev.stopFreezingScreenLocked(true /*force*/);
+            }
             mPausingActivity = null;
         }
 
@@ -1598,11 +1612,6 @@ final class ActivityStack {
         if (stackIndex == mStacks.size() - 1) {
             Slog.wtf(TAG,
                     "Stack=" + this + " isn't front stack but is at the top of the stack list");
-            return STACK_INVISIBLE;
-        }
-
-        final boolean isLockscreenShown = mService.mLockScreenShown == LOCK_SCREEN_SHOWN;
-        if (isLockscreenShown && !StackId.isAllowedOverLockscreen(mStackId)) {
             return STACK_INVISIBLE;
         }
 
@@ -2523,7 +2532,8 @@ final class ActivityStack {
                             break;
                         }
                     }
-                    next.app.thread.scheduleNewIntent(next.newIntents, next.appToken);
+                    next.app.thread.scheduleNewIntent(
+                            next.newIntents, next.appToken, false /* andPause */);
                 }
 
                 // Well the app will no longer be stopped.
@@ -4458,7 +4468,7 @@ final class ActivityStack {
                     mStackSupervisor.getStack(FULLSCREEN_WORKSPACE_STACK_ID);
             if (fullscreenStack != null && fullscreenStack.hasVisibleBehindActivity()) {
                 final ActivityRecord visibleBehind = fullscreenStack.getVisibleBehindActivity();
-                mService.setFocusedActivityLocked(visibleBehind, "moveTaskToBack");
+                mService.setFocusedActivityLocked(visibleBehind, "moveHomeTaskToBack");
                 mStackSupervisor.resumeFocusedStackTopActivityLocked();
                 return true;
             }
@@ -4511,9 +4521,13 @@ final class ActivityStack {
             }
             final int taskToReturnTo = tr.getTaskToReturnTo();
             tr.setTaskToReturnTo(APPLICATION_ACTIVITY_TYPE);
-            return mStackSupervisor.resumeHomeStackTask(taskToReturnTo, null, "moveTaskToBack");
+            return mStackSupervisor.resumeHomeStackTask(taskToReturnTo, null,
+                    "moveTaskToBackAndShowHome");
         }
 
+        // Using currently focused activity value from service instead of mResumedActivity,
+        // because if this happens when device is locked the mResumedActivity will be null.
+        adjustFocusedActivityLocked(mService.mFocusedActivity, "moveTaskToBack");
         mStackSupervisor.resumeFocusedStackTopActivityLocked();
         return true;
     }
@@ -4576,15 +4590,6 @@ final class ActivityStack {
         if (mConfigWillChange) {
             if (DEBUG_SWITCH || DEBUG_CONFIGURATION) Slog.v(TAG_CONFIGURATION,
                     "Skipping config check (will change): " + r);
-            return true;
-        }
-
-        // TODO: We could probably make the condition below just check that the activity state is
-        // stopped, but also checking the sleep state for now to reduce change impact late in
-        // development cycle.
-        if (mService.isSleepingOrShuttingDownLocked() && r.state == ActivityState.STOPPED) {
-            if (DEBUG_SWITCH || DEBUG_CONFIGURATION) Slog.v(TAG_CONFIGURATION,
-                    "Skipping config check (stopped while sleeping): " + r);
             return true;
         }
 

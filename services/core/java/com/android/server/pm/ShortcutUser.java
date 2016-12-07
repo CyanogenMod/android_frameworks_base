@@ -23,12 +23,14 @@ import android.content.pm.ShortcutManager;
 import android.text.TextUtils;
 import android.text.format.Formatter;
 import android.util.ArrayMap;
+import android.util.Log;
 import android.util.Slog;
 import android.util.SparseArray;
 
 import com.android.internal.annotations.GuardedBy;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.util.Preconditions;
+import com.android.server.pm.ShortcutService.InvalidFileFormatException;
 
 import libcore.util.Objects;
 
@@ -60,6 +62,7 @@ class ShortcutUser {
 
     // Suffix "2" was added to force rescan all packages after the next OTA.
     private static final String ATTR_LAST_APP_SCAN_TIME = "last-app-scan-time2";
+    private static final String ATTR_LAST_APP_SCAN_OS_FINGERPRINT = "last-app-scan-fp";
     private static final String KEY_USER_ID = "userId";
     private static final String KEY_LAUNCHERS = "launchers";
     private static final String KEY_PACKAGES = "packages";
@@ -125,6 +128,8 @@ class ShortcutUser {
 
     private long mLastAppScanTime;
 
+    private String mLastAppScanOsFingerprint;
+
     public ShortcutUser(ShortcutService service, int userId) {
         mService = service;
         mUserId = userId;
@@ -142,6 +147,14 @@ class ShortcutUser {
         mLastAppScanTime = lastAppScanTime;
     }
 
+    public String getLastAppScanOsFingerprint() {
+        return mLastAppScanOsFingerprint;
+    }
+
+    public void setLastAppScanOsFingerprint(String lastAppScanOsFingerprint) {
+        mLastAppScanOsFingerprint = lastAppScanOsFingerprint;
+    }
+
     // We don't expose this directly to non-test code because only ShortcutUser should add to/
     // remove from it.
     @VisibleForTesting
@@ -151,6 +164,11 @@ class ShortcutUser {
 
     public boolean hasPackage(@NonNull String packageName) {
         return mPackages.containsKey(packageName);
+    }
+
+    private void addPackage(@NonNull ShortcutPackage p) {
+        p.replaceUser(this);
+        mPackages.put(p.getPackageName(), p);
     }
 
     public ShortcutPackage removePackage(@NonNull String packageName) {
@@ -168,7 +186,8 @@ class ShortcutUser {
         return mLaunchers;
     }
 
-    public void addLauncher(ShortcutLauncher launcher) {
+    private void addLauncher(ShortcutLauncher launcher) {
+        launcher.replaceUser(this);
         mLaunchers.put(PackageWithUser.of(launcher.getPackageUserId(),
                 launcher.getPackageName()), launcher);
     }
@@ -315,11 +334,16 @@ class ShortcutUser {
             throws IOException, XmlPullParserException {
         out.startTag(null, TAG_ROOT);
 
-        ShortcutService.writeAttr(out, ATTR_KNOWN_LOCALES, mKnownLocales);
-        ShortcutService.writeAttr(out, ATTR_LAST_APP_SCAN_TIME,
-                mLastAppScanTime);
+        if (!forBackup) {
+            // Don't have to back them up.
+            ShortcutService.writeAttr(out, ATTR_KNOWN_LOCALES, mKnownLocales);
+            ShortcutService.writeAttr(out, ATTR_LAST_APP_SCAN_TIME,
+                    mLastAppScanTime);
+            ShortcutService.writeAttr(out, ATTR_LAST_APP_SCAN_OS_FINGERPRINT,
+                    mLastAppScanOsFingerprint);
 
-        ShortcutService.writeTagValue(out, TAG_LAUNCHER, mLastKnownLauncher);
+            ShortcutService.writeTagValue(out, TAG_LAUNCHER, mLastKnownLauncher);
+        }
 
         // Can't use forEachPackageItem due to the checked exceptions.
         {
@@ -352,53 +376,59 @@ class ShortcutUser {
     }
 
     public static ShortcutUser loadFromXml(ShortcutService s, XmlPullParser parser, int userId,
-            boolean fromBackup) throws IOException, XmlPullParserException {
+            boolean fromBackup) throws IOException, XmlPullParserException, InvalidFileFormatException {
         final ShortcutUser ret = new ShortcutUser(s, userId);
 
-        ret.mKnownLocales = ShortcutService.parseStringAttribute(parser,
-                ATTR_KNOWN_LOCALES);
+        try {
+            ret.mKnownLocales = ShortcutService.parseStringAttribute(parser,
+                    ATTR_KNOWN_LOCALES);
 
-        // If lastAppScanTime is in the future, that means the clock went backwards.
-        // Just scan all apps again.
-        final long lastAppScanTime = ShortcutService.parseLongAttribute(parser,
-                ATTR_LAST_APP_SCAN_TIME);
-        final long currentTime = s.injectCurrentTimeMillis();
-        ret.mLastAppScanTime = lastAppScanTime < currentTime ? lastAppScanTime : 0;
+            // If lastAppScanTime is in the future, that means the clock went backwards.
+            // Just scan all apps again.
+            final long lastAppScanTime = ShortcutService.parseLongAttribute(parser,
+                    ATTR_LAST_APP_SCAN_TIME);
+            final long currentTime = s.injectCurrentTimeMillis();
+            ret.mLastAppScanTime = lastAppScanTime < currentTime ? lastAppScanTime : 0;
+            ret.mLastAppScanOsFingerprint = ShortcutService.parseStringAttribute(parser,
+                    ATTR_LAST_APP_SCAN_OS_FINGERPRINT);
+            final int outerDepth = parser.getDepth();
+            int type;
+            while ((type = parser.next()) != XmlPullParser.END_DOCUMENT
+                    && (type != XmlPullParser.END_TAG || parser.getDepth() > outerDepth)) {
+                if (type != XmlPullParser.START_TAG) {
+                    continue;
+                }
+                final int depth = parser.getDepth();
+                final String tag = parser.getName();
 
-        final int outerDepth = parser.getDepth();
-        int type;
-        while ((type = parser.next()) != XmlPullParser.END_DOCUMENT
-                && (type != XmlPullParser.END_TAG || parser.getDepth() > outerDepth)) {
-            if (type != XmlPullParser.START_TAG) {
-                continue;
-            }
-            final int depth = parser.getDepth();
-            final String tag = parser.getName();
+                if (depth == outerDepth + 1) {
+                    switch (tag) {
+                        case TAG_LAUNCHER: {
+                            ret.mLastKnownLauncher = ShortcutService.parseComponentNameAttribute(
+                                    parser, ATTR_VALUE);
+                            continue;
+                        }
+                        case ShortcutPackage.TAG_ROOT: {
+                            final ShortcutPackage shortcuts = ShortcutPackage.loadFromXml(
+                                    s, ret, parser, fromBackup);
 
-            if (depth == outerDepth + 1) {
-                switch (tag) {
-                    case TAG_LAUNCHER: {
-                        ret.mLastKnownLauncher = ShortcutService.parseComponentNameAttribute(
-                                parser, ATTR_VALUE);
-                        continue;
-                    }
-                    case ShortcutPackage.TAG_ROOT: {
-                        final ShortcutPackage shortcuts = ShortcutPackage.loadFromXml(
-                                s, ret, parser, fromBackup);
+                            // Don't use addShortcut(), we don't need to save the icon.
+                            ret.mPackages.put(shortcuts.getPackageName(), shortcuts);
+                            continue;
+                        }
 
-                        // Don't use addShortcut(), we don't need to save the icon.
-                        ret.mPackages.put(shortcuts.getPackageName(), shortcuts);
-                        continue;
-                    }
-
-                    case ShortcutLauncher.TAG_ROOT: {
-                        ret.addLauncher(
-                                ShortcutLauncher.loadFromXml(parser, ret, userId, fromBackup));
-                        continue;
+                        case ShortcutLauncher.TAG_ROOT: {
+                            ret.addLauncher(
+                                    ShortcutLauncher.loadFromXml(parser, ret, userId, fromBackup));
+                            continue;
+                        }
                     }
                 }
+                ShortcutService.warnForInvalidTag(depth, tag);
             }
-            ShortcutService.warnForInvalidTag(depth, tag);
+        } catch (RuntimeException e) {
+            throw new ShortcutService.InvalidFileFormatException(
+                    "Unable to parse file", e);
         }
         return ret;
     }
@@ -447,6 +477,51 @@ class ShortcutUser {
         }
     }
 
+    public void mergeRestoredFile(ShortcutUser restored) {
+        final ShortcutService s = mService;
+        // Note, a restore happens only at the end of setup wizard.  At this point, no apps are
+        // installed from Play Store yet, but it's still possible that system apps have already
+        // published dynamic shortcuts, since some apps do so on BOOT_COMPLETED.
+        // When such a system app has allowbackup=true, then we go ahead and replace all existing
+        // shortcuts with the restored shortcuts.  (Then we'll re-publish manifest shortcuts later
+        // in the call site.)
+        // When such a system app has allowbackup=false, then we'll keep the shortcuts that have
+        // already been published.  So we selectively add restored ShortcutPackages here.
+        //
+        // The same logic applies to launchers, but since launchers shouldn't pin shortcuts
+        // without users interaction it's really not a big deal, so we just clear existing
+        // ShortcutLauncher instances in mLaunchers and add all the restored ones here.
+
+        mLaunchers.clear();
+        restored.forAllLaunchers(sl -> {
+            // If the app is already installed and allowbackup = false, then ignore the restored
+            // data.
+            if (s.isPackageInstalled(sl.getPackageName(), getUserId())
+                    && !s.shouldBackupApp(sl.getPackageName(), getUserId())) {
+                return;
+            }
+            addLauncher(sl);
+        });
+        restored.forAllPackages(sp -> {
+            // If the app is already installed and allowbackup = false, then ignore the restored
+            // data.
+            if (s.isPackageInstalled(sp.getPackageName(), getUserId())
+                    && !s.shouldBackupApp(sp.getPackageName(), getUserId())) {
+                return;
+            }
+
+            final ShortcutPackage previous = getPackageShortcutsIfExists(sp.getPackageName());
+            if (previous != null && previous.hasNonManifestShortcuts()) {
+                Log.w(TAG, "Shortcuts for package " + sp.getPackageName() + " are being restored."
+                        + " Existing non-manifeset shortcuts will be overwritten.");
+            }
+            addPackage(sp);
+        });
+        // Empty the launchers and packages in restored to avoid accidentally using them.
+        restored.mLaunchers.clear();
+        restored.mPackages.clear();
+    }
+
     public void dump(@NonNull PrintWriter pw, @NonNull String prefix) {
         pw.print(prefix);
         pw.print("User: ");
@@ -457,6 +532,8 @@ class ShortcutUser {
         pw.print(mLastAppScanTime);
         pw.print("] ");
         pw.print(ShortcutService.formatTime(mLastAppScanTime));
+        pw.print("  Last app scan FP: ");
+        pw.print(mLastAppScanOsFingerprint);
         pw.println();
 
         prefix += prefix + "  ";

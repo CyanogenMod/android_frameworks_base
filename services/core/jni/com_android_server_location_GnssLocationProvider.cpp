@@ -1092,6 +1092,7 @@ void JavaObject::callSetter(
             method_name,
             "([B)V");
     env_->CallVoidMethod(object_, method, array);
+    env_->DeleteLocalRef(array);
 }
 
 jobject JavaObject::get() {

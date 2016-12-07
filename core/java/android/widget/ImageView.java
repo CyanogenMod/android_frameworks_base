@@ -467,6 +467,14 @@ public class ImageView extends View {
      * {@link #setImageBitmap(android.graphics.Bitmap)} and
      * {@link android.graphics.BitmapFactory} instead.</p>
      *
+     * <p class="note">On devices running SDK < 24, this method will fail to
+     * apply correct density scaling to images loaded from
+     * {@link ContentResolver#SCHEME_CONTENT content} and
+     * {@link ContentResolver#SCHEME_FILE file} schemes. Applications running
+     * on devices with SDK >= 24 <strong>MUST</strong> specify the
+     * {@code targetSdkVersion} in their manifest as 24 or above for density
+     * scaling to be applied to images loaded from these schemes.</p>
+     *
      * @param uri the Uri of an image, or {@code null} to clear the content
      */
     @android.view.RemotableViewMethod(asyncImpl="setImageURIAsync")
@@ -1441,7 +1449,9 @@ public class ImageView extends View {
     /**
      * Returns the alpha that will be applied to the drawable of this ImageView.
      *
-     * @return the alpha that will be applied to the drawable of this ImageView
+     * @return the alpha value that will be applied to the drawable of this
+     * ImageView (between 0 and 255 inclusive, with 0 being transparent and
+     * 255 being opaque)
      *
      * @see #setImageAlpha(int)
      */
@@ -1452,7 +1462,8 @@ public class ImageView extends View {
     /**
      * Sets the alpha value that should be applied to the image.
      *
-     * @param alpha the alpha value that should be applied to the image
+     * @param alpha the alpha value that should be applied to the image (between
+     * 0 and 255 inclusive, with 0 being transparent and 255 being opaque)
      *
      * @see #getImageAlpha()
      */

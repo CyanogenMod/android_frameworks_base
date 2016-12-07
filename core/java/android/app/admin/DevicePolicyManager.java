@@ -417,6 +417,14 @@ public class DevicePolicyManager {
     public static final int NOTIFICATION_BUGREPORT_FINISHED_NOT_ACCEPTED = 3;
 
     /**
+     * Default and maximum timeout in milliseconds after which unlocking with weak auth times out,
+     * i.e. the user has to use a strong authentication method like password, PIN or pattern.
+     *
+     * @hide
+     */
+    public static final long DEFAULT_STRONG_AUTH_TIMEOUT_MS = 72 * 60 * 60 * 1000; // 72h
+
+    /**
      * A {@link android.os.Parcelable} extra of type {@link android.os.PersistableBundle} that
      * allows a mobile device management application or NFC programmer application which starts
      * managed provisioning to pass data to the management application instance after provisioning.
@@ -1274,6 +1282,33 @@ public class DevicePolicyManager {
      * @hide
      */
     public static final int PASSWORD_QUALITY_MANAGED = 0x80000;
+
+    /**
+     * @hide
+     *
+     * adb shell dpm set-{device,profile}-owner will normally not allow installing an owner to
+     * a user with accounts.  {@link #ACCOUNT_FEATURE_DEVICE_OR_PROFILE_OWNER_ALLOWED}
+     * and {@link #ACCOUNT_FEATURE_DEVICE_OR_PROFILE_OWNER_DISALLOWED} are the account features
+     * used by authenticator to exempt their accounts from this:
+     *
+     * <ul>
+     *     <li>Non-test-only DO/PO still can't be installed when there are accounts.
+     *     <p>In order to make an apk test-only, add android:testOnly="true" to the
+     *     &lt;application&gt; tag in the manifest.
+     *
+     *     <li>Test-only DO/PO can be installed even when there are accounts, as long as all the
+     *     accounts have the {@link #ACCOUNT_FEATURE_DEVICE_OR_PROFILE_OWNER_ALLOWED} feature.
+     *     Some authenticators claim to have any features, so to detect it, we also check
+     *     {@link #ACCOUNT_FEATURE_DEVICE_OR_PROFILE_OWNER_DISALLOWED} and disallow installing
+     *     if any of the accounts have it.
+     * </ul>
+     */
+    public static final String ACCOUNT_FEATURE_DEVICE_OR_PROFILE_OWNER_ALLOWED =
+            "android.account.DEVICE_OR_PROFILE_OWNER_ALLOWED";
+
+    /** @hide See {@link #ACCOUNT_FEATURE_DEVICE_OR_PROFILE_OWNER_ALLOWED} */
+    public static final String ACCOUNT_FEATURE_DEVICE_OR_PROFILE_OWNER_DISALLOWED =
+            "android.account.DEVICE_OR_PROFILE_OWNER_DISALLOWED";
 
     /**
      * Called by an application that is administering the device to set the password restrictions it
@@ -2219,6 +2254,7 @@ public class DevicePolicyManager {
      * @throws SecurityException if the calling application does not own an active administrator
      *             that uses {@link DeviceAdminInfo#USES_POLICY_RESET_PASSWORD}
      * @throws IllegalStateException if the calling user is locked or has a managed profile.
+     * @throws IllegalArgumentException if the password does not meet system requirements.
      */
     public boolean resetPassword(String password, int flags) {
         throwIfParentInstance("resetPassword");
@@ -2305,6 +2341,83 @@ public class DevicePolicyManager {
             }
         }
         return 0;
+    }
+
+    /**
+     * Called by a device/profile owner to set the timeout after which unlocking with secondary, non
+     * strong auth (e.g. fingerprint, trust agents) times out, i.e. the user has to use a strong
+     * authentication method like password, pin or pattern.
+     *
+     * <p>This timeout is used internally to reset the timer to require strong auth again after
+     * specified timeout each time it has been successfully used.
+     *
+     * <p>Fingerprint can also be disabled altogether using {@link #KEYGUARD_DISABLE_FINGERPRINT}.
+     *
+     * <p>Trust agents can also be disabled altogether using {@link #KEYGUARD_DISABLE_TRUST_AGENTS}.
+     *
+     * <p>The calling device admin must be a device or profile owner. If it is not,
+     * a {@link SecurityException} will be thrown.
+     *
+     * <p>The calling device admin can verify the value it has set by calling
+     * {@link #getRequiredStrongAuthTimeout(ComponentName)} and passing in its instance.
+     *
+     * <p>This method can be called on the {@link DevicePolicyManager} instance returned by
+     * {@link #getParentProfileInstance(ComponentName)} in order to set restrictions on the parent
+     * profile.
+     *
+     * @param admin Which {@link DeviceAdminReceiver} this request is associated with.
+     * @param timeoutMs The new timeout, after which the user will have to unlock with strong
+     *         authentication method. A value of 0 means the admin is not participating in
+     *         controlling the timeout.
+     *         The minimum and maximum timeouts are platform-defined and are typically 1 hour and
+     *         72 hours, respectively. Though discouraged, the admin may choose to require strong
+     *         auth at all times using {@link #KEYGUARD_DISABLE_FINGERPRINT} and/or
+     *         {@link #KEYGUARD_DISABLE_TRUST_AGENTS}.
+     *
+     * @throws SecurityException if {@code admin} is not a device or profile owner.
+     *
+     * @hide
+     */
+    public void setRequiredStrongAuthTimeout(@NonNull ComponentName admin,
+            long timeoutMs) {
+        if (mService != null) {
+            try {
+                mService.setRequiredStrongAuthTimeout(admin, timeoutMs, mParentInstance);
+            } catch (RemoteException e) {
+                throw e.rethrowFromSystemServer();
+            }
+        }
+    }
+
+    /**
+     * Determine for how long the user will be able to use secondary, non strong auth for
+     * authentication, since last strong method authentication (password, pin or pattern) was used.
+     * After the returned timeout the user is required to use strong authentication method.
+     *
+     * <p>This method can be called on the {@link DevicePolicyManager} instance
+     * returned by {@link #getParentProfileInstance(ComponentName)} in order to retrieve
+     * restrictions on the parent profile.
+     *
+     * @param admin The name of the admin component to check, or {@code null} to aggregate
+     *         accross all participating admins.
+     * @return The timeout or 0 if not configured for the provided admin.
+     *
+     * @hide
+     */
+    public long getRequiredStrongAuthTimeout(@Nullable ComponentName admin) {
+        return getRequiredStrongAuthTimeout(admin, myUserId());
+    }
+
+    /** @hide per-user version */
+    public long getRequiredStrongAuthTimeout(@Nullable ComponentName admin, @UserIdInt int userId) {
+        if (mService != null) {
+            try {
+                return mService.getRequiredStrongAuthTimeout(admin, userId, mParentInstance);
+            } catch (RemoteException e) {
+                throw e.rethrowFromSystemServer();
+            }
+        }
+        return DEFAULT_STRONG_AUTH_TIMEOUT_MS;
     }
 
     /**
@@ -6463,6 +6576,37 @@ public class DevicePolicyManager {
     private void throwIfParentInstance(String functionName) {
         if (mParentInstance) {
             throw new SecurityException(functionName + " cannot be called on the parent instance");
+        }
+    }
+
+    /**
+     * @hide
+     * Enable backup service.
+     * <p>This includes all backup and restore mechanisms.
+     * Setting this to {@code false} will make backup service no-op or return empty results.
+     *
+     * <p>There must be only one user on the device, managed by the device owner.
+     * Otherwise a {@link SecurityException} will be thrown.
+     *
+     * <p>Backup service is off by default when device owner is present.
+     */
+    public void setBackupServiceEnabled(@NonNull ComponentName admin, boolean enabled) {
+        try {
+            mService.setBackupServiceEnabled(admin, enabled);
+        } catch (RemoteException re) {
+            throw re.rethrowFromSystemServer();
+        }
+    }
+
+    /**
+     * @hide
+     * @return {@code true} if backup service is enabled, {@code false} otherwise.
+     */
+    public boolean isBackupServiceEnabled(@NonNull ComponentName admin) {
+        try {
+            return mService.isBackupServiceEnabled(admin);
+        } catch (RemoteException re) {
+            throw re.rethrowFromSystemServer();
         }
     }
 

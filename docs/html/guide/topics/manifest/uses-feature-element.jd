@@ -512,10 +512,11 @@ You can find your unsigned <code>.apk</code> in the
 
 <li>Next, locate the <code>aapt</code> tool, if it is not already in your PATH.
 If you are using SDK Tools r8 or higher, you can find <code>aapt</code> in the
-<code>&lt;<em>SDK</em>&gt;/platform-tools/</code> directory.
+<code>&lt;<em>SDK</em>&gt;/build-tools/&lt;<em>tools version number</em>&gt;</code>
+directory.
 <p class="note"><strong>Note:</strong> You must use the version of
-<code>aapt</code> that is provided for the latest Platform-Tools component available. If
-you do not have the latest Platform-Tools component, download it using the <a
+<code>aapt</code> that is provided for the latest Build-Tools component available. If
+you do not have the latest Build-Tools component, download it using the <a
 href="{@docRoot}studio/intro/update.html">Android SDK Manager</a>.
 </p></li>
 <li>Run <code>aapt</code> using this syntax: </li>
@@ -1666,6 +1667,15 @@ densities: '160'
 
 <pre>&lt;uses-feature android:name="android.hardware.camera" android:required="false" /&gt;</pre>
 
+<p class="caution">
+  <strong>Caution:</strong> If your app targets Android 5.0 (API level 21) or
+  higher and uses the <code>ACCESS_COARSE_LOCATION</code> or
+  <code>ACCESS_FINE_LOCATION</code> permission in order to receive location
+  updates from the network or a GPS, respectively, you must also explicitly
+  declare that your app uses the <code>android.hardware.location.network</code>
+  or <code>android.hardware.location.gps</code> hardware features.
+</p>
+
 <p class="table-caption" id="permissions-features">
   <strong>Table 2. </strong>Device permissions that imply device hardware use.
 </p>
@@ -1717,14 +1727,29 @@ densities: '160'
 </tr>
 <tr>
   <td><code>ACCESS_COARSE_LOCATION</code></td>
-  <td><code>android.hardware.location.network</code> <em>and</em>
-<br><code>android.hardware.location</code></td>
+  <td>
+    <p>
+      <code>android.hardware.location</code>
+    </p>
+    <p>
+      <code>android.hardware.location.network</code>
+      (Only when target API level is 20 or lower.)
+    </p>
+  </td>
 <!--  <td></td> -->
 </tr>
 <tr>
   <td><code>ACCESS_FINE_LOCATION</code></td>
-  <td><code>android.hardware.location.gps</code> <em>and</em>
-<br><code>android.hardware.location</code></td>
+  <td>
+    <p>
+      <code>android.hardware.location</code>
+    </p>
+    <p>
+      <code>android.hardware.location.gps</code>
+      (Only when target API level is 20 or lower.)
+    </p>
+  </td>
+
 <!--  <td></td> -->
 </tr>
 

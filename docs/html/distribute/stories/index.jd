@@ -4,16 +4,6 @@ page.metaDescription=Android developers, their apps, and their successes with An
 
 @jd:body
 
-<script>
-  $(document).ready(function() {
-    if (useUpdatedTemplates) {
-      $("#useUpdatedTemplates").css("display","block");
-    } else {
-      $("#useOldTemplates").css("display","block");
-    }
-  })
-</script>
-
 <p>Android developers, their apps, and their successes with Android and Google Play.</p>
 
 <section class="dac-section dac-small" id="latest-apps"><div class="wrap">
@@ -31,11 +21,11 @@ page.metaDescription=Android developers, their apps, and their successes with An
   <h3 class="norule">Articles</h3>
 
   <div class="resource-widget resource-flow-layout col-16"
-      data-query="type:distribute+tag:developerstory+tag:apps"
-      data-sortOrder="-timestamp"
+      data-query="collection:distribute/stories/apps/docs"
       data-cardSizes="6x6"
       data-items-per-page="15"
       data-initial-results="6"></div>
+
 </div></section>
 
 <section class="dac-section dac-small" id="latest-games"><div class="wrap">
@@ -53,9 +43,9 @@ page.metaDescription=Android developers, their apps, and their successes with An
   <h3 class="norule">Articles</h3>
 
   <div class="resource-widget resource-flow-layout col-16"
-      data-query="type:distribute+tag:developerstory+tag:games"
-      data-sortOrder="-timestamp"
+      data-query="collection:distribute/stories/games/docs"
       data-cardSizes="6x6"
       data-items-per-page="15"
       data-initial-results="6"></div>
+
 </div></section>

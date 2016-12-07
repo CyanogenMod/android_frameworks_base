@@ -40,6 +40,7 @@ import android.view.LayoutInflater;
 import android.view.ViewConfiguration;
 import android.view.WindowManager;
 
+import android.widget.Toast;
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.policy.DockedDividerUtils;
 import com.android.systemui.R;
@@ -200,9 +201,17 @@ public class RecentsImpl implements ActivityOptions.OnAnimationFinishedListener 
     }
 
     public void onConfigurationChanged() {
+        Resources res = mContext.getResources();
         reloadResources();
         mDummyStackView.reloadOnConfigurationChange();
+        // Update the header bar direction directly as it is not attached to anything and does not
+        // layout except in updateHeaderBarLayout()
+        mHeaderBar.setLayoutDirection(res.getConfiguration().getLayoutDirection());
         mHeaderBar.onConfigurationChanged();
+        mHeaderBar.forceLayout();
+        mHeaderBar.measure(
+                MeasureSpec.makeMeasureSpec(mHeaderBar.getMeasuredWidth(), MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(mHeaderBar.getMeasuredHeight(), MeasureSpec.EXACTLY));
     }
 
     /**
@@ -211,11 +220,7 @@ public class RecentsImpl implements ActivityOptions.OnAnimationFinishedListener 
      * {@link Recents#onBusEvent(RecentsVisibilityChangedEvent)}.
      */
     public void onVisibilityChanged(Context context, boolean visible) {
-        SystemUIApplication app = (SystemUIApplication) context;
-        PhoneStatusBar statusBar = app.getComponent(PhoneStatusBar.class);
-        if (statusBar != null) {
-            statusBar.updateRecentsVisibility(visible);
-        }
+        Recents.getSystemServices().setRecentsVisibility(visible);
     }
 
     /**
@@ -390,6 +395,10 @@ public class RecentsImpl implements ActivityOptions.OnAnimationFinishedListener 
 
     public void onDraggingInRecentsEnded(float velocity) {
         EventBus.getDefault().sendOntoMainThread(new DraggingInRecentsEndedEvent(velocity));
+    }
+
+    public void onShowCurrentUserToast(int msgResId, int msgLength) {
+        Toast.makeText(mContext, msgResId, msgLength).show();
     }
 
     /**
@@ -621,6 +630,7 @@ public class RecentsImpl implements ActivityOptions.OnAnimationFinishedListener 
                 synchronized (mHeaderBarLock) {
                     if (mHeaderBar.getMeasuredWidth() != taskViewWidth ||
                             mHeaderBar.getMeasuredHeight() != mTaskBarHeight) {
+                        mHeaderBar.forceLayout();
                         mHeaderBar.measure(
                                 MeasureSpec.makeMeasureSpec(taskViewWidth, MeasureSpec.EXACTLY),
                                 MeasureSpec.makeMeasureSpec(mTaskBarHeight, MeasureSpec.EXACTLY));

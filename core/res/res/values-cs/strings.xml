@@ -218,6 +218,7 @@
     <string name="global_actions" product="default" msgid="2406416831541615258">"Možnosti telefonu"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Zámek obrazovky"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Vypnout"</string>
+    <string name="global_action_emergency" msgid="7112311161137421166">"Stav nouze"</string>
     <string name="global_action_bug_report" msgid="7934010578922304799">"Hlášení chyb"</string>
     <string name="bugreport_title" msgid="2667494803742548533">"Vytvořit chybové hlášení"</string>
     <string name="bugreport_message" msgid="398447048750350456">"Shromažďuje informace o aktuálním stavu zařízení. Tyto informace je následně možné poslat v e-mailové zprávě, chvíli však potrvá, než bude hlášení o chybě připraveno k odeslání. Buďte prosím trpěliví."</string>
@@ -692,7 +693,7 @@
     <string name="lockscreen_missing_sim_message" product="default" msgid="2186920585695169078">"V telefonu není žádná SIM karta."</string>
     <string name="lockscreen_missing_sim_instructions" msgid="5372787138023272615">"Vložte SIM kartu."</string>
     <string name="lockscreen_missing_sim_instructions_long" msgid="3526573099019319472">"SIM karta chybí nebo je nečitelná. Vložte SIM kartu."</string>
-    <string name="lockscreen_permanent_disabled_sim_message_short" msgid="5096149665138916184">"Nepoužitelná karta SIM."</string>
+    <string name="lockscreen_permanent_disabled_sim_message_short" msgid="5096149665138916184">"Nepoužitelná SIM karta."</string>
     <string name="lockscreen_permanent_disabled_sim_instructions" msgid="910904643433151371">"Vaše SIM karta byla natrvalo zablokována.\n Požádejte svého poskytovatele bezdrátových služeb o další SIM kartu."</string>
     <string name="lockscreen_transport_prev_description" msgid="6300840251218161534">"Předchozí skladba"</string>
     <string name="lockscreen_transport_next_description" msgid="573285210424377338">"Další skladba"</string>
@@ -1126,6 +1127,17 @@
     <skip />
     <string name="wifi_no_internet" msgid="8451173622563841546">"Wi-Fi nemá přístup k internetu"</string>
     <string name="wifi_no_internet_detailed" msgid="8083079241212301741">"Klepnutím zobrazíte možnosti"</string>
+    <string name="network_switch_metered" msgid="4671730921726992671">"Přechod na síť <xliff:g id="NETWORK_TYPE">%1$s</xliff:g>"</string>
+    <string name="network_switch_metered_detail" msgid="5325661434777870353">"Když síť <xliff:g id="PREVIOUS_NETWORK">%2$s</xliff:g> nebude mít přístup k internetu, zařízení použije síť <xliff:g id="NEW_NETWORK">%1$s</xliff:g>. Mohou být účtovány poplatky."</string>
+    <string name="network_switch_metered_toast" msgid="5779283181685974304">"Přechod ze sítě <xliff:g id="PREVIOUS_NETWORK">%1$s</xliff:g> na síť <xliff:g id="NEW_NETWORK">%2$s</xliff:g>"</string>
+  <string-array name="network_switch_type_name">
+    <item msgid="2952042958050315394">"mobilní data"</item>
+    <item msgid="75483255295529161">"Wi-Fi"</item>
+    <item msgid="6862614801537202646">"Bluetooth"</item>
+    <item msgid="5447331121797802871">"Ethernet"</item>
+    <item msgid="8257233890381651999">"VPN"</item>
+  </string-array>
+    <string name="network_switch_type_name_unknown" msgid="4552612897806660656">"neznámý typ sítě"</string>
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Připojení k síti Wi-Fi se nezdařilo"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" má pomalé připojení k internetu."</string>
     <string name="wifi_connect_alert_title" msgid="8455846016001810172">"Povolit připojení?"</string>
@@ -1203,7 +1215,6 @@
     <string name="select_keyboard_layout_notification_message" msgid="8084622969903004900">"Klepnutím vyberte jazyk a rozvržení"</string>
     <string name="fast_scroll_alphabet" msgid="5433275485499039199">" AÁBCČDĎEÉĚFGHCHIÍJKLMNŇOÓPQRŘSŠTŤUÚVWXYÝZŽ"</string>
     <string name="fast_scroll_numeric_alphabet" msgid="4030170524595123610">" 0123456789AÁBCČDĎEÉĚFGHCHIÍJKLMNŇOÓPQRŘSŠTŤUÚVWXYÝZŽ"</string>
-    <string name="candidates_style" msgid="4333913089637062257"><u>"kandidáti"</u></string>
     <string name="ext_media_checking_notification_title" msgid="5734005953288045806">"Probíhá příprava úložiště <xliff:g id="NAME">%s</xliff:g>"</string>
     <string name="ext_media_checking_notification_message" msgid="4747432538578886744">"Kontrola chyb"</string>
     <string name="ext_media_new_notification_message" msgid="7589986898808506239">"Zjištěno nové úložiště <xliff:g id="NAME">%s</xliff:g>"</string>
@@ -1282,8 +1293,9 @@
     <string name="vpn_text_long" msgid="4907843483284977618">"Připojeno k relaci <xliff:g id="SESSION">%s</xliff:g>. Klepnutím můžete síť spravovat."</string>
     <string name="vpn_lockdown_connecting" msgid="6443438964440960745">"Připojování k trvalé síti VPN…"</string>
     <string name="vpn_lockdown_connected" msgid="8202679674819213931">"Je připojena trvalá síť VPN"</string>
+    <string name="vpn_lockdown_disconnected" msgid="4532298952570796327">"Trvalá síť VPN je odpojena"</string>
     <string name="vpn_lockdown_error" msgid="6009249814034708175">"Chyba trvalé sítě VPN"</string>
-    <string name="vpn_lockdown_config" msgid="4655589351146766608">"Klepnutím zahájíte konfiguraci"</string>
+    <string name="vpn_lockdown_config" msgid="5099330695245008680">"Klepnutím přejděte do Nastavení"</string>
     <string name="upload_file" msgid="2897957172366730416">"Zvolit soubor"</string>
     <string name="no_file_chosen" msgid="6363648562170759465">"Není vybrán žádný soubor"</string>
     <string name="reset" msgid="2448168080964209908">"Resetovat"</string>
@@ -1369,7 +1381,7 @@
     <string name="storage_usb_drive_label" msgid="4501418548927759953">"Jednotka USB <xliff:g id="MANUFACTURER">%s</xliff:g>"</string>
     <string name="storage_usb" msgid="3017954059538517278">"Úložiště USB"</string>
     <string name="extract_edit_menu_button" msgid="8940478730496610137">"Upravit"</string>
-    <string name="data_usage_warning_title" msgid="1955638862122232342">"Upozornění na využití dat"</string>
+    <string name="data_usage_warning_title" msgid="3620440638180218181">"Upozornění na používání dat"</string>
     <string name="data_usage_warning_body" msgid="6660692274311972007">"Klepnutím zobrazíte nastavení."</string>
     <string name="data_usage_3g_limit_title" msgid="4361523876818447683">"Dosáhli jste limitu dat 2G–3G"</string>
     <string name="data_usage_4g_limit_title" msgid="4609566827219442376">"Dosáhli jste limitu dat 4G"</string>
@@ -1708,6 +1720,7 @@
     <string name="search_language_hint" msgid="7042102592055108574">"Zadejte název jazyka"</string>
     <string name="language_picker_section_suggested" msgid="8414489646861640885">"Navrhované"</string>
     <string name="language_picker_section_all" msgid="3097279199511617537">"Všechny jazyky"</string>
+    <string name="region_picker_section_all" msgid="8966316787153001779">"Všechny oblasti"</string>
     <string name="locale_search_menu" msgid="2560710726687249178">"Vyhledávání"</string>
     <string name="work_mode_off_title" msgid="8954725060677558855">"Pracovní režim je VYPNUTÝ"</string>
     <string name="work_mode_off_message" msgid="3286169091278094476">"Povolí fungování pracovního profilu, včetně aplikací, synchronizace na pozadí a souvisejících funkcí."</string>
