@@ -34,6 +34,7 @@
   <string name="quick_settings_tile_flashlight_not_summary">Dotknij, aby wyłączyć</string>
   <!-- [CHAR LIMIT=NONE] Importance Tuner setting title -->
   <!-- Notification importance level title-->
+  <string name="importance_level_title">Ważność: Poziom %1$d</string>
   <!-- [CHAR LIMIT=100] Notification Importance slider: very low importance level description -->
   <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">Zostaje na widoku do czasu odpięcia. Dotknij i przytrzymaj przycisk Wstecz, aby odpiąć.</string>
@@ -52,6 +53,7 @@
   <string name="accessibility_dpad_left">Kursor w lewo</string>
   <string name="accessibility_dpad_right">Kursor w prawo</string>
   <!-- NavBar Tuner -->
+  <string name="menu_ime_always_show">Przełącznik Menu / Klawiatura (zawsze pokazuj)</string>
   <string name="search">Szukaj</string>
   <!-- Wi-Fi hotspot label when enabled -->
   <plurals name="wifi_hotspot_connected_clients_label">

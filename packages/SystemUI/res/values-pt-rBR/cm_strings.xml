@@ -29,12 +29,45 @@
   <string name="led_notification_title">Configurações de luz</string>
   <string name="led_notification_text">Luz de LED ativada pelas configurações</string>
   <!-- Content description of the superuser tile -->
+  <string name="accessibility_su_active">Sessão de superusuário ativa</string>
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">A lanterna está ligada</string>
   <string name="quick_settings_tile_flashlight_not_summary">Toque para desligar</string>
   <!-- [CHAR LIMIT=NONE] Importance Tuner setting title -->
+  <string name="cm_power_notification_controls_description">Com os controles poderosos de notificação, você pode definir um nível de importância de 0 a 6 para as notificações do aplicativo.
+        \n\n<b>Nível 6</b>
+        \n- Mostrar na parte superior da lista de notificações
+        \n- Permitir interrupção em tela cheia
+        \n- Sempre espiar
+        \n\n<b>Nível 5</b>
+        \n- Impedir a interrupção em tela cheia
+        \n- Sempre espiar
+        \n\n<b>Nível 4</b>
+        \n- Impedir a interrupção em tela cheia
+        \n- Nunca espiar
+        \n\n<b>Nível 3</b>
+        \n- Impedir a interrupção em tela cheia
+        \n- Nunca espiar
+        \n- Nunca tocar e vibrar
+        \n\n<b>Nível 2</b>
+        \n- Impedir a interrupção em tela cheia
+        \n- Nunca espiar
+        \n- Nunca tocar ou vibrar
+        \n- Ocultar da tela de bloqueio
+        \n- Mostrar na parte inferior da lista de notificações
+        \n\n<b>Nível 1</b>
+        \n- Impedir a interrupção em tela cheia
+        \n- Nunca espiar
+        \n- Nunca tocar ou vibrar
+        \n- Ocultar da tela de bloqueio e da barra de status
+        \n- Mostrar na parte inferior da lista de notificações
+        \n\n<b>Nível 0</b>
+        \n- Bloquear todas as notificações do aplicativo
+    </string>
   <!-- Notification importance level title-->
+  <string name="importance_level_title">Importância: Nível %1$d</string>
   <!-- [CHAR LIMIT=100] Notification Importance slider: very low importance level description -->
+  <string name="notification_importance_very_low">Sem interrupção em tela cheia, espiar, som, ou vibração. Ocultar da tela de bloqueio.</string>
   <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">Isto a manterá na tela até ser desafixada. Toque e segure o botão Voltar para desafixar.</string>
   <!-- Strings for lockscreen shortcut hints -->
@@ -52,6 +85,8 @@
   <string name="accessibility_dpad_left">Cursor à esquerda</string>
   <string name="accessibility_dpad_right">Cursor à direita</string>
   <!-- NavBar Tuner -->
+  <string name="menu_ime_always_show">Menu / Alternador de Teclado (sempre mostrar)</string>
+  <string name="search">Procurar</string>
   <!-- Wi-Fi hotspot label when enabled -->
   <plurals name="wifi_hotspot_connected_clients_label">
     <item quantity="one">%1$d cliente</item>

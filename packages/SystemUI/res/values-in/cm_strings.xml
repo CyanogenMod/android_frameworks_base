@@ -29,12 +29,15 @@
   <string name="led_notification_title">Pengaturan cahaya</string>
   <string name="led_notification_text">Lampu LED diaktifkan oleh pengaturan</string>
   <!-- Content description of the superuser tile -->
+  <string name="accessibility_su_active">Sesi superuser aktif</string>
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">Senter aktif</string>
   <string name="quick_settings_tile_flashlight_not_summary">Ketuk untuk mematikan</string>
   <!-- [CHAR LIMIT=NONE] Importance Tuner setting title -->
   <!-- Notification importance level title-->
+  <string name="importance_level_title">Penting: Tingkat %1$d</string>
   <!-- [CHAR LIMIT=100] Notification Importance slider: very low importance level description -->
+  <string name="notification_importance_very_low">Tidak ada gangguan penuh, mengintip, suara atau getaran. Sembunyikan dari layar kunci.</string>
   <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">Hal ini membuatnya tetap dalam pandangan sampai Anda melepas sematan. Sentuh dan tahan tombol kembali untuk melepas sematan.</string>
   <!-- Strings for lockscreen shortcut hints -->
@@ -52,6 +55,8 @@
   <string name="accessibility_dpad_left">Kursor kiri</string>
   <string name="accessibility_dpad_right">Kursor kanan</string>
   <!-- NavBar Tuner -->
+  <string name="menu_ime_always_show">Menu / Keyboard Switcher (selalu terlihat)</string>
+  <string name="search">Cari</string>
   <!-- Wi-Fi hotspot label when enabled -->
   <plurals name="wifi_hotspot_connected_clients_label">
     <item quantity="other">%1$d klien</item>
