@@ -217,7 +217,7 @@ public final class JobSchedulerService extends com.android.server.SystemService
         private static final int DEFAULT_FG_JOB_COUNT = 4;
         private static final int DEFAULT_BG_NORMAL_JOB_COUNT = 6;
         private static final int DEFAULT_BG_MODERATE_JOB_COUNT = 4;
-        private static final int DEFAULT_BG_LOW_JOB_COUNT = 2;
+        private static final int DEFAULT_BG_LOW_JOB_COUNT = 1;
         private static final int DEFAULT_BG_CRITICAL_JOB_COUNT = 1;
 
         /**
@@ -429,7 +429,18 @@ public final class JobSchedulerService extends com.android.server.SystemService
                                         }
                                         cancelJobsForUid(pkgUid, true);
                                     }
-                                } catch (RemoteException e) { /* cannot happen */ }
+                                } catch (RemoteException|IllegalArgumentException e) {
+                                    /*
+                                     * IllegalArgumentException means that the package doesn't exist.
+                                     * This arises when PACKAGE_CHANGED broadcast delivery has lagged
+                                     * behind outright uninstall, so by the time we try to act it's gone.
+                                     * We don't need to act on this PACKAGE_CHANGED when this happens;
+                                     * we'll get a PACKAGE_REMOVED later and clean up then.
+                                     *
+                                     * RemoteException can't actually happen; the package manager is
+                                     * running in this same process.
+                                     */
+                                }
                                 break;
                             }
                         }
@@ -907,7 +918,11 @@ public final class JobSchedulerService extends com.android.server.SystemService
     private boolean isCurrentlyActiveLocked(JobStatus job) {
         for (int i=0; i<mActiveServices.size(); i++) {
             JobServiceContext serviceContext = mActiveServices.get(i);
-            final JobStatus running = serviceContext.getRunningJob();
+            // The 'unsafe' direct-internal-reference running-job inspector is okay to
+            // use here because we are already holding the necessary lock *and* we
+            // immediately discard the returned object reference, if any; we return
+            // only a boolean state indicator to the caller.
+            final JobStatus running = serviceContext.getRunningJobUnsafeLocked();
             if (running != null && running.matches(job.getUid(), job.getJobId())) {
                 return true;
             }

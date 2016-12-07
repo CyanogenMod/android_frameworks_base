@@ -19,6 +19,7 @@ package android.net.apf;
 import static android.system.OsConstants.*;
 
 import android.os.SystemClock;
+import android.net.LinkAddress;
 import android.net.LinkProperties;
 import android.net.NetworkUtils;
 import android.net.apf.ApfGenerator;
@@ -44,6 +45,7 @@ import com.android.internal.util.IndentingPrintWriter;
 import java.io.FileDescriptor;
 import java.io.IOException;
 import java.lang.Thread;
+import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -171,8 +173,8 @@ public class ApfFilter {
     private static final int ETH_HEADER_LEN = 14;
     private static final int ETH_DEST_ADDR_OFFSET = 0;
     private static final int ETH_ETHERTYPE_OFFSET = 12;
-    private static final byte[] ETH_BROADCAST_MAC_ADDRESS = new byte[]{
-            (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff };
+    private static final byte[] ETH_BROADCAST_MAC_ADDRESS =
+            {(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff };
     // TODO: Make these offsets relative to end of link-layer header; don't include ETH_HEADER_LEN.
     private static final int IPV4_FRAGMENT_OFFSET_OFFSET = ETH_HEADER_LEN + 6;
     // Endianness is not an issue for this constant because the APF interpreter always operates in
@@ -181,6 +183,7 @@ public class ApfFilter {
     private static final int IPV4_PROTOCOL_OFFSET = ETH_HEADER_LEN + 9;
     private static final int IPV4_DEST_ADDR_OFFSET = ETH_HEADER_LEN + 16;
     private static final int IPV4_ANY_HOST_ADDRESS = 0;
+    private static final int IPV4_BROADCAST_ADDRESS = -1; // 255.255.255.255
 
     private static final int IPV6_NEXT_HEADER_OFFSET = ETH_HEADER_LEN + 6;
     private static final int IPV6_SRC_ADDR_OFFSET = ETH_HEADER_LEN + 8;
@@ -188,7 +191,7 @@ public class ApfFilter {
     private static final int IPV6_HEADER_LEN = 40;
     // The IPv6 all nodes address ff02::1
     private static final byte[] IPV6_ALL_NODES_ADDRESS =
-            new byte[]{ (byte) 0xff, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 };
+            { (byte) 0xff, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 };
 
     private static final int ICMP6_TYPE_OFFSET = ETH_HEADER_LEN + IPV6_HEADER_LEN;
     private static final int ICMP6_NEIGHBOR_ANNOUNCEMENT = 136;
@@ -206,7 +209,7 @@ public class ApfFilter {
     private static final int ARP_OPCODE_OFFSET = ARP_HEADER_OFFSET + 6;
     private static final short ARP_OPCODE_REQUEST = 1;
     private static final short ARP_OPCODE_REPLY = 2;
-    private static final byte[] ARP_IPV4_HEADER = new byte[]{
+    private static final byte[] ARP_IPV4_HEADER = {
             0, 1, // Hardware type: Ethernet (1)
             8, 0, // Protocol type: IP (0x0800)
             6,    // Hardware size: 6
@@ -229,6 +232,9 @@ public class ApfFilter {
     // Our IPv4 address, if we have just one, otherwise null.
     @GuardedBy("this")
     private byte[] mIPv4Address;
+    // The subnet prefix length of our IPv4 network. Only valid if mIPv4Address is not null.
+    @GuardedBy("this")
+    private int mIPv4PrefixLength;
 
     @VisibleForTesting
     ApfFilter(ApfCapabilities apfCapabilities, NetworkInterface networkInterface,
@@ -364,26 +370,6 @@ public class ApfFilter {
 
         // Can't be static because it's in a non-static inner class.
         // TODO: Make this static once RA is its own class.
-        private int uint8(byte b) {
-            return b & 0xff;
-        }
-
-        private int uint16(short s) {
-            return s & 0xffff;
-        }
-
-        private long uint32(int i) {
-            return i & 0xffffffffL;
-        }
-
-        private long getUint16(ByteBuffer buffer, int position) {
-            return uint16(buffer.getShort(position));
-        }
-
-        private long getUint32(ByteBuffer buffer, int position) {
-            return uint32(buffer.getInt(position));
-        }
-
         private void prefixOptionToString(StringBuffer sb, int offset) {
             String prefix = IPv6AddresstoString(offset + 16);
             int length = uint8(mPacket.get(offset + 2));
@@ -737,39 +723,57 @@ public class ApfFilter {
         // Here's a basic summary of what the IPv4 filter program does:
         //
         // if filtering multicast (i.e. multicast lock not held):
-        //   if it's multicast:
-        //     drop
-        //   if it's not broadcast:
+        //   if it's DHCP destined to our MAC:
         //     pass
-        //   if it's not DHCP destined to our MAC:
+        //   if it's L2 broadcast:
+        //     drop
+        //   if it's IPv4 multicast:
+        //     drop
+        //   if it's IPv4 broadcast:
         //     drop
         // pass
 
         if (mMulticastFilter) {
-            // Check for multicast destination address range
+            final String skipDhcpv4Filter = "skip_dhcp_v4_filter";
+
+            // Pass DHCP addressed to us.
+            // Check it's UDP.
+            gen.addLoad8(Register.R0, IPV4_PROTOCOL_OFFSET);
+            gen.addJumpIfR0NotEquals(IPPROTO_UDP, skipDhcpv4Filter);
+            // Check it's not a fragment. This matches the BPF filter installed by the DHCP client.
+            gen.addLoad16(Register.R0, IPV4_FRAGMENT_OFFSET_OFFSET);
+            gen.addJumpIfR0AnyBitsSet(IPV4_FRAGMENT_OFFSET_MASK, skipDhcpv4Filter);
+            // Check it's addressed to DHCP client port.
+            gen.addLoadFromMemory(Register.R1, gen.IPV4_HEADER_SIZE_MEMORY_SLOT);
+            gen.addLoad16Indexed(Register.R0, UDP_DESTINATION_PORT_OFFSET);
+            gen.addJumpIfR0NotEquals(DHCP_CLIENT_PORT, skipDhcpv4Filter);
+            // Check it's DHCP to our MAC address.
+            gen.addLoadImmediate(Register.R0, DHCP_CLIENT_MAC_OFFSET);
+            // NOTE: Relies on R1 containing IPv4 header offset.
+            gen.addAddR1();
+            gen.addJumpIfBytesNotEqual(Register.R0, mHardwareAddress, skipDhcpv4Filter);
+            gen.addJump(gen.PASS_LABEL);
+
+            // Drop all multicasts/broadcasts.
+            gen.defineLabel(skipDhcpv4Filter);
+
+            // If IPv4 destination address is in multicast range, drop.
             gen.addLoad8(Register.R0, IPV4_DEST_ADDR_OFFSET);
             gen.addAnd(0xf0);
             gen.addJumpIfR0Equals(0xe0, gen.DROP_LABEL);
 
-            // Drop all broadcasts besides DHCP addressed to us
-            // If not a broadcast packet, pass
+            // If IPv4 broadcast packet, drop regardless of L2 (b/30231088).
+            gen.addLoad32(Register.R0, IPV4_DEST_ADDR_OFFSET);
+            gen.addJumpIfR0Equals(IPV4_BROADCAST_ADDRESS, gen.DROP_LABEL);
+            if (mIPv4Address != null && mIPv4PrefixLength < 31) {
+                int broadcastAddr = ipv4BroadcastAddress(mIPv4Address, mIPv4PrefixLength);
+                gen.addJumpIfR0Equals(broadcastAddr, gen.DROP_LABEL);
+            }
+
+            // If L2 broadcast packet, drop.
             gen.addLoadImmediate(Register.R0, ETH_DEST_ADDR_OFFSET);
             gen.addJumpIfBytesNotEqual(Register.R0, ETH_BROADCAST_MAC_ADDRESS, gen.PASS_LABEL);
-            // If not UDP, drop
-            gen.addLoad8(Register.R0, IPV4_PROTOCOL_OFFSET);
-            gen.addJumpIfR0NotEquals(IPPROTO_UDP, gen.DROP_LABEL);
-            // If fragment, drop. This matches the BPF filter installed by the DHCP client.
-            gen.addLoad16(Register.R0, IPV4_FRAGMENT_OFFSET_OFFSET);
-            gen.addJumpIfR0AnyBitsSet(IPV4_FRAGMENT_OFFSET_MASK, gen.DROP_LABEL);
-            // If not to DHCP client port, drop
-            gen.addLoadFromMemory(Register.R1, gen.IPV4_HEADER_SIZE_MEMORY_SLOT);
-            gen.addLoad16Indexed(Register.R0, UDP_DESTINATION_PORT_OFFSET);
-            gen.addJumpIfR0NotEquals(DHCP_CLIENT_PORT, gen.DROP_LABEL);
-            // If not DHCP to our MAC address, drop
-            gen.addLoadImmediate(Register.R0, DHCP_CLIENT_MAC_OFFSET);
-            // NOTE: Relies on R1 containing IPv4 header offset.
-            gen.addAddR1();
-            gen.addJumpIfBytesNotEqual(Register.R0, mHardwareAddress, gen.DROP_LABEL);
+            gen.addJump(gen.DROP_LABEL);
         }
 
         // Otherwise, pass
@@ -1062,26 +1066,32 @@ public class ApfFilter {
         }
     }
 
-    // Find the single IPv4 address if there is one, otherwise return null.
-    private static byte[] findIPv4Address(LinkProperties lp) {
-        byte[] ipv4Address = null;
-        for (InetAddress inetAddr : lp.getAddresses()) {
-            byte[] addr = inetAddr.getAddress();
-            if (addr.length != 4) continue;
-            // More than one IPv4 address, abort
-            if (ipv4Address != null && !Arrays.equals(ipv4Address, addr)) return null;
-            ipv4Address = addr;
+    /** Find the single IPv4 LinkAddress if there is one, otherwise return null. */
+    private static LinkAddress findIPv4LinkAddress(LinkProperties lp) {
+        LinkAddress ipv4Address = null;
+        for (LinkAddress address : lp.getLinkAddresses()) {
+            if (!(address.getAddress() instanceof Inet4Address)) {
+                continue;
+            }
+            if (ipv4Address != null && !ipv4Address.isSameAddressAs(address)) {
+                // More than one IPv4 address, abort.
+                return null;
+            }
+            ipv4Address = address;
         }
         return ipv4Address;
     }
 
     public synchronized void setLinkProperties(LinkProperties lp) {
         // NOTE: Do not keep a copy of LinkProperties as it would further duplicate state.
-        byte[] ipv4Address = findIPv4Address(lp);
-        // If ipv4Address is the same as mIPv4Address, then there's no change, just return.
-        if (Arrays.equals(ipv4Address, mIPv4Address)) return;
-        // Otherwise update mIPv4Address and install new program.
-        mIPv4Address = ipv4Address;
+        final LinkAddress ipv4Address = findIPv4LinkAddress(lp);
+        final byte[] addr = (ipv4Address != null) ? ipv4Address.getAddress().getAddress() : null;
+        final int prefix = (ipv4Address != null) ? ipv4Address.getPrefixLength() : 0;
+        if ((prefix == mIPv4PrefixLength) && Arrays.equals(addr, mIPv4Address)) {
+            return;
+        }
+        mIPv4Address = addr;
+        mIPv4PrefixLength = prefix;
         installNewProgramLocked();
     }
 
@@ -1126,5 +1136,39 @@ public class ApfFilter {
             pw.println(HexDump.toHexString(mLastInstalledProgram, false /* lowercase */));
             pw.decreaseIndent();
         }
+    }
+
+    private static int uint8(byte b) {
+        return b & 0xff;
+    }
+
+    private static int uint16(short s) {
+        return s & 0xffff;
+    }
+
+    private static long uint32(int i) {
+        return i & 0xffffffffL;
+    }
+
+    private static long getUint16(ByteBuffer buffer, int position) {
+        return uint16(buffer.getShort(position));
+    }
+
+    private static long getUint32(ByteBuffer buffer, int position) {
+        return uint32(buffer.getInt(position));
+    }
+
+    // TODO: move to android.net.NetworkUtils
+    @VisibleForTesting
+    public static int ipv4BroadcastAddress(byte[] addrBytes, int prefixLength) {
+        return bytesToInt(addrBytes) | (int) (uint32(-1) >>> prefixLength);
+    }
+
+    @VisibleForTesting
+    public static int bytesToInt(byte[] addrBytes) {
+        return (uint8(addrBytes[0]) << 24)
+                + (uint8(addrBytes[1]) << 16)
+                + (uint8(addrBytes[2]) << 8)
+                + (uint8(addrBytes[3]));
     }
 }

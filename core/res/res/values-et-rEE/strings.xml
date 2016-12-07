@@ -214,6 +214,7 @@
     <string name="global_actions" product="default" msgid="2406416831541615258">"Telefonivalikud"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Ekraanilukk"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Lülita välja"</string>
+    <string name="global_action_emergency" msgid="7112311161137421166">"Hädaabi"</string>
     <string name="global_action_bug_report" msgid="7934010578922304799">"Veaaruanne"</string>
     <string name="bugreport_title" msgid="2667494803742548533">"Veaaruande võtmine"</string>
     <string name="bugreport_message" msgid="398447048750350456">"Nii kogutakse teavet teie seadme praeguse oleku kohta, et saata see meilisõnumina. Enne kui saate veaaruande ära saata, võtab selle loomine natuke aega; varuge kannatust."</string>
@@ -251,7 +252,7 @@
     <string name="permgrouplab_sms" msgid="228308803364967808">"SMS"</string>
     <string name="permgroupdesc_sms" msgid="4656988620100940350">"saata ja vaadata SMS-sõnumeid"</string>
     <string name="permgrouplab_storage" msgid="1971118770546336966">"Mäluruum"</string>
-    <string name="permgroupdesc_storage" msgid="637758554581589203">"juurde pääseda seadmesse salvestatud fotodele, meediale ja failidele"</string>
+    <string name="permgroupdesc_storage" msgid="637758554581589203">"juurde pääseda seadmesse salvestatud fotodele, meediasisule ja failidele"</string>
     <string name="permgrouplab_microphone" msgid="171539900250043464">"Mikrofon"</string>
     <string name="permgroupdesc_microphone" msgid="4988812113943554584">"heli salvestamine"</string>
     <string name="permgrouplab_camera" msgid="4820372495894586615">"Kaamera"</string>
@@ -1076,6 +1077,17 @@
     <skip />
     <string name="wifi_no_internet" msgid="8451173622563841546">"WiFi-l pole juurdepääsu Internetile"</string>
     <string name="wifi_no_internet_detailed" msgid="8083079241212301741">"Puudutage valikute nägemiseks"</string>
+    <string name="network_switch_metered" msgid="4671730921726992671">"Lülitati võrgule <xliff:g id="NETWORK_TYPE">%1$s</xliff:g>"</string>
+    <string name="network_switch_metered_detail" msgid="5325661434777870353">"Seade kasutab võrku <xliff:g id="NEW_NETWORK">%1$s</xliff:g>, kui võrgul <xliff:g id="PREVIOUS_NETWORK">%2$s</xliff:g> puudub Interneti-ühendus. Rakenduda võivad tasud."</string>
+    <string name="network_switch_metered_toast" msgid="5779283181685974304">"Lülitati võrgult <xliff:g id="PREVIOUS_NETWORK">%1$s</xliff:g> võrgule <xliff:g id="NEW_NETWORK">%2$s</xliff:g>"</string>
+  <string-array name="network_switch_type_name">
+    <item msgid="2952042958050315394">"mobiilne andmeside"</item>
+    <item msgid="75483255295529161">"WiFi"</item>
+    <item msgid="6862614801537202646">"Bluetooth"</item>
+    <item msgid="5447331121797802871">"Ethernet"</item>
+    <item msgid="8257233890381651999">"VPN"</item>
+  </string-array>
+    <string name="network_switch_type_name_unknown" msgid="4552612897806660656">"tundmatu võrgutüüp"</string>
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Ei saanud WiFi-ga ühendust"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" on halb Interneti-ühendus."</string>
     <string name="wifi_connect_alert_title" msgid="8455846016001810172">"Kas lubada ühendus?"</string>
@@ -1153,7 +1165,6 @@
     <string name="select_keyboard_layout_notification_message" msgid="8084622969903004900">"Puudutage keele ja paigutuse valimiseks"</string>
     <string name="fast_scroll_alphabet" msgid="5433275485499039199">" ABCDEFGHIJKLMNOPQRSŠZŽTUVWÕÄÖÜXY"</string>
     <string name="fast_scroll_numeric_alphabet" msgid="4030170524595123610">" 0123456789ABCDEFGHIJKLMNOPQRSŠZŽTUVWÕÄÖÜXY"</string>
-    <string name="candidates_style" msgid="4333913089637062257"><u>"kandidaadid"</u></string>
     <string name="ext_media_checking_notification_title" msgid="5734005953288045806">"Üksuse <xliff:g id="NAME">%s</xliff:g> ettevalmistamine"</string>
     <string name="ext_media_checking_notification_message" msgid="4747432538578886744">"Vigade kontrollimine"</string>
     <string name="ext_media_new_notification_message" msgid="7589986898808506239">"Tuvastati uus üksus <xliff:g id="NAME">%s</xliff:g>"</string>
@@ -1232,8 +1243,9 @@
     <string name="vpn_text_long" msgid="4907843483284977618">"Ühendatud seansiga <xliff:g id="SESSION">%s</xliff:g>. Koputage võrgu haldamiseks"</string>
     <string name="vpn_lockdown_connecting" msgid="6443438964440960745">"Ühendamine alati sees VPN-iga …"</string>
     <string name="vpn_lockdown_connected" msgid="8202679674819213931">"Ühendatud alati sees VPN-iga"</string>
+    <string name="vpn_lockdown_disconnected" msgid="4532298952570796327">"Alati sees VPN pole ühendatud"</string>
     <string name="vpn_lockdown_error" msgid="6009249814034708175">"Alati sees VPN-i viga"</string>
-    <string name="vpn_lockdown_config" msgid="4655589351146766608">"Puudutage seadistamiseks"</string>
+    <string name="vpn_lockdown_config" msgid="5099330695245008680">"Puudutage seadistamiseks"</string>
     <string name="upload_file" msgid="2897957172366730416">"Valige fail"</string>
     <string name="no_file_chosen" msgid="6363648562170759465">"Ühtegi faili pole valitud"</string>
     <string name="reset" msgid="2448168080964209908">"Lähtesta"</string>
@@ -1317,7 +1329,7 @@
     <string name="storage_usb_drive_label" msgid="4501418548927759953">"Tootja <xliff:g id="MANUFACTURER">%s</xliff:g> USB-ketas"</string>
     <string name="storage_usb" msgid="3017954059538517278">"USB-mäluseade"</string>
     <string name="extract_edit_menu_button" msgid="8940478730496610137">"Muuda"</string>
-    <string name="data_usage_warning_title" msgid="1955638862122232342">"Andmete kasutamise hoiatus"</string>
+    <string name="data_usage_warning_title" msgid="3620440638180218181">"Andmekasutuse hoiatus"</string>
     <string name="data_usage_warning_body" msgid="6660692274311972007">"Puudutage kasutuse/seadete vaat."</string>
     <string name="data_usage_3g_limit_title" msgid="4361523876818447683">"2G-, 3G-andmeside limiit on täis"</string>
     <string name="data_usage_4g_limit_title" msgid="4609566827219442376">"4G-andmeside limiit on täis"</string>
@@ -1636,6 +1648,7 @@
     <string name="search_language_hint" msgid="7042102592055108574">"Sisestage keele nimi"</string>
     <string name="language_picker_section_suggested" msgid="8414489646861640885">"Soovitatud"</string>
     <string name="language_picker_section_all" msgid="3097279199511617537">"Kõik keeled"</string>
+    <string name="region_picker_section_all" msgid="8966316787153001779">"Kõik piirkonnad"</string>
     <string name="locale_search_menu" msgid="2560710726687249178">"Otsing"</string>
     <string name="work_mode_off_title" msgid="8954725060677558855">"Töörežiim on VÄLJA LÜLITATUD"</string>
     <string name="work_mode_off_message" msgid="3286169091278094476">"Lubatakse tööprofiili toimingud, sh rakendused, taustal sünkroonimine ja seotud funktsioonid."</string>

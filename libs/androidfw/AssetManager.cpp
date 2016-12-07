@@ -35,6 +35,9 @@
 #include <utils/threads.h>
 #include <utils/Timers.h>
 #include <utils/Trace.h>
+#ifndef _WIN32
+#include <sys/file.h>
+#endif
 
 #include <assert.h>
 #include <dirent.h>
@@ -777,6 +780,12 @@ void AssetManager::addSystemOverlays(const char* pathOverlaysList,
         return;
     }
 
+#ifndef _WIN32
+    if (TEMP_FAILURE_RETRY(flock(fileno(fin), LOCK_SH)) != 0) {
+        fclose(fin);
+        return;
+    }
+#endif
     char buf[1024];
     while (fgets(buf, sizeof(buf), fin)) {
         // format of each line:
@@ -808,6 +817,10 @@ void AssetManager::addSystemOverlays(const char* pathOverlaysList,
             delete oidmap;
         }
     }
+
+#ifndef _WIN32
+    TEMP_FAILURE_RETRY(flock(fileno(fin), LOCK_UN));
+#endif
     fclose(fin);
 }
 
@@ -1903,6 +1916,7 @@ ZipFileRO* AssetManager::SharedZip::getZip()
 
 Asset* AssetManager::SharedZip::getResourceTableAsset()
 {
+    AutoMutex _l(gLock);
     ALOGV("Getting from SharedZip %p resource asset %p\n", this, mResourceTableAsset);
     return mResourceTableAsset;
 }
@@ -1912,10 +1926,10 @@ Asset* AssetManager::SharedZip::setResourceTableAsset(Asset* asset)
     {
         AutoMutex _l(gLock);
         if (mResourceTableAsset == NULL) {
-            mResourceTableAsset = asset;
             // This is not thread safe the first time it is called, so
             // do it here with the global lock held.
             asset->getBuffer(true);
+            mResourceTableAsset = asset;
             return asset;
         }
     }

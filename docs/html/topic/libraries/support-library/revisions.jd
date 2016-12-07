@@ -6,9 +6,71 @@ page.metaDescription=This page provides details about the Support Library packag
 <p>This page provides details about the Support Library package releases.</p>
 
 <div class="toggle-content opened">
-  <p id="rev24-2-0">
+  <p id="rev24-2-1">
     <a href="#" onclick="return toggleContent(this)"><img src=
     "{@docRoot}assets/images/styles/disclosure_up.png" class=
+    "toggle-content-img" alt="">Android Support Library, revision 24.2.1</a>
+    <em>(September 2016)</em>
+  </p>
+
+  <div class="toggle-content-toggleme">
+
+    <p>Fixed issues:</p>
+
+<ul>
+  <li>{@link android.support.design.widget.FloatingActionButton} can no longer
+  be anchored to indirect children of {@link
+  android.support.design.widget.CoordinatorLayout}. (AOSP issue <a href=
+  "https://code.google.com/p/android/issues/detail?id=220250">220250</a>)
+  </li>
+
+  <li>Image inside {@link
+  android.support.design.widget.CollapsingToolbarLayout} doesn’t scale properly
+  with <code>fitsSystemWindows=true</code>. (AOSP issue <a href=
+  "https://code.google.com/p/android/issues/detail?id=220389">220389</a>)
+  </li>
+
+  <li>{@link android.support.design.widget.CoordinatorLayout} throws {@link
+  java.lang.IndexOutOfBoundsException} when {@link
+  android.support.design.widget.Snackbar} is shown and dismissed. (AOSP issue
+  <a href="https://code.google.com/p/android/issues/detail?id=220762"
+  >220762</a>)
+  </li>
+
+  <li>{@link android.support.design.widget.TextInputLayout} fails to resolve
+  error text color. (AOSP issue <a href=
+  "https://code.google.com/p/android/issues/detail?id=220305">220305</a>)
+  </li>
+
+  <li>{@link android.support.v7.util.SortedList.BatchedCallback#onMoved
+  BatchedCallback.onMoved()} calls {@link
+  android.support.v7.util.SortedList.BatchedCallback#onInserted
+  BatchedCallback.onInserted()}. (AOSP issue <a href=
+  "https://code.google.com/p/android/issues/detail?id=220309">220309</a>)
+  </li>
+
+  <li>{@link android.support.design.widget.TextInputLayout} overrides right
+  compound drawable. (AOSP issue <a href=
+  "https://code.google.com/p/android/issues/detail?id=220728">220728</a>)
+  </li>
+</ul>
+
+<p>
+  A complete list of public bug fixes is available on the <a href=
+  "https://code.google.com/p/android/issues/list?can=1&q=label%3ATarget-Support-24.2.1">
+  AOSP Issue Tracker</a>.
+</p>
+
+
+  </div>
+</div>
+
+<!-- end of collapsible section: 24.2.1 -->
+
+<div class="toggle-content closed">
+  <p id="rev24-2-0">
+    <a href="#" onclick="return toggleContent(this)"><img src=
+    "{@docRoot}assets/images/styles/disclosure_down.png" class=
     "toggle-content-img" alt="">Android Support Library, revision 24.2.0</a>
     <em>(August 2016)</em>
   </p>
@@ -174,6 +236,14 @@ APK size, we recommend that you just list the specific modules your app needs.
     behavior similar to {@link android.support.v4.view.ViewPager}.
   </li>
 
+  <li>The Custom Tabs library now allows clients to request the standard
+  browser UI, rather than custom tabs UI, by calling <a href=
+  "/reference/android/support/customtabs/CustomTabsIntent.html#setAlwaysUseBrowserUI(android.content.Intent)">
+    <code>CustomTabsIntent.setAlwaysUseBrowserUI()</code></a>. This behavior is
+    useful in cases where the browser defaults to custom tabs UI but the user
+    has expressed a preference for the standard browser UI.
+  </li>
+
 </ul>
 
 <h3 id="24-2-0-behavior">Behavior changes</h3>
@@ -189,7 +259,16 @@ APK size, we recommend that you just list the specific modules your app needs.
   <li>{@link android.support.design.widget.Snackbar} now draws behind the
   navigation bar if the status bar is translucent.
   </li>
+
 </ul>
+
+<h4>MediaRouter library</h4>
+
+<p>
+  Bluetooth devices are no longer listed as media routes. Routing audio to
+  Bluetooth devices is now solely controlled at the Android system level.
+</p>
+
 
 <h3 id="24-2-0-deprecations">Deprecations</h3>
 
@@ -2895,8 +2974,6 @@ if (animator instanceof SimpleItemAnimator) {
         <ul>
           <li>Added {@link android.support.v7.widget.GridLayout} to provide support for the
             {@link android.widget.GridLayout} layout object.</li>
-          <li>Added {@link android.support.v7.widget.Space} which can be used to create blank areas
-            within a {@link android.support.v7.widget.GridLayout} layout object.</li>
         </ul>
     </dl>
   </div>

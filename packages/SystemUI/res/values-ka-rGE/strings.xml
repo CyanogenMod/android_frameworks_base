@@ -238,7 +238,7 @@
     <string name="data_usage_disabled_dialog_4g_title" msgid="1601769736881078016">"4G მონაცემები შეჩერებულია"</string>
     <string name="data_usage_disabled_dialog_mobile_title" msgid="4651001290947318931">"ფიჭური მონაცემები შეჩერებულია"</string>
     <string name="data_usage_disabled_dialog_title" msgid="3932437232199671967">"მონაცემები შეჩერებულია"</string>
-    <string name="data_usage_disabled_dialog" msgid="8453242888903772524">"რადგან თქვენი მონაცემების ლიმიტი ამოწურულია, მოწყობილობამ შეაჭერა მონაცემების გამოყენება დარჩენილი ციკლისათვის. \n\n შეჯამაბ შეიძლება გამოიწვიოს თქვენს პროვაიდერთან დამატებითი ხარჯები."</string>
+    <string name="data_usage_disabled_dialog" msgid="1841738975235283398">"მიღწეულია მონაცემთა მოხმარების თქვენ მიერ მითითებული ლიმიტი. ამიტომ, მობილური ინტერნეტის გამოყენება აღარ ხდება.\n\nგანახლების შემთხვევაში, შეიძლება მობილური ინტერნეტის საფასურის გადახდა მოგიწიოთ."</string>
     <string name="data_usage_disabled_dialog_enable" msgid="1412395410306390593">"გაგრძელება"</string>
     <string name="status_bar_settings_signal_meter_disconnected" msgid="1940231521274147771">"ინტერნეტ კავშირი არ არის"</string>
     <string name="status_bar_settings_signal_meter_wifi_nossid" msgid="6557486452774597820">"Wi-Fi დაკავშირებულია"</string>
@@ -404,6 +404,7 @@
     <string name="device_owned_footer" msgid="3802752663326030053">"შესაძლოა მოწყობილობის მონიტორინგი არ ხორციელდება"</string>
     <string name="profile_owned_footer" msgid="8021888108553696069">"შესაძლოა პროფილზე ხორციელდებოდეს მონიტორინგი"</string>
     <string name="vpn_footer" msgid="2388611096129106812">"შესაძლოა ქსელზე ხორციელდება მონიტორინგი"</string>
+    <string name="branded_vpn_footer" msgid="2168111859226496230">"ქსელზე შესაძლოა მონიტორინგი ხორციელდებოდეს"</string>
     <string name="monitoring_title_device_owned" msgid="7121079311903859610">"მოწყობილობის მონიტორინგი"</string>
     <string name="monitoring_title_profile_owned" msgid="6790109874733501487">"პროფილის მონიტორინგი"</string>
     <string name="monitoring_title" msgid="169206259253048106">"ქსელის მონიტორინგი"</string>
@@ -416,6 +417,7 @@
     <string name="legacy_vpn_name" msgid="6604123105765737830">"VPN"</string>
     <string name="monitoring_description_app" msgid="6259179342284742878">"თქვენ დაუკავშირდით <xliff:g id="APPLICATION">%1$s</xliff:g>-ს, რომელსაც შეუძლია თქვენი ქსელის აქტივობის, მათ შორის, ელფოსტის, აპებისა და ვებსაიტების მონიტორინგი."</string>
     <string name="monitoring_description_app_personal" msgid="484599052118316268">"თქვენ დაუკავშირდით <xliff:g id="APPLICATION">%1$s</xliff:g>-ს, რომელსაც შეუძლია თქვენი პირადი ქსელის აქტივობის, მათ შორის, ელფოსტის, აპებისა და ვებსაიტების მონიტორინგი."</string>
+    <string name="branded_monitoring_description_app_personal" msgid="2669518213949202599">"თქვენ დაუკავშირდით <xliff:g id="APPLICATION">%1$s</xliff:g>-ს, რომელსაც თქვენი პირადი ქსელის აქტივობის მონიტორინგი შეუძლია, მათ შორის, ელფოსტის, აპებისა და ვებსაიტების."</string>
     <string name="monitoring_description_app_work" msgid="1754325860918060897">"თქვენი სამუშაო პროფილი <xliff:g id="ORGANIZATION">%1$s</xliff:g>-ის მიერ იმართება. ის დაკავშირებულია <xliff:g id="APPLICATION">%2$s</xliff:g>-თან, რომელსაც შეუძლია თქვენი სამსახურის ქსელის აქტივობის, მათ შორის, ელფოსტის, აპებისა და ვებსაიტების მონიტორინგი.\n\nდამატებითი ინფორმაციისთვის მიმართეთ თქვენს ადმინისტრატორს."</string>
     <string name="monitoring_description_app_personal_work" msgid="4946600443852045903">"თქვენი სამუშაო პროფილი <xliff:g id="ORGANIZATION">%1$s</xliff:g>-ის მიერ იმართება. ის დაკავშირებულია <xliff:g id="APPLICATION_WORK">%2$s</xliff:g>-თან, რომელსაც შეუძლია თქვენი სამსახურის ქსელის აქტივობის, მათ შორის, ელფოსტის, აპებისა და ვებსაიტების მონიტორინგი.\n\nასევე, დაკავშირებული ხართ <xliff:g id="APPLICATION_PERSONAL">%3$s</xliff:g>-თან, რომელსაც შეუძლია თქვენი პირადი ქსელის აქტივობის მონიტორინგი."</string>
     <string name="monitoring_description_vpn_app_device_owned" msgid="4970443827043261703">"თქვენს მოწყობილობას მართავს <xliff:g id="ORGANIZATION">%1$s</xliff:g>.\n\nადმინისტრატორს შეუძლია თქვენი მოწყობილობასთან ასოცირებული პარამეტრების, კორპორატიული წვდომის, აპებისა და მონაცემების, და ასევე მოწყობილობის მდებარეობის ინფორმაციის მონიტორინგი და მართვა.\n\nთქვენ დაკავშირებული ხართ <xliff:g id="APPLICATION">%2$s</xliff:g>-თან, რომელსაც შეუძლია თქვენი ქსელის აქტივობის, მათ შორის, ელფოსტის, აპებისა და ვებ-საიტების მონიტორინგი.\n\nდამატებითი ინფორმაციისათვის, დაუკავშირდით თქვენს ადმინისტრატორს."</string>
@@ -492,8 +494,6 @@
     <string name="clock_seconds_desc" msgid="6282693067130470675">"საათის წამების ჩვენება სტატუსის ზოლში. შეიძლება გავლენა იქონიოს ბატარეაზე."</string>
     <string name="qs_rearrange" msgid="8060918697551068765">"სწრაფი პარამეტრების გადაწყობა"</string>
     <string name="show_brightness" msgid="6613930842805942519">"სიკაშკაშის ჩვენება სწრაფ პარამეტრებში"</string>
-    <string name="overview_nav_bar_gesture" msgid="8579814204727917764">"ზემოთ გადაფურცვლისას ეკრანის გაყოფის ჟესტის ჩართვა"</string>
-    <string name="overview_nav_bar_gesture_desc" msgid="6329167382305102615">"მიმოხილვის ღილაკიდან ზემოთ გადაფურცვლისას ეკრანის გაყოფის რეჟიმზე გადასვლის ჟესტის ჩართვა"</string>
     <string name="experimental" msgid="6198182315536726162">"ექსპერიმენტული"</string>
     <string name="enable_bluetooth_title" msgid="5027037706500635269">"გსურთ Bluetooth-ის ჩართვა?"</string>
     <string name="enable_bluetooth_message" msgid="9106595990708985385">"კლავიატურის ტაბლეტთან დასაკავშირებლად, ჯერ უნდა ჩართოთ Bluetooth."</string>
@@ -651,4 +651,5 @@
     <string name="accessibility_quick_settings_open_settings" msgid="7806613775728380737">"<xliff:g id="ID_1">%s</xliff:g> პარამეტრების გახსნა."</string>
     <string name="accessibility_quick_settings_edit" msgid="7839992848995240393">"პარამეტრების მიმდევრობის რედაქტირება."</string>
     <string name="accessibility_quick_settings_page" msgid="5032979051755200721">"გვერდი <xliff:g id="ID_1">%1$d</xliff:g> / <xliff:g id="ID_2">%2$d</xliff:g>-დან"</string>
+    <string name="cant_silence_or_block" msgid="999689262131488625">"შეტყობინებების გაჩუმება ან დაბლოკვა ვერ მოხერხდება"</string>
 </resources>

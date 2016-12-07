@@ -214,6 +214,7 @@
     <string name="global_actions" product="default" msgid="2406416831541615258">"தொலைபேசி விருப்பங்கள்"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"திரைப் பூட்டு"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"முடக்கு"</string>
+    <string name="global_action_emergency" msgid="7112311161137421166">"அவசர அழைப்பு"</string>
     <string name="global_action_bug_report" msgid="7934010578922304799">"பிழை அறிக்கை"</string>
     <string name="bugreport_title" msgid="2667494803742548533">"பிழை அறிக்கையை எடு"</string>
     <string name="bugreport_message" msgid="398447048750350456">"உங்கள் நடப்புச் சாதன நிலையை மின்னஞ்சல் செய்தியாக அனுப்ப, அது குறித்த தகவலை இது சேகரிக்கும். பிழை அறிக்கையைத் தொடங்குவதில் இருந்து, அது அனுப்புவதற்குத் தயாராகும் வரை, இதற்குச் சிறிது நேரம் ஆகும்; பொறுமையாகக் காத்திருக்கவும்."</string>
@@ -1076,6 +1077,17 @@
     <skip />
     <string name="wifi_no_internet" msgid="8451173622563841546">"வைஃபை இணைய அணுகல் கொண்டிருக்கவில்லை"</string>
     <string name="wifi_no_internet_detailed" msgid="8083079241212301741">"விருப்பங்களுக்கு, தட்டவும்"</string>
+    <string name="network_switch_metered" msgid="4671730921726992671">"<xliff:g id="NETWORK_TYPE">%1$s</xliff:g>க்கு மாற்றப்பட்டது"</string>
+    <string name="network_switch_metered_detail" msgid="5325661434777870353">"<xliff:g id="PREVIOUS_NETWORK">%2$s</xliff:g> இல் இணைய அணுகல் இல்லாததால், சாதனமானது <xliff:g id="NEW_NETWORK">%1$s</xliff:g>ஐப் பயன்படுத்துகிறது. கட்டணங்கள் விதிக்கப்படலாம்."</string>
+    <string name="network_switch_metered_toast" msgid="5779283181685974304">"<xliff:g id="PREVIOUS_NETWORK">%1$s</xliff:g> இலிருந்து <xliff:g id="NEW_NETWORK">%2$s</xliff:g>க்கு மாற்றப்பட்டது"</string>
+  <string-array name="network_switch_type_name">
+    <item msgid="2952042958050315394">"செல்லுலார் தரவு"</item>
+    <item msgid="75483255295529161">"வைஃபை"</item>
+    <item msgid="6862614801537202646">"புளூடூத்"</item>
+    <item msgid="5447331121797802871">"ஈத்தர்நெட்"</item>
+    <item msgid="8257233890381651999">"VPN"</item>
+  </string-array>
+    <string name="network_switch_type_name_unknown" msgid="4552612897806660656">"தெரியாத நெட்வொர்க் வகை"</string>
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"வைஃபை உடன் இணைக்க முடியவில்லை"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" இணைய இணைப்பு மோசமாக உள்ளது."</string>
     <string name="wifi_connect_alert_title" msgid="8455846016001810172">"இணைப்பை அனுமதிக்கவா?"</string>
@@ -1153,7 +1165,6 @@
     <string name="select_keyboard_layout_notification_message" msgid="8084622969903004900">"மொழியையும் தளவமைப்பையும் தேர்ந்தெடுக்க, தட்டவும்"</string>
     <string name="fast_scroll_alphabet" msgid="5433275485499039199">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
     <string name="fast_scroll_numeric_alphabet" msgid="4030170524595123610">" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
-    <string name="candidates_style" msgid="4333913089637062257"><u>"கேன்டிடேட்ஸ்"</u></string>
     <string name="ext_media_checking_notification_title" msgid="5734005953288045806">"<xliff:g id="NAME">%s</xliff:g> தயாராகிறது"</string>
     <string name="ext_media_checking_notification_message" msgid="4747432538578886744">"பிழைகள் உள்ளதா எனப் பார்க்கிறது"</string>
     <string name="ext_media_new_notification_message" msgid="7589986898808506239">"புதிய <xliff:g id="NAME">%s</xliff:g> கண்டறியப்பட்டது"</string>
@@ -1232,8 +1243,9 @@
     <string name="vpn_text_long" msgid="4907843483284977618">"<xliff:g id="SESSION">%s</xliff:g> உடன் இணைக்கப்பட்டது. நெட்வொர்க்கை நிர்வகிக்க, தட்டவும்."</string>
     <string name="vpn_lockdown_connecting" msgid="6443438964440960745">"எப்போதும் இயங்கும் VPN உடன் இணைக்கிறது…"</string>
     <string name="vpn_lockdown_connected" msgid="8202679674819213931">"எப்போதும் இயங்கும் VPN இணைக்கப்பட்டது"</string>
+    <string name="vpn_lockdown_disconnected" msgid="4532298952570796327">"எப்போதும் இயங்கும் VPN துண்டிக்கப்பட்டது"</string>
     <string name="vpn_lockdown_error" msgid="6009249814034708175">"எப்போதும் இயங்கும் VPN பிழை"</string>
-    <string name="vpn_lockdown_config" msgid="4655589351146766608">"உள்ளமைக்க, தட்டவும்"</string>
+    <string name="vpn_lockdown_config" msgid="5099330695245008680">"அமைக்க, தட்டவும்"</string>
     <string name="upload_file" msgid="2897957172366730416">"கோப்பைத் தேர்வுசெய்"</string>
     <string name="no_file_chosen" msgid="6363648562170759465">"எந்தக் கோப்பும் தேர்வுசெய்யப்படவில்லை"</string>
     <string name="reset" msgid="2448168080964209908">"மீட்டமை"</string>
@@ -1317,7 +1329,7 @@
     <string name="storage_usb_drive_label" msgid="4501418548927759953">"<xliff:g id="MANUFACTURER">%s</xliff:g> USB டிரைவ்"</string>
     <string name="storage_usb" msgid="3017954059538517278">"USB சேமிப்பிடம்"</string>
     <string name="extract_edit_menu_button" msgid="8940478730496610137">"திருத்து"</string>
-    <string name="data_usage_warning_title" msgid="1955638862122232342">"தரவு பயன்பாட்டு எச்சரிக்கை"</string>
+    <string name="data_usage_warning_title" msgid="3620440638180218181">"தரவுப் பயன்பாடு குறித்த எச்சரிக்கை"</string>
     <string name="data_usage_warning_body" msgid="6660692274311972007">"தரவு உபயோகம், அமைப்புகளைப் பார்க்க, தட்டவும்."</string>
     <string name="data_usage_3g_limit_title" msgid="4361523876818447683">"2G-3G தரவு வரம்பைக் கடந்தது"</string>
     <string name="data_usage_4g_limit_title" msgid="4609566827219442376">"4G தரவு வரம்பைக் கடந்தது"</string>
@@ -1636,6 +1648,7 @@
     <string name="search_language_hint" msgid="7042102592055108574">"மொழி பெயரை உள்ளிடுக"</string>
     <string name="language_picker_section_suggested" msgid="8414489646861640885">"பரிந்துரைகள்"</string>
     <string name="language_picker_section_all" msgid="3097279199511617537">"எல்லா மொழிகளும்"</string>
+    <string name="region_picker_section_all" msgid="8966316787153001779">"எல்லா மண்டலங்களும்"</string>
     <string name="locale_search_menu" msgid="2560710726687249178">"தேடு"</string>
     <string name="work_mode_off_title" msgid="8954725060677558855">"பணிப் பயன்முறை முடக்கப்பட்டது"</string>
     <string name="work_mode_off_message" msgid="3286169091278094476">"செயல்பட, பணி சுயவிவரத்தை அனுமதி. இதில் பயன்பாடுகள், பின்னணி ஒத்திசைவு மற்றும் தொடர்புடைய அம்சங்கள் அடங்கும்."</string>

@@ -114,7 +114,7 @@ import java.util.regex.Pattern;
 public class SettingsProvider extends ContentProvider {
     private static final boolean DEBUG = false;
 
-    private static final boolean DROP_DATABASE_ON_MIGRATION = !Build.IS_DEBUGGABLE;
+    private static final boolean DROP_DATABASE_ON_MIGRATION = true;
 
     private static final String LOG_TAG = "SettingsProvider";
 
@@ -2107,7 +2107,7 @@ public class SettingsProvider extends ContentProvider {
         }
 
         private final class UpgradeController {
-            private static final int SETTINGS_VERSION = 130;
+            private static final int SETTINGS_VERSION = 131;
 
             private final int mUserId;
 
@@ -2147,6 +2147,12 @@ public class SettingsProvider extends ContentProvider {
 
                     // Now upgrade should work fine.
                     onUpgradeLocked(mUserId, oldVersion, newVersion);
+
+                    // Make a note what happened, so we don't wonder why data was lost
+                    String reason = "Settings rebuilt! Current version: "
+                            + curVersion + " while expected: " + newVersion;
+                    getGlobalSettingsLocked().insertSettingLocked(
+                            Settings.Global.DATABASE_DOWNGRADE_REASON, reason, "android");
                 }
 
                 // Set the global settings version if owner.
@@ -2602,8 +2608,23 @@ public class SettingsProvider extends ContentProvider {
                     currentVersion = 130;
                 }
 
+                if (currentVersion == 130) {
+                    // Split Ambient settings
+                    final SettingsState secureSettings = getSecureSettingsLocked(userId);
+                    boolean dozeExplicitlyDisabled = "0".equals(secureSettings.
+                            getSettingLocked(Settings.Secure.DOZE_ENABLED).getValue());
+
+                    if (dozeExplicitlyDisabled) {
+                        secureSettings.insertSettingLocked(Settings.Secure.DOZE_PULSE_ON_PICK_UP,
+                                "0", SettingsState.SYSTEM_PACKAGE_NAME);
+                        secureSettings.insertSettingLocked(Settings.Secure.DOZE_PULSE_ON_DOUBLE_TAP,
+                                "0", SettingsState.SYSTEM_PACKAGE_NAME);
+                    }
+                    currentVersion = 131;
+                }
+
                 if (currentVersion != newVersion) {
-                    Slog.w("SettingsProvider", "warning: upgrading settings database to version "
+                    Slog.wtf("SettingsProvider", "warning: upgrading settings database to version "
                             + newVersion + " left it at "
                             + currentVersion + " instead; this is probably a bug", new Throwable());
                     if (DEBUG) {

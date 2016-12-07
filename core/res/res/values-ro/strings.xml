@@ -216,6 +216,7 @@
     <string name="global_actions" product="default" msgid="2406416831541615258">"Opțiuni telefon"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Blocați ecranul"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Opriți alimentarea"</string>
+    <string name="global_action_emergency" msgid="7112311161137421166">"Urgență"</string>
     <string name="global_action_bug_report" msgid="7934010578922304799">"Raport despre erori"</string>
     <string name="bugreport_title" msgid="2667494803742548533">"Executați un raport despre erori"</string>
     <string name="bugreport_message" msgid="398447048750350456">"Acest raport va colecta informații despre starea actuală a dispozitivului, pentru a le trimite într-un e-mail. Aveți răbdare după pornirea raportului despre erori până când va fi gata de trimis."</string>
@@ -1101,6 +1102,17 @@
     <skip />
     <string name="wifi_no_internet" msgid="8451173622563841546">"Rețeaua Wi-Fi nu are acces la internet"</string>
     <string name="wifi_no_internet_detailed" msgid="8083079241212301741">"Atingeți pentru opțiuni"</string>
+    <string name="network_switch_metered" msgid="4671730921726992671">"S-a comutat la <xliff:g id="NETWORK_TYPE">%1$s</xliff:g>"</string>
+    <string name="network_switch_metered_detail" msgid="5325661434777870353">"Dispozitivul folosește <xliff:g id="NEW_NETWORK">%1$s</xliff:g> când <xliff:g id="PREVIOUS_NETWORK">%2$s</xliff:g> nu are acces la internet. Se pot aplica taxe."</string>
+    <string name="network_switch_metered_toast" msgid="5779283181685974304">"S-a comutat de la <xliff:g id="PREVIOUS_NETWORK">%1$s</xliff:g> la <xliff:g id="NEW_NETWORK">%2$s</xliff:g>"</string>
+  <string-array name="network_switch_type_name">
+    <item msgid="2952042958050315394">"date mobile"</item>
+    <item msgid="75483255295529161">"Wi-Fi"</item>
+    <item msgid="6862614801537202646">"Bluetooth"</item>
+    <item msgid="5447331121797802871">"Ethernet"</item>
+    <item msgid="8257233890381651999">"VPN"</item>
+  </string-array>
+    <string name="network_switch_type_name_unknown" msgid="4552612897806660656">"un tip de rețea necunoscut"</string>
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Nu se poate conecta la Wi-Fi"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" are o conexiune la internet slabă."</string>
     <string name="wifi_connect_alert_title" msgid="8455846016001810172">"Permiteți conectarea?"</string>
@@ -1178,7 +1190,6 @@
     <string name="select_keyboard_layout_notification_message" msgid="8084622969903004900">"Atingeți pentru a selecta limba și aspectul"</string>
     <string name="fast_scroll_alphabet" msgid="5433275485499039199">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
     <string name="fast_scroll_numeric_alphabet" msgid="4030170524595123610">" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
-    <string name="candidates_style" msgid="4333913089637062257"><u>"candidați"</u></string>
     <string name="ext_media_checking_notification_title" msgid="5734005953288045806">"Se pregătește <xliff:g id="NAME">%s</xliff:g>"</string>
     <string name="ext_media_checking_notification_message" msgid="4747432538578886744">"Se verifică dacă există erori"</string>
     <string name="ext_media_new_notification_message" msgid="7589986898808506239">"A fost detectat un nou <xliff:g id="NAME">%s</xliff:g>"</string>
@@ -1257,8 +1268,9 @@
     <string name="vpn_text_long" msgid="4907843483284977618">"Conectat la <xliff:g id="SESSION">%s</xliff:g>. Apăsați pentru a gestiona rețeaua."</string>
     <string name="vpn_lockdown_connecting" msgid="6443438964440960745">"Se efectuează conectarea la rețeaua VPN activată permanent…"</string>
     <string name="vpn_lockdown_connected" msgid="8202679674819213931">"Conectat(ă) la rețeaua VPN activată permanent"</string>
+    <string name="vpn_lockdown_disconnected" msgid="4532298952570796327">"Rețeaua VPN activată permanent a fost deconectată"</string>
     <string name="vpn_lockdown_error" msgid="6009249814034708175">"Eroare de rețea VPN activată permanent"</string>
-    <string name="vpn_lockdown_config" msgid="4655589351146766608">"Atingeți ca să configurați"</string>
+    <string name="vpn_lockdown_config" msgid="5099330695245008680">"Atingeți pentru a configura"</string>
     <string name="upload_file" msgid="2897957172366730416">"Alegeți un fișier"</string>
     <string name="no_file_chosen" msgid="6363648562170759465">"Nu au fost găsite fișiere"</string>
     <string name="reset" msgid="2448168080964209908">"Resetați"</string>
@@ -1343,7 +1355,7 @@
     <string name="storage_usb_drive_label" msgid="4501418548927759953">"Unitate USB <xliff:g id="MANUFACTURER">%s</xliff:g>"</string>
     <string name="storage_usb" msgid="3017954059538517278">"Dsipozitiv de stocare USB"</string>
     <string name="extract_edit_menu_button" msgid="8940478730496610137">"Editați"</string>
-    <string name="data_usage_warning_title" msgid="1955638862122232342">"Avertisment de utiliz. a datelor"</string>
+    <string name="data_usage_warning_title" msgid="3620440638180218181">"Alertă pentru utilizarea datelor"</string>
     <string name="data_usage_warning_body" msgid="6660692274311972007">"Atingeți ca să vedeți utilizarea/setările."</string>
     <string name="data_usage_3g_limit_title" msgid="4361523876818447683">"Ați atins limita de date 2G-3G"</string>
     <string name="data_usage_4g_limit_title" msgid="4609566827219442376">"Ați atins limita de date 4G"</string>
@@ -1672,6 +1684,7 @@
     <string name="search_language_hint" msgid="7042102592055108574">"Numele limbii"</string>
     <string name="language_picker_section_suggested" msgid="8414489646861640885">"Sugerate"</string>
     <string name="language_picker_section_all" msgid="3097279199511617537">"Toate limbile"</string>
+    <string name="region_picker_section_all" msgid="8966316787153001779">"Toate regiunile"</string>
     <string name="locale_search_menu" msgid="2560710726687249178">"Căutați"</string>
     <string name="work_mode_off_title" msgid="8954725060677558855">"Modul de serviciu e DEZACTIVAT"</string>
     <string name="work_mode_off_message" msgid="3286169091278094476">"Permiteți profilului de serviciu să funcționeze, inclusiv aplicațiile, sincronizarea în fundal și funcțiile asociate."</string>

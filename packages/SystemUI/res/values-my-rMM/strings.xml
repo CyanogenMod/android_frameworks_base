@@ -238,7 +238,7 @@
     <string name="data_usage_disabled_dialog_4g_title" msgid="1601769736881078016">"4G data ခေတ္တရပ်တန့်သည်"</string>
     <string name="data_usage_disabled_dialog_mobile_title" msgid="4651001290947318931">"cellular data ခေတ္တရပ်တန့်သည်"</string>
     <string name="data_usage_disabled_dialog_title" msgid="3932437232199671967">"ဒေတာ ခေတ္တရပ်တန့်သည်"</string>
-    <string name="data_usage_disabled_dialog" msgid="8453242888903772524">"သင့် ဒေတာ အသုံးပြုမှု သတ်မှတ်ထားချက်သို့ ရောက်ရှိသောကြောင့်၊ ဤကာလအတွက် ကျန်ရှိသည့် ဒေတာအသုံးပြုမှုအား စက်ပစ္စည်းမှ ရပ်တန့်ထားသည်။\n\nဆက်လက်သွားပါက သင့်ဖုန်းဝန်ဆောင်မှုမှ သင့်အား ကုန်ကျစရိတ်တောင်းခံလိမ့်မည်။"</string>
+    <string name="data_usage_disabled_dialog" msgid="1841738975235283398">"သင်သတ်မှတ်ထားသော ဒေတာကန့်သတ်ချက်သို့ ရောက်နေပါပြီ။ သင်သည် ဆယ်လူလာဒေတာကို အသုံးမပြုတော့ပါ။\n\nသင်ဆက်လုပ်မည်ဆိုလျှင် ဒေတာသုံးစွဲမှုအတွက် အခငွေ ကျသင့်မှုရှိနိုင်ပါသည်။"</string>
     <string name="data_usage_disabled_dialog_enable" msgid="1412395410306390593">"ပြန်ဆက်လုပ်ရန်"</string>
     <string name="status_bar_settings_signal_meter_disconnected" msgid="1940231521274147771">"အင်တာနက်မရှိ"</string>
     <string name="status_bar_settings_signal_meter_wifi_nossid" msgid="6557486452774597820">"ကြိုးမဲ့ဆက်သွယ်မှု"</string>
@@ -404,6 +404,7 @@
     <string name="device_owned_footer" msgid="3802752663326030053">"ကိရိယာကို စောင့်ကြပ် နိုင်ပါသည်"</string>
     <string name="profile_owned_footer" msgid="8021888108553696069">"ပရိုဖိုင်ကို စောင့်ကြပ်နိုင်သည်"</string>
     <string name="vpn_footer" msgid="2388611096129106812">"ကွန်ရက်ကို ကို စောင့်ကြပ် နိုင်ပါသည်"</string>
+    <string name="branded_vpn_footer" msgid="2168111859226496230">"ကွန်ရက်ကို စောင့်ကြည့်စစ်ဆေးမှု ရှိနိုင်ပါသည်"</string>
     <string name="monitoring_title_device_owned" msgid="7121079311903859610">"ကိရိယာကို စောင့်ကြပ်ခြင်း"</string>
     <string name="monitoring_title_profile_owned" msgid="6790109874733501487">"ပရိုဖိုင် စောင့်ကြပ်မှု"</string>
     <string name="monitoring_title" msgid="169206259253048106">"ကွန်ရက်ကို စောင့်ကြပ်ခြင်း"</string>
@@ -416,6 +417,7 @@
     <string name="legacy_vpn_name" msgid="6604123105765737830">"VPN"</string>
     <string name="monitoring_description_app" msgid="6259179342284742878">"သင်သည် <xliff:g id="APPLICATION">%1$s</xliff:g> သို့ ချိတ်ဆက်ထားသည်၊ ၎င်းသည် အီးမေးများ၊ အက်ပ်များနှင့် ဝဘ်ဆိုက်များအပါအဝင် သင့်ကွန်ရက်လုပ်ဆောင်ချက်များကို စောင့်ကြည့်နိုင်သည်။"</string>
     <string name="monitoring_description_app_personal" msgid="484599052118316268">"သင်သည် <xliff:g id="APPLICATION">%1$s</xliff:g> သို့ ချိတ်ဆက်ထားသည်။ ၎င်းသည် အီးမေးလ်များ၊ အက်ပ်များနှင့် ဝဘ်ဆိုက်များအပါအဝင် သင့်ကွန်ရက်လုပ်ဆောင်ချက်ကို စောင့်ကြည့်နိုင်သည်။"</string>
+    <string name="branded_monitoring_description_app_personal" msgid="2669518213949202599">"သင်သည် အီးမေးလ်၊ အက်ပ်နှင့် ဝဘ်ဆိုက်များအပါအဝင် သင့်ကိုယ်ရေးကိုယ်တာ ကွန်ရက်အသုံးပြုမှုကို စောင့်ကြည့်နိုင်သည့် <xliff:g id="APPLICATION">%1$s</xliff:g> သို့ ချိတ်ဆက်ထားပါသည်။"</string>
     <string name="monitoring_description_app_work" msgid="1754325860918060897">"သင့်အလုပ်ပရိုဖိုင်ကို <xliff:g id="ORGANIZATION">%1$s</xliff:g> မှစီမံခန့်ခွဲသည်။ ၎င်းကို <xliff:g id="APPLICATION">%2$s</xliff:g> သို့ ချိတ်ဆက်ထားသည်၊ ၎င်းသည် အီးမေးလ်များ၊ အက်ပ်များနှင့် ဝဘ်ဆိုက်များအပါအဝင် သင့်အလုပ်ကွန်ရက်လုပ်ဆောင်ချက်ကို စောင့်ကြည့်နိုင်သည်။ \n\nအချက်အလက်များ ပိုမိုရယူရန် သင်၏ စီမံခန့်ခွဲသူကို ဆက်သွယ်ပါ။"</string>
     <string name="monitoring_description_app_personal_work" msgid="4946600443852045903">"သင့်အလုပ် ပရိုဖိုင်ကို <xliff:g id="ORGANIZATION">%1$s</xliff:g> မှစီမံခန့်ခွဲသည်။ ၎င်းကို <xliff:g id="APPLICATION_WORK">%2$s</xliff:g> သို့ ချိတ်ဆက်ထားသည်၊ ၎င်းသည် အီးမေးလ်များ၊ အက်ပ်များနှင့် ဝဘ်ဆိုက်များအပါအဝင် သင့်အလုပ်ကွန်ရက်လုပ်ဆောင်ချက်ကို စောင့်ကြည့်နိုင်သည်။ \n\n သင်သည်<xliff:g id="APPLICATION_PERSONAL">%3$s</xliff:g> ကိုလည်း ချိတ်ဆက်ထားသည်၊ ၎င်းသည် သင့်ကိုယ်ပိုင်ကွန်ရက်လုပ်ဆောင်ချက်များကို စောင့်ကြည့်နိုင်သည်။"</string>
     <string name="monitoring_description_vpn_app_device_owned" msgid="4970443827043261703">"သင့်စက်ကိရိယာကို <xliff:g id="ORGANIZATION">%1$s</xliff:g> မှစီမံခန့်ခွဲပါသည်။ \n\n စီမံခန့်ခွဲသူသည် ကြိုတင်ပြင်ဆင်မှုများ၊ စုပေါင်းဝင်ရောက်ခွင့်၊ အက်ပ်များ၊ သင့်ကိရိယာနှင့်သက်ဆိုင်သော ဒေတာနှင့် သင့်ကိရိယာ၏ တည်နေရာအချက်အလက်များကို စောင့်ကြည့်ပြီး စီမံခန့်ခွဲနိုင်သည်။ \n\nသင်သည် <xliff:g id="APPLICATION">%2$s</xliff:g> သို့ချိတ်ဆက်ထားသည်၊ ၎င်းသည် အီးမေးလ်များ၊ အက်ပ်များ၊ နှင့် ဝဘ်ဆိုက်များအပါအဝင် သင့်ကွန်ရက်လုပ်ဆောင်ချက်ကို စောင့်ကြည့်နိုင်သည်။ \n\nအချက်အလက်များ ပိုမိုရယူရန် သင်၏ စီမံခန့်ခွဲသူကို ဆက်သွယ်ပါ။"</string>
@@ -492,8 +494,6 @@
     <string name="clock_seconds_desc" msgid="6282693067130470675">"အခြေအနေပြနေရာမှာ နာရီ စက္ကန့်များကို ပြပါ။ ဘက်ထရီ သက်တမ်းကို အကျိုးသက်ရောက်နိုင်တယ်။"</string>
     <string name="qs_rearrange" msgid="8060918697551068765">"အမြန် ဆက်တင်များကို ပြန်စီစဉ်ရန်"</string>
     <string name="show_brightness" msgid="6613930842805942519">"အမြန် ဆက်တင်များထဲက တောက်ပမှုကို ပြရန်"</string>
-    <string name="overview_nav_bar_gesture" msgid="8579814204727917764">"မျက်နှာပြင်ခွဲကြည့်ရန် အပေါ်သို့ပွတ်ဆွဲခြင်း အမူအရာကိုဖွင့်ပါ"</string>
-    <string name="overview_nav_bar_gesture_desc" msgid="6329167382305102615">"ခြုံကြည့်သည့်ခလုတ်မှ အပေါ်သို့ပွတ်ဆွဲခြင်းဖြင့် မျက်နှာပြင်ခွဲကြည့်ရန် လက်ဟန်ကိုဖွင့်ပါ"</string>
     <string name="experimental" msgid="6198182315536726162">"စမ်းသပ်ရေး"</string>
     <string name="enable_bluetooth_title" msgid="5027037706500635269">"ဘလူးတုသ် ဖွင့်ရမလား။"</string>
     <string name="enable_bluetooth_message" msgid="9106595990708985385">"ကီးဘုတ်ကို တပ်ဘလက်နှင့် ချိတ်ဆက်ရန်၊ ပမထဦးစွာ ဘလူးတုသ်ကို ဖွင့်ပါ။"</string>
@@ -588,7 +588,7 @@
     <string name="center" msgid="4327473927066010960">"ဌာန"</string>
     <string name="end" msgid="125797972524818282">"ပြီးပါပြီ"</string>
     <string name="space" msgid="804232271282109749">"နေရာလွတ်ခြားစနစ်"</string>
-    <string name="menu_ime" msgid="4943221416525250684">"မန်နယူး / ကီးဘုတ်ပြောင်းစနစ်"</string>
+    <string name="menu_ime" msgid="4943221416525250684">"မီနူး / ကီးဘုတ်ပြောင်းစနစ်"</string>
     <string name="select_button" msgid="1597989540662710653">"ပေါင်းထည့်ရန် ခလုတ်ကိုရွေးပါ"</string>
     <string name="add_button" msgid="4134946063432258161">"ခလုတ်ပေါင်းထည့်ပါ"</string>
     <string name="save" msgid="2311877285724540644">"သိမ်းရန်"</string>
@@ -651,4 +651,5 @@
     <string name="accessibility_quick_settings_open_settings" msgid="7806613775728380737">"<xliff:g id="ID_1">%s</xliff:g> ဆက်တင်များကို ဖွင့်ပါ။"</string>
     <string name="accessibility_quick_settings_edit" msgid="7839992848995240393">"ဆက်တင်များ၏ အစီအစဉ်ကို တည်းဖြတ်ပါ။"</string>
     <string name="accessibility_quick_settings_page" msgid="5032979051755200721">"စာမျက်နှာ <xliff:g id="ID_2">%2$d</xliff:g> အနက်မှ စာမျက်နှာ <xliff:g id="ID_1">%1$d</xliff:g>"</string>
+    <string name="cant_silence_or_block" msgid="999689262131488625">"အကြောင်းကြားချက်များကို အသံတိတ်ခြင်း သို့မဟုတ် ပိတ်ဆို့ခြင်းများ ပြုလုပ်၍ မရပါ"</string>
 </resources>

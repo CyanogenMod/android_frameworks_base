@@ -35,6 +35,7 @@ import android.content.pm.ServiceInfo;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.database.ContentObserver;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.AudioManagerInternal;
 import android.media.AudioSystem;
@@ -626,8 +627,10 @@ public class ZenModeHelper {
         return setConfigLocked(config, reason, true /*setRingerMode*/);
     }
 
-    public void setConfigAsync(ZenModeConfig config, String reason) {
-        mHandler.postSetConfig(config, reason);
+    public void setConfig(ZenModeConfig config, String reason) {
+        synchronized (mConfig) {
+            setConfigLocked(config, reason);
+        }
     }
 
     private boolean setConfigLocked(ZenModeConfig config, String reason, boolean setRingerMode) {
@@ -778,13 +781,14 @@ public class ZenModeHelper {
         // total silence restrictions
         final boolean muteEverything = mZenMode == Global.ZEN_MODE_NO_INTERRUPTIONS;
 
-        for (int i = USAGE_UNKNOWN; i <= USAGE_VIRTUAL_SOURCE; i++) {
-            if (i == USAGE_NOTIFICATION) {
-                applyRestrictions(muteNotifications || muteEverything, i);
-            } else if (i == USAGE_NOTIFICATION_RINGTONE) {
-                applyRestrictions(muteCalls || muteEverything, i);
+        for (int usage : AudioAttributes.SDK_USAGES) {
+            final int suppressionBehavior = AudioAttributes.SUPPRESSIBLE_USAGES.get(usage);
+            if (suppressionBehavior == AudioAttributes.SUPPRESSIBLE_NOTIFICATION) {
+                applyRestrictions(muteNotifications || muteEverything, usage);
+            } else if (suppressionBehavior == AudioAttributes.SUPPRESSIBLE_CALL) {
+                applyRestrictions(muteCalls || muteEverything, usage);
             } else {
-                applyRestrictions(muteEverything, i);
+                applyRestrictions(muteEverything, usage);
             }
         }
 
@@ -1142,19 +1146,12 @@ public class ZenModeHelper {
     private final class H extends Handler {
         private static final int MSG_DISPATCH = 1;
         private static final int MSG_METRICS = 2;
-        private static final int MSG_SET_CONFIG = 3;
         private static final int MSG_APPLY_CONFIG = 4;
 
         private final class ConfigMessageData {
             public final ZenModeConfig config;
             public final String reason;
             public final boolean setRingerMode;
-
-            ConfigMessageData(ZenModeConfig config, String reason) {
-                this.config = config;
-                this.reason = reason;
-                this.setRingerMode = false;
-            }
 
             ConfigMessageData(ZenModeConfig config, String reason, boolean setRingerMode) {
                 this.config = config;
@@ -1179,10 +1176,6 @@ public class ZenModeHelper {
             sendEmptyMessageDelayed(MSG_METRICS, METRICS_PERIOD_MS);
         }
 
-        private void postSetConfig(ZenModeConfig config, String reason) {
-            sendMessage(obtainMessage(MSG_SET_CONFIG, new ConfigMessageData(config, reason)));
-        }
-
         private void postApplyConfig(ZenModeConfig config, String reason, boolean setRingerMode) {
             sendMessage(obtainMessage(MSG_APPLY_CONFIG,
                     new ConfigMessageData(config, reason, setRingerMode)));
@@ -1196,12 +1189,6 @@ public class ZenModeHelper {
                     break;
                 case MSG_METRICS:
                     mMetrics.emit();
-                    break;
-                case MSG_SET_CONFIG:
-                    ConfigMessageData configData = (ConfigMessageData) msg.obj;
-                    synchronized (mConfig) {
-                        setConfigLocked(configData.config, configData.reason);
-                    }
                     break;
                 case MSG_APPLY_CONFIG:
                     ConfigMessageData applyConfigData = (ConfigMessageData) msg.obj;

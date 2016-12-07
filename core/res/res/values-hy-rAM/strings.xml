@@ -214,6 +214,7 @@
     <string name="global_actions" product="default" msgid="2406416831541615258">"Հեռախոսի ընտրանքներ"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Էկրանի փական"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Անջատել"</string>
+    <string name="global_action_emergency" msgid="7112311161137421166">"Շտապ կանչ"</string>
     <string name="global_action_bug_report" msgid="7934010578922304799">"Վրիպակի զեկույց"</string>
     <string name="bugreport_title" msgid="2667494803742548533">"Գրել սխալի զեկույց"</string>
     <string name="bugreport_message" msgid="398447048750350456">"Սա տեղեկություններ կհավաքագրի ձեր սարքի առկա կարգավիճակի մասին և կուղարկի այն էլեկտրոնային նամակով: Որոշակի ժամանակ կպահանջվի վրիպակի մասին զեկուցելու պահից սկսած մինչ ուղարկելը: Խնդրում ենք փոքր-ինչ համբերատար լինել:"</string>
@@ -249,17 +250,17 @@
     <string name="permgrouplab_calendar" msgid="5863508437783683902">"Օրացույց"</string>
     <string name="permgroupdesc_calendar" msgid="3889615280211184106">"օգտագործել օրացույցը"</string>
     <string name="permgrouplab_sms" msgid="228308803364967808">"Կարճ հաղորդագրություն"</string>
-    <string name="permgroupdesc_sms" msgid="4656988620100940350">"ուղարկել և դիտել SMS հաղորդագրությունները"</string>
+    <string name="permgroupdesc_sms" msgid="4656988620100940350">"ուղարկել և դիտել SMS-ները"</string>
     <string name="permgrouplab_storage" msgid="1971118770546336966">"Պահոց"</string>
-    <string name="permgroupdesc_storage" msgid="637758554581589203">"օգտագործել լուսանկարները, մեդիա ֆայլերը և ձեր սարքում պահվող այլ ֆայլերը"</string>
+    <string name="permgroupdesc_storage" msgid="637758554581589203">"օգտագործել լուսանկարները, մեդիա ֆայլերը և ձեր սարքում պահվող մյուս ֆայլերը"</string>
     <string name="permgrouplab_microphone" msgid="171539900250043464">"Բարձրախոս"</string>
-    <string name="permgroupdesc_microphone" msgid="4988812113943554584">"ձայնագրում"</string>
+    <string name="permgroupdesc_microphone" msgid="4988812113943554584">"ձայնագրել"</string>
     <string name="permgrouplab_camera" msgid="4820372495894586615">"Ֆոտոխցիկ"</string>
-    <string name="permgroupdesc_camera" msgid="3250611594678347720">"լուսանկարում և տեսագրում"</string>
+    <string name="permgroupdesc_camera" msgid="3250611594678347720">"լուսանկարել և տեսագրել"</string>
     <string name="permgrouplab_phone" msgid="5229115638567440675">"Հեռախոս"</string>
-    <string name="permgroupdesc_phone" msgid="6234224354060641055">"հեռախոսազանգերի կատարում և կառավարում"</string>
+    <string name="permgroupdesc_phone" msgid="6234224354060641055">"կատարել զանգեր և կառավարել զանգերը"</string>
     <string name="permgrouplab_sensors" msgid="416037179223226722">"Մարմնի սենսորներ"</string>
-    <string name="permgroupdesc_sensors" msgid="7147968539346634043">"օգտագործել ձեր հիմնական ֆիզիոլոգիական ցուցանիշների վերաբերյալ սենսորի տվյալները"</string>
+    <string name="permgroupdesc_sensors" msgid="7147968539346634043">"օգտագործել սենսորների տվյալները ձեր օրգանիզմի վիճակի մասին"</string>
     <string name="capability_title_canRetrieveWindowContent" msgid="3901717936930170320">"Առբերել պատուհանի բովանդակությունը"</string>
     <string name="capability_desc_canRetrieveWindowContent" msgid="3772225008605310672">"Ստուգեք պատուհանի բովանդակությունը, որի հետ փոխգործակցում եք:"</string>
     <string name="capability_title_canRequestTouchExploration" msgid="3108723364676667320">"Միացնել Հպման միջոցով հետազոտումը"</string>
@@ -673,7 +674,7 @@
     <string name="lockscreen_instructions_when_pattern_enabled" msgid="46154051614126049">"Ապակողպելու կամ շտապ կանչ անելու համար սեղմեք «Ընտրացանկ»"</string>
     <string name="lockscreen_instructions_when_pattern_disabled" msgid="686260028797158364">"Ապակողպելու համար սեղմեք Ցանկը:"</string>
     <string name="lockscreen_pattern_instructions" msgid="7478703254964810302">"Հավաքեք սխեման` ապակողպելու համար"</string>
-    <string name="lockscreen_emergency_call" msgid="5298642613417801888">"Արտակարգ իրավիճակ"</string>
+    <string name="lockscreen_emergency_call" msgid="5298642613417801888">"Շտապ կանչ"</string>
     <string name="lockscreen_return_to_call" msgid="5244259785500040021">"Վերադառնալ զանգին"</string>
     <string name="lockscreen_pattern_correct" msgid="9039008650362261237">"Ճիշտ է:"</string>
     <string name="lockscreen_pattern_wrong" msgid="4317955014948108794">"Կրկին փորձեք"</string>
@@ -1057,8 +1058,8 @@
     <string name="volume_icon_description_incall" msgid="8890073218154543397">"Զանգի ձայնի բարձրություն"</string>
     <string name="volume_icon_description_media" msgid="4217311719665194215">"Մեդիա ձայնի բարձրություն"</string>
     <string name="volume_icon_description_notification" msgid="7044986546477282274">"Ծանուցումների ձայնի ուժգնությունը"</string>
-    <string name="ringtone_default" msgid="3789758980357696936">"Լռելյայն զանգերանգ"</string>
-    <string name="ringtone_default_with_actual" msgid="8129563480895990372">"Լռելյայն զանգերանգ (<xliff:g id="ACTUAL_RINGTONE">%1$s</xliff:g>)"</string>
+    <string name="ringtone_default" msgid="3789758980357696936">"Կանխադրված զանգերանգ"</string>
+    <string name="ringtone_default_with_actual" msgid="8129563480895990372">"Կանխադրված զանգերանգ (<xliff:g id="ACTUAL_RINGTONE">%1$s</xliff:g>)"</string>
     <string name="ringtone_silent" msgid="7937634392408977062">"Ոչ մեկը"</string>
     <string name="ringtone_picker_title" msgid="3515143939175119094">"Զանգերանգներ"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"Անհայտ զանգերանգ"</string>
@@ -1076,6 +1077,17 @@
     <skip />
     <string name="wifi_no_internet" msgid="8451173622563841546">"Wi-Fi ցանցը համացանցի միացում չունի"</string>
     <string name="wifi_no_internet_detailed" msgid="8083079241212301741">"Հպեք՝ ընտրանքները տեսնելու համար"</string>
+    <string name="network_switch_metered" msgid="4671730921726992671">"Անցել է <xliff:g id="NETWORK_TYPE">%1$s</xliff:g> ցանցի"</string>
+    <string name="network_switch_metered_detail" msgid="5325661434777870353">"Եթե <xliff:g id="PREVIOUS_NETWORK">%2$s</xliff:g> ցանցն ինտերնետ կապ չունի, սարքն անցնում է <xliff:g id="NEW_NETWORK">%1$s</xliff:g> ցանցի: Կարող են վճարներ գանձվել:"</string>
+    <string name="network_switch_metered_toast" msgid="5779283181685974304">"<xliff:g id="PREVIOUS_NETWORK">%1$s</xliff:g> ցանցից անցել է <xliff:g id="NEW_NETWORK">%2$s</xliff:g> ցանցի"</string>
+  <string-array name="network_switch_type_name">
+    <item msgid="2952042958050315394">"բջջային տվյալներ"</item>
+    <item msgid="75483255295529161">"Wi-Fi"</item>
+    <item msgid="6862614801537202646">"Bluetooth"</item>
+    <item msgid="5447331121797802871">"Ethernet"</item>
+    <item msgid="8257233890381651999">"VPN"</item>
+  </string-array>
+    <string name="network_switch_type_name_unknown" msgid="4552612897806660656">"ցանցի անհայտ տեսակ"</string>
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Չհաջողվեց միանալ Wi-Fi-ին"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" ունի թույլ ինտերնետ կապ:"</string>
     <string name="wifi_connect_alert_title" msgid="8455846016001810172">"Թույլատրե՞լ կապը:"</string>
@@ -1153,7 +1165,6 @@
     <string name="select_keyboard_layout_notification_message" msgid="8084622969903004900">"Հպեք՝ լեզուն և դասավորությունն ընտրելու համար"</string>
     <string name="fast_scroll_alphabet" msgid="5433275485499039199">" ԱԲԳԴԵԶԷԸԹԺԻԼԽԾԿՀՁՂՃՄՅՆՇՈՉՊՋՌՍՎՏՐՑՈՒՓՔԵւՕՖ"</string>
     <string name="fast_scroll_numeric_alphabet" msgid="4030170524595123610">" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
-    <string name="candidates_style" msgid="4333913089637062257"><u>"թեկնածուները"</u></string>
     <string name="ext_media_checking_notification_title" msgid="5734005953288045806">"<xliff:g id="NAME">%s</xliff:g>-ի նախապատրաստում"</string>
     <string name="ext_media_checking_notification_message" msgid="4747432538578886744">"Սխալների ստուգում"</string>
     <string name="ext_media_new_notification_message" msgid="7589986898808506239">"Հայտնաբերվել է նոր <xliff:g id="NAME">%s</xliff:g>"</string>
@@ -1232,8 +1243,9 @@
     <string name="vpn_text_long" msgid="4907843483284977618">"Կապակացված է <xliff:g id="SESSION">%s</xliff:g>-ին: Սեղմեք` ցանցը կառավարելու համար:"</string>
     <string name="vpn_lockdown_connecting" msgid="6443438964440960745">"Միշտ-միացված VPN-ը կապվում է..."</string>
     <string name="vpn_lockdown_connected" msgid="8202679674819213931">"Միշտ-առցանց VPN-ը կապակցված է"</string>
+    <string name="vpn_lockdown_disconnected" msgid="4532298952570796327">"«Միշտ միացված VPN»-ն անջատված է"</string>
     <string name="vpn_lockdown_error" msgid="6009249814034708175">"VPN սխալը միշտ միացված"</string>
-    <string name="vpn_lockdown_config" msgid="4655589351146766608">"Հպեք՝ կազմաձևելու համար"</string>
+    <string name="vpn_lockdown_config" msgid="5099330695245008680">"Հպեք՝ կարգավորելու համար"</string>
     <string name="upload_file" msgid="2897957172366730416">"Ընտրել ֆայլը"</string>
     <string name="no_file_chosen" msgid="6363648562170759465">"Ոչ մի ֆայլ չի ընտրված"</string>
     <string name="reset" msgid="2448168080964209908">"Վերակայել"</string>
@@ -1317,7 +1329,7 @@
     <string name="storage_usb_drive_label" msgid="4501418548927759953">"USB սարքավար <xliff:g id="MANUFACTURER">%s</xliff:g>-ից"</string>
     <string name="storage_usb" msgid="3017954059538517278">"USB կրիչ"</string>
     <string name="extract_edit_menu_button" msgid="8940478730496610137">"Խմբագրել"</string>
-    <string name="data_usage_warning_title" msgid="1955638862122232342">"Տվյալների օգտագործման նախազգուշացում"</string>
+    <string name="data_usage_warning_title" msgid="3620440638180218181">"Տվյալների օգտագործման զգուշացում"</string>
     <string name="data_usage_warning_body" msgid="6660692274311972007">"Հպեք և տեսեք օգտագործումը և կարգավորումները:"</string>
     <string name="data_usage_3g_limit_title" msgid="4361523876818447683">"2G-3G տվյալների սահմանաչափը սպառվել է"</string>
     <string name="data_usage_4g_limit_title" msgid="4609566827219442376">"4G տվյալների սահմանաչափը սպառվել է"</string>
@@ -1636,6 +1648,7 @@
     <string name="search_language_hint" msgid="7042102592055108574">"Մուտքագրեք լեզուն"</string>
     <string name="language_picker_section_suggested" msgid="8414489646861640885">"Առաջարկներ"</string>
     <string name="language_picker_section_all" msgid="3097279199511617537">"Բոլոր լեզուները"</string>
+    <string name="region_picker_section_all" msgid="8966316787153001779">"Բոլոր տարածաշրջանները"</string>
     <string name="locale_search_menu" msgid="2560710726687249178">"Որոնում"</string>
     <string name="work_mode_off_title" msgid="8954725060677558855">"Աշխատանքային ռեժիմն ԱՆՋԱՏՎԱԾ Է"</string>
     <string name="work_mode_off_message" msgid="3286169091278094476">"Միացնել աշխատանքային պրոֆիլը՝ հավելվածները, ֆոնային համաժամեցումը և առնչվող գործառույթները"</string>

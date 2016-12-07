@@ -486,6 +486,9 @@
     <!-- TODO: promote to separate string-->
     <string name="global_action_restart" translatable="false">@string/sim_restart_button</string>
 
+    <!-- label for item that starts emergency call -->
+    <string name="global_action_emergency">Emergency</string>
+
     <!-- label for item that generates a bug report in the phone options dialog -->
     <string name="global_action_bug_report">Bug report</string>
 
@@ -3121,8 +3124,6 @@
     <string name="fast_scroll_alphabet">\u0020ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
     <string name="fast_scroll_numeric_alphabet">\u00200123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
 
-    <string name="candidates_style"><u>candidates</u></string>
-
     <!-- External media notification strings -->
     <skip />
 
@@ -3325,10 +3326,12 @@
     <string name="vpn_lockdown_connecting">Always-on VPN connecting\u2026</string>
     <!-- Notification title when connected to lockdown VPN. -->
     <string name="vpn_lockdown_connected">Always-on VPN connected</string>
+    <!-- Notification title when not connected to lockdown VPN. -->
+    <string name="vpn_lockdown_disconnected">Always-on VPN disconnected</string>
     <!-- Notification title when error connecting to lockdown VPN. -->
     <string name="vpn_lockdown_error">Always-on VPN error</string>
     <!-- Notification body that indicates user can touch to configure lockdown VPN connection. -->
-    <string name="vpn_lockdown_config">Tap to configure</string>
+    <string name="vpn_lockdown_config">Tap to set up</string>
 
     <!-- Localized strings for WebView -->
     <!-- Label for button in a WebView that will open a chooser to choose a file to upload -->
@@ -3549,8 +3552,8 @@
     <!-- Button text for the edit menu in input method extract mode. [CHAR LIMIT=16] -->
     <string name="extract_edit_menu_button">Edit</string>
 
-    <!-- Notification title when data usage has exceeded warning threshold. [CHAR LIMIT=32] -->
-    <string name="data_usage_warning_title">Data usage warning</string>
+    <!-- Notification title when data usage has exceeded warning threshold. [CHAR LIMIT=50] -->
+    <string name="data_usage_warning_title">Data usage alert</string>
     <!-- Notification body when data usage has exceeded warning threshold. [CHAR LIMIT=32] -->
     <string name="data_usage_warning_body">Tap to view usage and settings.</string>
 
@@ -4356,6 +4359,9 @@
     <string name="language_picker_section_suggested">Suggested</string>
     <!-- List section subheader for the language picker, containing a list of all languages available [CHAR LIMIT=30] -->
     <string name="language_picker_section_all">All languages</string>
+    <!-- List section subheader for the region picker, containing a list of all regions supported for the selected language.
+    Warning: this is a more 'neutral' term for 'country', not for the sub-divisions of a country. [CHAR LIMIT=30] -->
+    <string name="region_picker_section_all">All regions</string>
 
     <!-- Menu item in the locale menu  [CHAR LIMIT=30] -->
     <string name="locale_search_menu">Search</string>

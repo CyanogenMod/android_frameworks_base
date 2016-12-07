@@ -100,7 +100,7 @@
 
     <!-- The default tiles to display in QuickSettings -->
     <string name="quick_settings_tiles_default" translatable="false">
-        wifi,cell,battery,dnd,flashlight,rotation,bt,airplane,location
+        wifi,cell,battery,dnd,flashlight,rotation,bt,airplane
     </string>
 
     <!-- Tiles native to System UI. Order should match "quick_settings_tiles_default" -->
@@ -208,9 +208,6 @@
 
     <!-- Doze: should the significant motion sensor be used as a pulse signal? -->
     <bool name="doze_pulse_on_significant_motion">false</bool>
-
-    <!-- Doze: should the pickup sensor be used as a pulse signal? -->
-    <bool name="doze_pulse_on_pick_up">false</bool>
 
     <!-- Doze: check proximity sensor before pulsing? -->
     <bool name="doze_proximity_check_before_pulse">true</bool>

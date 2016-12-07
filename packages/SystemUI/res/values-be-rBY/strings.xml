@@ -242,7 +242,7 @@
     <string name="data_usage_disabled_dialog_4g_title" msgid="1601769736881078016">"Перадача даных 4G прыпынена"</string>
     <string name="data_usage_disabled_dialog_mobile_title" msgid="4651001290947318931">"Мабільная перадача даных прыпынена"</string>
     <string name="data_usage_disabled_dialog_title" msgid="3932437232199671967">"Перадача даных прыпынена"</string>
-    <string name="data_usage_disabled_dialog" msgid="8453242888903772524">"Быў дасягнуты ліміт перадачы даных, таму прылада прыпыніла перадачу даных на астатнюю частку гэтага цыкла.\n\nУзнаўленне перадачы можа прывесці да спагнання платы вашым аператарам."</string>
+    <string name="data_usage_disabled_dialog" msgid="1841738975235283398">"Ліміт даных, які вы задалі, быў дасягнуты. Вы больш не выкарыстоўваеце сотавую перадачу даных.\n\nКалі вы ўзновіце карыстанне, можа спаганяцца плата за выкарыстанне трафіка."</string>
     <string name="data_usage_disabled_dialog_enable" msgid="1412395410306390593">"Узнавіць"</string>
     <string name="status_bar_settings_signal_meter_disconnected" msgid="1940231521274147771">"Няма падключэння да Iнтэрнэту"</string>
     <string name="status_bar_settings_signal_meter_wifi_nossid" msgid="6557486452774597820">"Wi-Fi падключаны"</string>
@@ -410,6 +410,7 @@
     <string name="device_owned_footer" msgid="3802752663326030053">"За прыладай могуць назіраць"</string>
     <string name="profile_owned_footer" msgid="8021888108553696069">"За профілем могуць назіраць"</string>
     <string name="vpn_footer" msgid="2388611096129106812">"За сеткай могуць назіраць"</string>
+    <string name="branded_vpn_footer" msgid="2168111859226496230">"За сеткай могуць назіраць"</string>
     <string name="monitoring_title_device_owned" msgid="7121079311903859610">"Маніторынг прылад"</string>
     <string name="monitoring_title_profile_owned" msgid="6790109874733501487">"Маніторынг профіляў"</string>
     <string name="monitoring_title" msgid="169206259253048106">"Маніторынг сеткі"</string>
@@ -422,6 +423,7 @@
     <string name="legacy_vpn_name" msgid="6604123105765737830">"VPN"</string>
     <string name="monitoring_description_app" msgid="6259179342284742878">"Вы падлучаны да праграмы <xliff:g id="APPLICATION">%1$s</xliff:g>, якая можа сачыць за вашай сеткавай актыўнасцю, уключаючы электронную пошту, праграмы і вэб-сайты."</string>
     <string name="monitoring_description_app_personal" msgid="484599052118316268">"Вы падлучаны да праграмы <xliff:g id="APPLICATION">%1$s</xliff:g>, якая сачыць за вашай асабістай сеткавай актыўнасцю, уключаючы электронную пошту, праграмы і вэб-сайты."</string>
+    <string name="branded_monitoring_description_app_personal" msgid="2669518213949202599">"Вы падключаны да праграмы <xliff:g id="APPLICATION">%1$s</xliff:g>, якая можа сачыць за вашай асабістай сеткавай дзейнасцю, уключаючы электронную пошту, праграмы і вэб-сайты."</string>
     <string name="monitoring_description_app_work" msgid="1754325860918060897">"Ваш працоўны профіль знаходзіцца пад кіраваннем <xliff:g id="ORGANIZATION">%1$s</xliff:g>. Ён падлучаны да праграмы <xliff:g id="APPLICATION">%2$s</xliff:g>, якая можа сачыць за вашай сеткавай актыўнасцю, уключаючы электронную пошту, праграмы і вэб-сайты.\n\nДля атрымання дадатковай інфармацыі звярніцеся да адміністратара."</string>
     <string name="monitoring_description_app_personal_work" msgid="4946600443852045903">"Ваш працоўны профіль знаходзіцца пад кіраваннем <xliff:g id="ORGANIZATION">%1$s</xliff:g>. Ён падлучаны да праграмы <xliff:g id="APPLICATION_WORK">%2$s</xliff:g>, якая можа сачыць за вашай сеткавай актыўнасцю, уключаючы электронную пошту, праграмы і вэб-сайты.\n\nВы таксама падлучаны да праграмы <xliff:g id="APPLICATION_PERSONAL">%3$s</xliff:g>, якая можа сачыць за вашай асабістай сеткавай актыўнасцю."</string>
     <string name="monitoring_description_vpn_app_device_owned" msgid="4970443827043261703">"Ваша прылада знаходзіцца пад кіраваннем <xliff:g id="ORGANIZATION">%1$s</xliff:g>.\n\nВаш адміністратар можа сачыць і кіраваць наладамі, доступам да карпаратыўных рэсурсаў, праграмамі, данымі, звязанымі з вашай прыладай, і звесткамі пра месцазнаходжанне прылады.\n\nВы падлучаны да праграмы <xliff:g id="APPLICATION">%2$s</xliff:g>,  якая можа сачыць за вашай сеткавай актыўнасцю, уключаючы электронную пошту, праграмы і вэб-сайты.\n\nДля атрымання дадатковай інфармацыі звярніцеся да адміністратара."</string>
@@ -498,8 +500,6 @@
     <string name="clock_seconds_desc" msgid="6282693067130470675">"Паказваць секунды гадзінніка на панэлі стану. Можа паўплываць на рэсурс акумулятара."</string>
     <string name="qs_rearrange" msgid="8060918697551068765">"Змяніць парадак Хуткіх налад"</string>
     <string name="show_brightness" msgid="6613930842805942519">"Паказваць яркасць у Хуткіх наладах"</string>
-    <string name="overview_nav_bar_gesture" msgid="8579814204727917764">"Уключ. пераход да рэжыму дзялення экрана правядзеннем уверх"</string>
-    <string name="overview_nav_bar_gesture_desc" msgid="6329167382305102615">"Уключыць пераход да рэжыму дзялення экрана правядзеннем пальцам уверх ад кнопкі «Агляд»"</string>
     <string name="experimental" msgid="6198182315536726162">"Эксперыментальныя"</string>
     <string name="enable_bluetooth_title" msgid="5027037706500635269">"Уключыць Bluetooth?"</string>
     <string name="enable_bluetooth_message" msgid="9106595990708985385">"Для падлучэння клавіятуры да планшэта трэба спачатку ўключыць Bluetooth."</string>
@@ -657,4 +657,5 @@
     <string name="accessibility_quick_settings_open_settings" msgid="7806613775728380737">"Адкрыць налады <xliff:g id="ID_1">%s</xliff:g>."</string>
     <string name="accessibility_quick_settings_edit" msgid="7839992848995240393">"Змяніць парадак налад."</string>
     <string name="accessibility_quick_settings_page" msgid="5032979051755200721">"Старонка <xliff:g id="ID_1">%1$d</xliff:g> з <xliff:g id="ID_2">%2$d</xliff:g>"</string>
+    <string name="cant_silence_or_block" msgid="999689262131488625">"Гук паведамленняў нельга адключыць, і іх нельга заблакіраваць"</string>
 </resources>

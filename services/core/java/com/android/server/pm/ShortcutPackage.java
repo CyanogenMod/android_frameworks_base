@@ -23,7 +23,6 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.ShortcutInfo;
 import android.content.res.Resources;
-import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.text.format.Formatter;
 import android.util.ArrayMap;
@@ -145,30 +144,6 @@ class ShortcutPackage extends ShortcutPackageItem {
         return mPackageUid;
     }
 
-    /**
-     * Called when a shortcut is about to be published.  At this point we know the publisher
-     * package
-     * exists (as opposed to Launcher trying to fetch shortcuts from a non-existent package), so
-     * we do some initialization for the package.
-     */
-    private void ensurePackageVersionInfo() {
-        // Make sure we have the version code for the app.  We need the version code in
-        // handlePackageUpdated().
-        if (getPackageInfo().getVersionCode() < 0) {
-            final ShortcutService s = mShortcutUser.mService;
-
-            final PackageInfo pi = s.getPackageInfo(getPackageName(), getOwnerUserId());
-            if (pi != null) {
-                if (ShortcutService.DEBUG) {
-                    Slog.d(TAG, String.format("Package %s version = %d", getPackageName(),
-                            pi.versionCode));
-                }
-                getPackageInfo().updateVersionInfo(pi);
-                s.scheduleSaveUser(getOwnerUserId());
-            }
-        }
-    }
-
     @Nullable
     public Resources getPackageResources() {
         return mShortcutUser.mService.injectGetResourcesForApplicationAsUser(
@@ -250,8 +225,6 @@ class ShortcutPackage extends ShortcutPackageItem {
 
         Preconditions.checkArgument(newShortcut.isEnabled(),
                 "add/setDynamicShortcuts() cannot publish disabled shortcuts");
-
-        ensurePackageVersionInfo();
 
         newShortcut.addFlags(ShortcutInfo.FLAG_DYNAMIC);
 
@@ -662,15 +635,30 @@ class ShortcutPackage extends ShortcutPackageItem {
                 return false; // Shouldn't happen.
             }
 
-            if (!isNewApp && !forceRescan) {
+            // Always scan the settings app, since its version code is the same for DR and MR1.
+            // TODO Fix it properly: b/32554059
+            final boolean isSettings = "com.android.settings".equals(getPackageName());
+
+            if (!isNewApp && !forceRescan && !isSettings) {
                 // Return if the package hasn't changed, ie:
                 // - version code hasn't change
                 // - lastUpdateTime hasn't change
                 // - all target activities are still enabled.
+
+                // Note, system apps timestamps do *not* change after OTAs.  (But they do
+                // after an adb sync or a local flash.)
+                // This means if a system app's version code doesn't change on an OTA,
+                // we don't notice it's updated.  But that's fine since their version code *should*
+                // really change on OTAs.
                 if ((getPackageInfo().getVersionCode() == pi.versionCode)
                         && (getPackageInfo().getLastUpdateTime() == pi.lastUpdateTime)
                         && areAllActivitiesStillEnabled()) {
                     return false;
+                }
+            }
+            if (isSettings) {
+                if (ShortcutService.DEBUG) {
+                    Slog.d(TAG, "Always scan settings.");
                 }
             }
         } finally {
@@ -1143,6 +1131,17 @@ class ShortcutPackage extends ShortcutPackageItem {
                 }
             }
         }
+    }
+
+    /** @return true if there's any shortcuts that are not manifest shortcuts. */
+    public boolean hasNonManifestShortcuts() {
+        for (int i = mShortcuts.size() - 1; i >= 0; i--) {
+            final ShortcutInfo si = mShortcuts.valueAt(i);
+            if (!si.isDeclaredInManifest()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void dump(@NonNull PrintWriter pw, @NonNull String prefix) {

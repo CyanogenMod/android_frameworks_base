@@ -40,7 +40,6 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Insets;
 import android.graphics.Interpolator;
 import android.graphics.LinearGradient;
@@ -829,6 +828,17 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      * {@hide}
      */
     protected static boolean sPreserveMarginParamsInLayoutParamConversion;
+
+    /**
+     * Prior to N, when drag enters into child of a view that has already received an
+     * ACTION_DRAG_ENTERED event, the parent doesn't get a ACTION_DRAG_EXITED event.
+     * ACTION_DRAG_LOCATION and ACTION_DROP were delivered to the parent of a view that returned
+     * false from its event handler for these events.
+     * Starting from N, the parent will get ACTION_DRAG_EXITED event before the child gets its
+     * ACTION_DRAG_ENTERED. ACTION_DRAG_LOCATION and ACTION_DROP are never propagated to the parent.
+     * sCascadedDragDrop is true for pre-N apps for backwards compatibility implementation.
+     */
+    static boolean sCascadedDragDrop;
 
     /**
      * This view does not want keystrokes. Use with TAKES_FOCUS_MASK when
@@ -3086,20 +3096,6 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
     /**
      * @hide
      *
-     * Whether Recents is visible or not.
-     */
-    public static final int RECENT_APPS_VISIBLE = 0x00004000;
-
-    /**
-     * @hide
-     *
-     * Whether the TV's picture-in-picture is visible or not.
-     */
-    public static final int TV_PICTURE_IN_PICTURE_VISIBLE = 0x00010000;
-
-    /**
-     * @hide
-     *
      * Makes navigation bar transparent (but not the status bar).
      */
     public static final int NAVIGATION_BAR_TRANSPARENT = 0x00008000;
@@ -4065,6 +4061,8 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
             // Prior to N, we would drop margins in LayoutParam conversions. The fix triggers bugs
             // in apps so we target check it to avoid breaking existing apps.
             sPreserveMarginParamsInLayoutParamConversion = targetSdkVersion >= N;
+
+            sCascadedDragDrop = targetSdkVersion < N;
 
             sCompatibilityDone = true;
         }
@@ -8061,7 +8059,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
     }
 
     /**
-     * Set the enabled state of this view.
+     * Set the visibility state of this view.
      *
      * @param visibility One of {@link #VISIBLE}, {@link #INVISIBLE}, or {@link #GONE}.
      * @attr ref android.R.styleable#View_visibility
@@ -20284,8 +20282,14 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
                 // remove it from the transparent region.
                 final int[] location = attachInfo.mTransparentLocation;
                 getLocationInWindow(location);
-                region.op(location[0], location[1], location[0] + mRight - mLeft,
-                        location[1] + mBottom - mTop, Region.Op.DIFFERENCE);
+                // When a view has Z value, then it will be better to leave some area below the view
+                // for drawing shadow. The shadow outset is proportional to the Z value. Note that
+                // the bottom part needs more offset than the left, top and right parts due to the
+                // spot light effects.
+                int shadowOffset = getZ() > 0 ? (int) getZ() : 0;
+                region.op(location[0] - shadowOffset, location[1] - shadowOffset,
+                        location[0] + mRight - mLeft + shadowOffset,
+                        location[1] + mBottom - mTop + (shadowOffset * 3), Region.Op.DIFFERENCE);
             } else {
                 if (mBackground != null && mBackground.getOpacity() != PixelFormat.TRANSPARENT) {
                     // The SKIP_DRAW flag IS set and the background drawable exists, we remove
@@ -20653,8 +20657,10 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      * @param shadowBuilder A {@link android.view.View.DragShadowBuilder} object for building the
      * drag shadow.
      * @param myLocalState An {@link java.lang.Object} containing local data about the drag and
-     * drop operation. This Object is put into every DragEvent object sent by the system during the
-     * current drag.
+     * drop operation. When dispatching drag events to views in the same activity this object
+     * will be available through {@link android.view.DragEvent#getLocalState()}. Views in other
+     * activities will not have access to this data ({@link android.view.DragEvent#getLocalState()}
+     * will return null).
      * <p>
      * myLocalState is a lightweight mechanism for the sending information from the dragged View
      * to the target Views. For example, it can contain flags that differentiate between a
@@ -20855,6 +20861,11 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
         return false;
     }
 
+    // Dispatches ACTION_DRAG_ENTERED and ACTION_DRAG_EXITED events for pre-Nougat apps.
+    boolean dispatchDragEnterExitInPreN(DragEvent event) {
+        return callDragEventHandler(event);
+    }
+
     /**
      * Detects if this View is enabled and has a drag event listener.
      * If both are true, then it calls the drag event listener with the
@@ -20872,13 +20883,44 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      * </p>
      */
     public boolean dispatchDragEvent(DragEvent event) {
+        event.mEventHandlerWasCalled = true;
+        if (event.mAction == DragEvent.ACTION_DRAG_LOCATION ||
+            event.mAction == DragEvent.ACTION_DROP) {
+            // About to deliver an event with coordinates to this view. Notify that now this view
+            // has drag focus. This will send exit/enter events as needed.
+            getViewRootImpl().setDragFocus(this, event);
+        }
+        return callDragEventHandler(event);
+    }
+
+    final boolean callDragEventHandler(DragEvent event) {
+        final boolean result;
+
         ListenerInfo li = mListenerInfo;
         //noinspection SimplifiableIfStatement
         if (li != null && li.mOnDragListener != null && (mViewFlags & ENABLED_MASK) == ENABLED
                 && li.mOnDragListener.onDrag(this, event)) {
-            return true;
+            result = true;
+        } else {
+            result = onDragEvent(event);
         }
-        return onDragEvent(event);
+
+        switch (event.mAction) {
+            case DragEvent.ACTION_DRAG_ENTERED: {
+                mPrivateFlags2 |= View.PFLAG2_DRAG_HOVERED;
+                refreshDrawableState();
+            } break;
+            case DragEvent.ACTION_DRAG_EXITED: {
+                mPrivateFlags2 &= ~View.PFLAG2_DRAG_HOVERED;
+                refreshDrawableState();
+            } break;
+            case DragEvent.ACTION_DRAG_ENDED: {
+                mPrivateFlags2 &= ~View.DRAG_MASK;
+                refreshDrawableState();
+            } break;
+        }
+
+        return result;
     }
 
     boolean canAcceptDrag() {
