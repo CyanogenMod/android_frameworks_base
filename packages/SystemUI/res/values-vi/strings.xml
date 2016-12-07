@@ -238,7 +238,7 @@
     <string name="data_usage_disabled_dialog_4g_title" msgid="1601769736881078016">"Đã tạm dừng dữ liệu 4G"</string>
     <string name="data_usage_disabled_dialog_mobile_title" msgid="4651001290947318931">"Đã tạm dừng dữ liệu di động"</string>
     <string name="data_usage_disabled_dialog_title" msgid="3932437232199671967">"Đã tạm dừng dữ liệu"</string>
-    <string name="data_usage_disabled_dialog" msgid="8453242888903772524">"Vì bạn đã đạt tới giới hạn dữ liệu thiết lập nên thiết bị đã tạm dừng sử dụng dữ liệu cho phần còn lại của chu kỳ này.\n\nTiếp tục có thể dẫn tới nhà cung cấp dịch vụ của bạn sẽ tính phí."</string>
+    <string name="data_usage_disabled_dialog" msgid="1841738975235283398">"Đã đạt đến giới hạn dữ liệu mà bạn đặt. Bạn hiện không còn sử dụng dữ liệu di động.\n\nNếu tiếp tục, bạn có thể bị tính phí khi sử dụng dữ liệu."</string>
     <string name="data_usage_disabled_dialog_enable" msgid="1412395410306390593">"Tiếp tục"</string>
     <string name="status_bar_settings_signal_meter_disconnected" msgid="1940231521274147771">"Ko có k.nối Internet"</string>
     <string name="status_bar_settings_signal_meter_wifi_nossid" msgid="6557486452774597820">"Đã kết nối Wi-Fi"</string>
@@ -404,6 +404,7 @@
     <string name="device_owned_footer" msgid="3802752663326030053">"Thiết bị có thể được giám sát"</string>
     <string name="profile_owned_footer" msgid="8021888108553696069">"Hồ sơ có thể được giám sát"</string>
     <string name="vpn_footer" msgid="2388611096129106812">"Mạng có thể được giám sát"</string>
+    <string name="branded_vpn_footer" msgid="2168111859226496230">"Mạng có thể được giám sát"</string>
     <string name="monitoring_title_device_owned" msgid="7121079311903859610">"Giám sát thiết bị"</string>
     <string name="monitoring_title_profile_owned" msgid="6790109874733501487">"Giám sát hồ sơ"</string>
     <string name="monitoring_title" msgid="169206259253048106">"Giám sát mạng"</string>
@@ -416,6 +417,7 @@
     <string name="legacy_vpn_name" msgid="6604123105765737830">"VPN"</string>
     <string name="monitoring_description_app" msgid="6259179342284742878">"Bạn đang kết nối với <xliff:g id="APPLICATION">%1$s</xliff:g>. Ứng dụng này có thể giám sát hoạt động mạng của bạn bao gồm email, ứng dụng và trang web."</string>
     <string name="monitoring_description_app_personal" msgid="484599052118316268">"Bạn đang kết nối với <xliff:g id="APPLICATION">%1$s</xliff:g>. Ứng dụng này có thể giám sát hoạt động mạng cá nhân của bạn bao gồm email, ứng dụng và trang web."</string>
+    <string name="branded_monitoring_description_app_personal" msgid="2669518213949202599">"Bạn đang kết nối với <xliff:g id="APPLICATION">%1$s</xliff:g>. Ứng dụng này có thể giám sát hoạt động mạng cá nhân của bạn bao gồm email, ứng dụng và trang web."</string>
     <string name="monitoring_description_app_work" msgid="1754325860918060897">"Hồ sơ công việc của bạn được quản lý bởi <xliff:g id="ORGANIZATION">%1$s</xliff:g>. Hồ sơ được kết nối với <xliff:g id="APPLICATION">%2$s</xliff:g>, ứng dụng này có thể giám sát hoạt động mạng cơ quan của bạn, bao gồm email, ứng dụng và trang web.\n\nĐể biết thêm thông tin, hãy liên hệ với quản trị viên của bạn."</string>
     <string name="monitoring_description_app_personal_work" msgid="4946600443852045903">"Hồ sơ công việc của bạn được quản lý bởi <xliff:g id="ORGANIZATION">%1$s</xliff:g>. Hồ sơ được kết nối với <xliff:g id="APPLICATION_WORK">%2$s</xliff:g>, ứng dụng này có thể giám sát hoạt động mạng cơ quan của bạn, bao gồm email, ứng dụng và trang web.\n\nBạn cũng được kết nối với <xliff:g id="APPLICATION_PERSONAL">%3$s</xliff:g>, có thể giám sát hoạt động mạng cá nhân của bạn."</string>
     <string name="monitoring_description_vpn_app_device_owned" msgid="4970443827043261703">"Thiết bị của bạn được quản lý bởi <xliff:g id="ORGANIZATION">%1$s</xliff:g>.\n\nQuản trị viên có thể giám sát và quản lý cài đặt, quyền truy cập của công ty, ứng dụng, dữ liệu được liên kết với thiết bị của bạn và thông tin về vị trí của thiết bị.\n\nBạn được kết nối với <xliff:g id="APPLICATION">%2$s</xliff:g>. Ứng dụng này có thể giám sát hoạt động mạng của bạn, bao gồm email, ứng dụng và trang web.\n\nĐể biết thêm thông tin, hãy liên hệ với quản trị viên của bạn."</string>
@@ -494,8 +496,6 @@
     <string name="clock_seconds_desc" msgid="6282693067130470675">"Hiển thị giây đồng hồ trong thanh trạng thái. Có thể ảnh hưởng đến thời lượng pin."</string>
     <string name="qs_rearrange" msgid="8060918697551068765">"Sắp xếp lại Cài đặt nhanh"</string>
     <string name="show_brightness" msgid="6613930842805942519">"Hiển thị độ sáng trong Cài đặt nhanh"</string>
-    <string name="overview_nav_bar_gesture" msgid="8579814204727917764">"Bật cử chỉ vuốt lên ở chế độ chia đôi màn hình"</string>
-    <string name="overview_nav_bar_gesture_desc" msgid="6329167382305102615">"Cho phép cử chỉ truy cập chế độ chia đôi màn hình bằng cách vuốt lên từ nút Tổng quan"</string>
     <string name="experimental" msgid="6198182315536726162">"Thử nghiệm"</string>
     <string name="enable_bluetooth_title" msgid="5027037706500635269">"Bật Bluetooth?"</string>
     <string name="enable_bluetooth_message" msgid="9106595990708985385">"Để kết nối bàn phím với máy tính bảng, trước tiên, bạn phải bật Bluetooth."</string>
@@ -653,4 +653,5 @@
     <string name="accessibility_quick_settings_open_settings" msgid="7806613775728380737">"Mở cài đặt <xliff:g id="ID_1">%s</xliff:g>."</string>
     <string name="accessibility_quick_settings_edit" msgid="7839992848995240393">"Chỉnh sửa thứ tự cài đặt."</string>
     <string name="accessibility_quick_settings_page" msgid="5032979051755200721">"Trang <xliff:g id="ID_1">%1$d</xliff:g> / <xliff:g id="ID_2">%2$d</xliff:g>"</string>
+    <string name="cant_silence_or_block" msgid="999689262131488625">"Không thể chặn hoặc tắt tiếng thông báo"</string>
 </resources>

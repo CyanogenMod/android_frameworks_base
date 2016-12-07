@@ -22,7 +22,6 @@ import com.android.internal.logging.MetricsProto;
 import com.android.internal.os.ProcessCpuTracker;
 import com.android.server.Watchdog;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.ActivityThread;
@@ -33,10 +32,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.IPackageDataObserver;
-import android.content.pm.PackageManager;
 import android.os.Binder;
-import android.os.Bundle;
 import android.os.Message;
 import android.os.Process;
 import android.os.RemoteException;
@@ -59,7 +55,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Set;
-import java.util.concurrent.Semaphore;
 
 import static com.android.server.Watchdog.NATIVE_STACKS_OF_INTEREST;
 import static com.android.server.am.ActivityManagerDebugConfig.DEBUG_ANR;
@@ -305,15 +300,19 @@ class AppErrors {
      * @param crashInfo describing the failure
      */
     void crashApplication(ProcessRecord r, ApplicationErrorReport.CrashInfo crashInfo) {
+        final int callingPid = Binder.getCallingPid();
+        final int callingUid = Binder.getCallingUid();
+
         final long origId = Binder.clearCallingIdentity();
         try {
-            crashApplicationInner(r, crashInfo);
+            crashApplicationInner(r, crashInfo, callingPid, callingUid);
         } finally {
             Binder.restoreCallingIdentity(origId);
         }
     }
 
-    void crashApplicationInner(ProcessRecord r, ApplicationErrorReport.CrashInfo crashInfo) {
+    void crashApplicationInner(ProcessRecord r, ApplicationErrorReport.CrashInfo crashInfo,
+            int callingPid, int callingUid) {
         long timeMillis = System.currentTimeMillis();
         String shortMsg = crashInfo.exceptionClassName;
         String longMsg = crashInfo.exceptionMessage;
@@ -332,7 +331,7 @@ class AppErrors {
              * finish now and don't show the app error dialog.
              */
             if (handleAppCrashInActivityController(r, crashInfo, shortMsg, longMsg, stackTrace,
-                    timeMillis)) {
+                    timeMillis, callingPid, callingUid)) {
                 return;
             }
 
@@ -359,7 +358,7 @@ class AppErrors {
                 return;
             }
 
-            Message msg = Message.obtain();
+            final Message msg = Message.obtain();
             msg.what = ActivityManagerService.SHOW_ERROR_UI_MSG;
 
             task = data.task;
@@ -434,15 +433,16 @@ class AppErrors {
     private boolean handleAppCrashInActivityController(ProcessRecord r,
                                                        ApplicationErrorReport.CrashInfo crashInfo,
                                                        String shortMsg, String longMsg,
-                                                       String stackTrace, long timeMillis) {
+                                                       String stackTrace, long timeMillis,
+                                                       int callingPid, int callingUid) {
         if (mService.mController == null) {
             return false;
         }
 
         try {
             String name = r != null ? r.processName : null;
-            int pid = r != null ? r.pid : Binder.getCallingPid();
-            int uid = r != null ? r.info.uid : Binder.getCallingUid();
+            int pid = r != null ? r.pid : callingPid;
+            int uid = r != null ? r.info.uid : callingUid;
             if (!mService.mController.appCrashed(name, pid,
                     shortMsg, longMsg, timeMillis, crashInfo.stackTrace)) {
                 if ("1".equals(SystemProperties.get(SYSTEM_DEBUGGABLE, "0"))
@@ -575,6 +575,8 @@ class AppErrors {
     boolean handleAppCrashLocked(ProcessRecord app, String reason,
             String shortMsg, String longMsg, String stackTrace, AppErrorDialog.Data data) {
         long now = SystemClock.uptimeMillis();
+        boolean showBackground = Settings.Secure.getInt(mContext.getContentResolver(),
+                Settings.Secure.ANR_SHOW_BACKGROUND, 0) != 0;
 
         Long crashTime;
         Long crashTimePersistent;
@@ -612,7 +614,9 @@ class AppErrors {
                 // processes run critical code.
                 mService.removeProcessLocked(app, false, false, "crash");
                 mService.mStackSupervisor.resumeFocusedStackTopActivityLocked();
-                return false;
+                if (!showBackground) {
+                    return false;
+                }
             }
             mService.mStackSupervisor.resumeFocusedStackTopActivityLocked();
         } else {
@@ -705,7 +709,7 @@ class AppErrors {
             }
             final boolean crashSilenced = mAppsNotReportingCrashes != null &&
                     mAppsNotReportingCrashes.contains(proc.info.packageName);
-            if (mService.canShowErrorDialogs() && !crashSilenced) {
+            if ((mService.canShowErrorDialogs() || showBackground) && !crashSilenced) {
                 proc.crashDialog = new AppErrorDialog(mContext, mService, data);
             } else {
                 // The device is asleep, so just pretend that the user
@@ -942,7 +946,9 @@ class AppErrors {
                     null, null, 0, null, null, null, AppOpsManager.OP_NONE,
                     null, false, false, MY_PID, Process.SYSTEM_UID, 0 /* TODO: Verify */);
 
-            if (mService.canShowErrorDialogs()) {
+            boolean showBackground = Settings.Secure.getInt(mContext.getContentResolver(),
+                    Settings.Secure.ANR_SHOW_BACKGROUND, 0) != 0;
+            if (mService.canShowErrorDialogs() || showBackground) {
                 d = new AppNotRespondingDialog(mService,
                         mContext, proc, (ActivityRecord)data.get("activity"),
                         msg.arg1 != 0);

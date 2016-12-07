@@ -152,7 +152,7 @@
     <string name="httpErrorAuth" msgid="1435065629438044534">"Nije moguće potvrditi autentičnost."</string>
     <string name="httpErrorProxyAuth" msgid="1788207010559081331">"Potvrda identiteta preko proksi servera nije uspela."</string>
     <string name="httpErrorConnect" msgid="8714273236364640549">"Nije moguće povezati se sa serverom."</string>
-    <string name="httpErrorIO" msgid="2340558197489302188">"Nije moguće komunicirati sa serverom. Pokušajte ponovo kasnije."</string>
+    <string name="httpErrorIO" msgid="2340558197489302188">"Nije moguće komunicirati sa serverom. Probajte ponovo kasnije."</string>
     <string name="httpErrorTimeout" msgid="4743403703762883954">"Veza sa serverom je istekla."</string>
     <string name="httpErrorRedirectLoop" msgid="8679596090392779516">"Stranica sadrži previše veza za preusmeravanje sa servera."</string>
     <string name="httpErrorUnsupportedScheme" msgid="5015730812906192208">"Protokol nije podržan."</string>
@@ -160,7 +160,7 @@
     <string name="httpErrorBadUrl" msgid="3636929722728881972">"Stranicu nije moguće otvoriti zato što je URL adresa nevažeća."</string>
     <string name="httpErrorFile" msgid="2170788515052558676">"Nije moguće pristupiti datoteci."</string>
     <string name="httpErrorFileNotFound" msgid="6203856612042655084">"Nije moguće pronaći traženu datoteku."</string>
-    <string name="httpErrorTooManyRequests" msgid="1235396927087188253">"Previše zahteva se obrađuje. Pokušajte ponovo kasnije."</string>
+    <string name="httpErrorTooManyRequests" msgid="1235396927087188253">"Previše zahteva se obrađuje. Probajte ponovo kasnije."</string>
     <string name="notification_title" msgid="8967710025036163822">"Greška pri prijavljivanju za <xliff:g id="ACCOUNT">%1$s</xliff:g>"</string>
     <string name="contentServiceSync" msgid="8353523060269335667">"Sinhronizacija"</string>
     <string name="contentServiceSyncNotificationTitle" msgid="397743349191901458">"Sinhronizacija"</string>
@@ -216,6 +216,7 @@
     <string name="global_actions" product="default" msgid="2406416831541615258">"Opcije telefona"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Zaključaj ekran"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Isključi"</string>
+    <string name="global_action_emergency" msgid="7112311161137421166">"Hitni poziv"</string>
     <string name="global_action_bug_report" msgid="7934010578922304799">"Izveštaj o grešci"</string>
     <string name="bugreport_title" msgid="2667494803742548533">"Napravi izveštaj o grešci"</string>
     <string name="bugreport_message" msgid="398447048750350456">"Ovim će se prikupiti informacije o trenutnom stanju uređaja kako bi bile poslate u poruci e-pošte. Od započinjanja izveštaja o grešci do trenutka za njegovo slanje proći će neko vreme; budite strpljivi."</string>
@@ -256,9 +257,9 @@
     <string name="permgrouplab_storage" msgid="1971118770546336966">"Skladište"</string>
     <string name="permgroupdesc_storage" msgid="637758554581589203">"pristupa slikama, medijima i datotekama na uređaju"</string>
     <string name="permgrouplab_microphone" msgid="171539900250043464">"Mikrofon"</string>
-    <string name="permgroupdesc_microphone" msgid="4988812113943554584">"snima audio snimke"</string>
+    <string name="permgroupdesc_microphone" msgid="4988812113943554584">"snima audio"</string>
     <string name="permgrouplab_camera" msgid="4820372495894586615">"Kamera"</string>
-    <string name="permgroupdesc_camera" msgid="3250611594678347720">"snima slike i video snimke"</string>
+    <string name="permgroupdesc_camera" msgid="3250611594678347720">"snima slike i video"</string>
     <string name="permgrouplab_phone" msgid="5229115638567440675">"Telefon"</string>
     <string name="permgroupdesc_phone" msgid="6234224354060641055">"upućuje telefonske pozive i upravlja njima"</string>
     <string name="permgrouplab_sensors" msgid="416037179223226722">"Senzori za telo"</string>
@@ -439,19 +440,19 @@
     <string name="permdesc_manageFingerprint" msgid="178208705828055464">"Dozvoljava aplikaciji da aktivira metode za dodavanje i brisanje šablona otisaka prstiju koji će se koristiti."</string>
     <string name="permlab_useFingerprint" msgid="3150478619915124905">"koristi hardver za otiske prstiju"</string>
     <string name="permdesc_useFingerprint" msgid="9165097460730684114">"Dozvoljava aplikaciji da koristi hardver za otiske prstiju radi potvrde autentičnosti"</string>
-    <string name="fingerprint_acquired_partial" msgid="735082772341716043">"Otkriven je delimični otisak prsta. Pokušajte ponovo."</string>
-    <string name="fingerprint_acquired_insufficient" msgid="4596546021310923214">"Nije uspela obrada otiska prsta. Pokušajte ponovo."</string>
+    <string name="fingerprint_acquired_partial" msgid="735082772341716043">"Otkriven je delimični otisak prsta. Probajte ponovo."</string>
+    <string name="fingerprint_acquired_insufficient" msgid="4596546021310923214">"Nije uspela obrada otiska prsta. Probajte ponovo."</string>
     <string name="fingerprint_acquired_imager_dirty" msgid="1087209702421076105">"Senzor za otiske prstiju je prljav. Očistite ga i pokušajte ponovo."</string>
-    <string name="fingerprint_acquired_too_fast" msgid="6470642383109155969">"Prebrzo ste pomerili prst. Pokušajte ponovo."</string>
-    <string name="fingerprint_acquired_too_slow" msgid="59250885689661653">"Previše sporo ste pomerili prst. Pokušajte ponovo."</string>
+    <string name="fingerprint_acquired_too_fast" msgid="6470642383109155969">"Prebrzo ste pomerili prst. Probajte ponovo."</string>
+    <string name="fingerprint_acquired_too_slow" msgid="59250885689661653">"Previše sporo ste pomerili prst. Probajte ponovo."</string>
   <string-array name="fingerprint_acquired_vendor">
   </string-array>
     <string name="fingerprint_error_hw_not_available" msgid="7955921658939936596">"Hardver za otiske prstiju nije dostupan."</string>
     <string name="fingerprint_error_no_space" msgid="1055819001126053318">"Nije moguće sačuvati otisak prsta. Uklonite neki od postojećih otisaka prstiju."</string>
-    <string name="fingerprint_error_timeout" msgid="3927186043737732875">"Vremensko ograničenje za otisak prsta je isteklo. Pokušajte ponovo."</string>
+    <string name="fingerprint_error_timeout" msgid="3927186043737732875">"Vremensko ograničenje za otisak prsta je isteklo. Probajte ponovo."</string>
     <string name="fingerprint_error_canceled" msgid="4402024612660774395">"Radnja sa otiskom prsta je otkazana."</string>
-    <string name="fingerprint_error_lockout" msgid="5536934748136933450">"Previše pokušaja. Pokušajte ponovo kasnije."</string>
-    <string name="fingerprint_error_unable_to_process" msgid="6107816084103552441">"Pokušajte ponovo."</string>
+    <string name="fingerprint_error_lockout" msgid="5536934748136933450">"Previše pokušaja. Probajte ponovo kasnije."</string>
+    <string name="fingerprint_error_unable_to_process" msgid="6107816084103552441">"Probajte ponovo."</string>
     <string name="fingerprint_name_template" msgid="5870957565512716938">"Prst <xliff:g id="FINGERID">%d</xliff:g>"</string>
   <string-array name="fingerprint_error_vendor">
   </string-array>
@@ -679,8 +680,8 @@
     <string name="lockscreen_emergency_call" msgid="5298642613417801888">"Hitne službe"</string>
     <string name="lockscreen_return_to_call" msgid="5244259785500040021">"Nazad na poziv"</string>
     <string name="lockscreen_pattern_correct" msgid="9039008650362261237">"Tačno!"</string>
-    <string name="lockscreen_pattern_wrong" msgid="4317955014948108794">"Pokušajte ponovo"</string>
-    <string name="lockscreen_password_wrong" msgid="5737815393253165301">"Pokušajte ponovo"</string>
+    <string name="lockscreen_pattern_wrong" msgid="4317955014948108794">"Probajte ponovo"</string>
+    <string name="lockscreen_password_wrong" msgid="5737815393253165301">"Probajte ponovo"</string>
     <string name="lockscreen_storage_locked" msgid="9167551160010625200">"Otključaj za sve funkcije i podatke"</string>
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"Premašen je najveći dozvoljeni broj pokušaja Otključavanja licem"</string>
     <string name="lockscreen_missing_sim_message_short" msgid="5099439277819215399">"Nema SIM kartice"</string>
@@ -704,19 +705,19 @@
     <string name="lockscreen_sim_puk_locked_instructions" msgid="8127916255245181063">"Pogledajte Korisnički vodič ili kontaktirajte Korisničku podršku."</string>
     <string name="lockscreen_sim_locked_message" msgid="8066660129206001039">"SIM kartica je zaključana."</string>
     <string name="lockscreen_sim_unlock_progress_dialog_message" msgid="595323214052881264">"Otključavanje SIM kartice…"</string>
-    <string name="lockscreen_too_many_failed_attempts_dialog_message" msgid="6481623830344107222">"<xliff:g id="NUMBER_0">%1$d</xliff:g> puta ste nepravilno nacrtali šablon za otključavanje. \n\nPokušajte ponovo za <xliff:g id="NUMBER_1">%2$d</xliff:g> sekunde(i)."</string>
-    <string name="lockscreen_too_many_failed_password_attempts_dialog_message" msgid="2725973286239344555">"<xliff:g id="NUMBER_0">%1$d</xliff:g> puta ste pogrešno uneli lozinku. \n\nPokušajte ponovo za <xliff:g id="NUMBER_1">%2$d</xliff:g> sekunde(i)."</string>
-    <string name="lockscreen_too_many_failed_pin_attempts_dialog_message" msgid="6216672706545696955">"<xliff:g id="NUMBER_0">%1$d</xliff:g> puta ste pogrešno uneli PIN. \n\nPokušajte ponovo za <xliff:g id="NUMBER_1">%2$d</xliff:g> sekunde(i)."</string>
-    <string name="lockscreen_failed_attempts_almost_glogin" product="tablet" msgid="9191611984625460820">"<xliff:g id="NUMBER_0">%1$d</xliff:g> puta ste netačno uneli šablon za otključavanje. Nakon još <xliff:g id="NUMBER_1">%2$d</xliff:g> nesupešna(ih) pokušaja, od vas će biti zatraženo da otključate tablet pomoću podataka za prijavljivanje na Google.\n\n Pokušajte ponovo za <xliff:g id="NUMBER_2">%3$d</xliff:g> sekunde(i)."</string>
-    <string name="lockscreen_failed_attempts_almost_glogin" product="tv" msgid="5316664559603394684">"Neispravno ste nacrtali šablon za otključavanje <xliff:g id="NUMBER_0">%1$d</xliff:g> puta. Posle još <xliff:g id="NUMBER_1">%2$d</xliff:g> neuspešna(ih) pokušaja od vas će biti zatraženo da otključate TV pomoću podataka za prijavljivanje na Google.\n\n Pokušajte ponovo za <xliff:g id="NUMBER_2">%3$d</xliff:g> sek."</string>
-    <string name="lockscreen_failed_attempts_almost_glogin" product="default" msgid="2590227559763762751">"<xliff:g id="NUMBER_0">%1$d</xliff:g> puta ste netačno uneli šablon za otključavanje. Nakon još <xliff:g id="NUMBER_1">%2$d</xliff:g> nesupešna(ih) pokušaja, od vas će biti zatraženo da otključate telefon pomoću podataka za prijavljivanje na Google.\n\n Pokušajte ponovo za <xliff:g id="NUMBER_2">%3$d</xliff:g> sekunde(i)."</string>
+    <string name="lockscreen_too_many_failed_attempts_dialog_message" msgid="6481623830344107222">"<xliff:g id="NUMBER_0">%1$d</xliff:g> puta ste nepravilno nacrtali šablon za otključavanje. \n\nProbajte ponovo za <xliff:g id="NUMBER_1">%2$d</xliff:g> sekunde(i)."</string>
+    <string name="lockscreen_too_many_failed_password_attempts_dialog_message" msgid="2725973286239344555">"<xliff:g id="NUMBER_0">%1$d</xliff:g> puta ste pogrešno uneli lozinku. \n\nProbajte ponovo za <xliff:g id="NUMBER_1">%2$d</xliff:g> sekunde(i)."</string>
+    <string name="lockscreen_too_many_failed_pin_attempts_dialog_message" msgid="6216672706545696955">"<xliff:g id="NUMBER_0">%1$d</xliff:g> puta ste pogrešno uneli PIN. \n\nProbajte ponovo za <xliff:g id="NUMBER_1">%2$d</xliff:g> sekunde(i)."</string>
+    <string name="lockscreen_failed_attempts_almost_glogin" product="tablet" msgid="9191611984625460820">"<xliff:g id="NUMBER_0">%1$d</xliff:g> puta ste netačno uneli šablon za otključavanje. Nakon još <xliff:g id="NUMBER_1">%2$d</xliff:g> nesupešna(ih) pokušaja, od vas će biti zatraženo da otključate tablet pomoću podataka za prijavljivanje na Google.\n\n Probajte ponovo za <xliff:g id="NUMBER_2">%3$d</xliff:g> sekunde(i)."</string>
+    <string name="lockscreen_failed_attempts_almost_glogin" product="tv" msgid="5316664559603394684">"Neispravno ste nacrtali šablon za otključavanje <xliff:g id="NUMBER_0">%1$d</xliff:g> puta. Posle još <xliff:g id="NUMBER_1">%2$d</xliff:g> neuspešna(ih) pokušaja od vas će biti zatraženo da otključate TV pomoću podataka za prijavljivanje na Google.\n\n Probajte ponovo za <xliff:g id="NUMBER_2">%3$d</xliff:g> sek."</string>
+    <string name="lockscreen_failed_attempts_almost_glogin" product="default" msgid="2590227559763762751">"<xliff:g id="NUMBER_0">%1$d</xliff:g> puta ste netačno uneli šablon za otključavanje. Nakon još <xliff:g id="NUMBER_1">%2$d</xliff:g> nesupešna(ih) pokušaja, od vas će biti zatraženo da otključate telefon pomoću podataka za prijavljivanje na Google.\n\n Probajte ponovo za <xliff:g id="NUMBER_2">%3$d</xliff:g> sekunde(i)."</string>
     <string name="lockscreen_failed_attempts_almost_at_wipe" product="tablet" msgid="6128106399745755604">"Nepravilno ste pokušali da otključate tablet <xliff:g id="NUMBER_0">%1$d</xliff:g> puta. Nakon još neuspešnih pokušaja (<xliff:g id="NUMBER_1">%2$d</xliff:g>) tablet će biti resetovan na fabrička podešavanja i svi korisnički podaci će biti izgubljeni."</string>
     <string name="lockscreen_failed_attempts_almost_at_wipe" product="tv" msgid="950408382418270260">"Pokušali ste da otključate TV netačno <xliff:g id="NUMBER_0">%1$d</xliff:g> puta. Posle još <xliff:g id="NUMBER_1">%2$d</xliff:g> neuspešna(ih) pokušaja TV će biti resetovan na podrazumevana fabrička podešavanja i svi korisnički podaci će biti izgubljeni."</string>
     <string name="lockscreen_failed_attempts_almost_at_wipe" product="default" msgid="8603565142156826565">"Neispravno ste pokušali da otključate telefon <xliff:g id="NUMBER_0">%1$d</xliff:g> puta. Nakon još neuspešnih pokušaja (<xliff:g id="NUMBER_1">%2$d</xliff:g>) telefon će biti resetovan na fabrička podešavanja i svi korisnički podaci će biti izgubljeni."</string>
     <string name="lockscreen_failed_attempts_now_wiping" product="tablet" msgid="280873516493934365">"Neispravno ste pokušali da otključate tablet <xliff:g id="NUMBER">%d</xliff:g> puta. Tablet će sada biti vraćen na podrazumevana fabrička podešavanja."</string>
     <string name="lockscreen_failed_attempts_now_wiping" product="tv" msgid="3195755534096192191">"Pokušali ste da otključate TV netačno <xliff:g id="NUMBER">%d</xliff:g> puta. TV će sada biti resetovan na podrazumevana fabrička podešavanja."</string>
     <string name="lockscreen_failed_attempts_now_wiping" product="default" msgid="3025504721764922246">"Neispravno ste pokušali da otključate telefon <xliff:g id="NUMBER">%d</xliff:g> puta. Telefon će sada biti vraćen na podrazumevana fabrička podešavanja."</string>
-    <string name="lockscreen_too_many_failed_attempts_countdown" msgid="6251480343394389665">"Pokušajte ponovo za <xliff:g id="NUMBER">%d</xliff:g> sekunde(i)."</string>
+    <string name="lockscreen_too_many_failed_attempts_countdown" msgid="6251480343394389665">"Probajte ponovo za <xliff:g id="NUMBER">%d</xliff:g> sekunde(i)."</string>
     <string name="lockscreen_forgot_pattern_button_text" msgid="2626999449610695930">"Zaboravili ste šablon?"</string>
     <string name="lockscreen_glogin_forgot_pattern" msgid="2588521501166032747">"Otključavanje naloga"</string>
     <string name="lockscreen_glogin_too_many_attempts" msgid="2751368605287288808">"Previše pokušaja unosa šablona"</string>
@@ -1101,6 +1102,17 @@
     <skip />
     <string name="wifi_no_internet" msgid="8451173622563841546">"Wi-Fi nema pristup internetu"</string>
     <string name="wifi_no_internet_detailed" msgid="8083079241212301741">"Dodirnite za opcije"</string>
+    <string name="network_switch_metered" msgid="4671730921726992671">"Prešli ste na tip mreže <xliff:g id="NETWORK_TYPE">%1$s</xliff:g>"</string>
+    <string name="network_switch_metered_detail" msgid="5325661434777870353">"Uređaj koristi tip mreže <xliff:g id="NEW_NETWORK">%1$s</xliff:g> kada tip mreže <xliff:g id="PREVIOUS_NETWORK">%2$s</xliff:g> nema pristup internetu. Možda će se naplaćivati troškovi."</string>
+    <string name="network_switch_metered_toast" msgid="5779283181685974304">"Prešli ste sa tipa mreže <xliff:g id="PREVIOUS_NETWORK">%1$s</xliff:g> na tip mreže <xliff:g id="NEW_NETWORK">%2$s</xliff:g>"</string>
+  <string-array name="network_switch_type_name">
+    <item msgid="2952042958050315394">"mobilni podaci"</item>
+    <item msgid="75483255295529161">"Wi-Fi"</item>
+    <item msgid="6862614801537202646">"Bluetooth"</item>
+    <item msgid="5447331121797802871">"Eternet"</item>
+    <item msgid="8257233890381651999">"VPN"</item>
+  </string-array>
+    <string name="network_switch_type_name_unknown" msgid="4552612897806660656">"nepoznat tip mreže"</string>
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Nije moguće povezati sa Wi-Fi mrežom"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" ima lošu internet vezu."</string>
     <string name="wifi_connect_alert_title" msgid="8455846016001810172">"Želite li da dozvolite povezivanje?"</string>
@@ -1172,13 +1184,12 @@
     <string name="share_remote_bugreport_action" msgid="6249476773913384948">"DELI"</string>
     <string name="decline_remote_bugreport_action" msgid="6230987241608770062">"ODBIJ"</string>
     <string name="select_input_method" msgid="8547250819326693584">"Promenite tastaturu"</string>
-    <string name="show_ime" msgid="2506087537466597099">"Zadrži ga na ekranu dok je fizička tastatura aktivna"</string>
+    <string name="show_ime" msgid="2506087537466597099">"Zadrži je na ekranu dok je fizička tastatura aktivna"</string>
     <string name="hardware" msgid="194658061510127999">"Prikaži virtuelnu tastaturu"</string>
     <string name="select_keyboard_layout_notification_title" msgid="597189518763083494">"Konfigurišite fizičku tastaturu"</string>
     <string name="select_keyboard_layout_notification_message" msgid="8084622969903004900">"Dodirnite da biste izabrali jezik i raspored"</string>
     <string name="fast_scroll_alphabet" msgid="5433275485499039199">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
     <string name="fast_scroll_numeric_alphabet" msgid="4030170524595123610">" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
-    <string name="candidates_style" msgid="4333913089637062257"><u>"kandidati"</u></string>
     <string name="ext_media_checking_notification_title" msgid="5734005953288045806">"<xliff:g id="NAME">%s</xliff:g> se priprema"</string>
     <string name="ext_media_checking_notification_message" msgid="4747432538578886744">"Proverava se da li postoje greške"</string>
     <string name="ext_media_new_notification_message" msgid="7589986898808506239">"Novi uređaj <xliff:g id="NAME">%s</xliff:g> je otkriven"</string>
@@ -1257,8 +1268,9 @@
     <string name="vpn_text_long" msgid="4907843483284977618">"Povezano sa sesijom <xliff:g id="SESSION">%s</xliff:g>. Dodirnite da biste upravljali mrežom."</string>
     <string name="vpn_lockdown_connecting" msgid="6443438964440960745">"Povezivanje stalno uključenog VPN-a..."</string>
     <string name="vpn_lockdown_connected" msgid="8202679674819213931">"Stalno uključeni VPN je povezan"</string>
+    <string name="vpn_lockdown_disconnected" msgid="4532298952570796327">"Veza sa stalno uključenim VPN-om je prekinuta"</string>
     <string name="vpn_lockdown_error" msgid="6009249814034708175">"Greška stalno uključenog VPN-a"</string>
-    <string name="vpn_lockdown_config" msgid="4655589351146766608">"Dodirnite da biste konfigurisali"</string>
+    <string name="vpn_lockdown_config" msgid="5099330695245008680">"Dodirnite da biste podesili"</string>
     <string name="upload_file" msgid="2897957172366730416">"Odaberi datoteku"</string>
     <string name="no_file_chosen" msgid="6363648562170759465">"Nije izabrana nijedna datoteka"</string>
     <string name="reset" msgid="2448168080964209908">"Ponovo postavi"</string>
@@ -1343,7 +1355,7 @@
     <string name="storage_usb_drive_label" msgid="4501418548927759953">"<xliff:g id="MANUFACTURER">%s</xliff:g> USB disk"</string>
     <string name="storage_usb" msgid="3017954059538517278">"USB memorija"</string>
     <string name="extract_edit_menu_button" msgid="8940478730496610137">"Izmeni"</string>
-    <string name="data_usage_warning_title" msgid="1955638862122232342">"Upozorenje o potrošnji podataka"</string>
+    <string name="data_usage_warning_title" msgid="3620440638180218181">"Obaveštenje o potrošnji podataka"</string>
     <string name="data_usage_warning_body" msgid="6660692274311972007">"Dodirnite za potrošnju i podešavanja."</string>
     <string name="data_usage_3g_limit_title" msgid="4361523876818447683">"Nema više 2G-3G podataka"</string>
     <string name="data_usage_4g_limit_title" msgid="4609566827219442376">"Nema više 4G podataka"</string>
@@ -1409,7 +1421,7 @@
     <string name="kg_wrong_pattern" msgid="1850806070801358830">"Pogrešan šablon"</string>
     <string name="kg_wrong_password" msgid="2333281762128113157">"Pogrešna lozinka"</string>
     <string name="kg_wrong_pin" msgid="1131306510833563801">"Pogrešan PIN"</string>
-    <string name="kg_too_many_failed_attempts_countdown" msgid="6358110221603297548">"Pokušajte ponovo za <xliff:g id="NUMBER">%1$d</xliff:g> sekunde(i)."</string>
+    <string name="kg_too_many_failed_attempts_countdown" msgid="6358110221603297548">"Probajte ponovo za <xliff:g id="NUMBER">%1$d</xliff:g> sekunde(i)."</string>
     <string name="kg_pattern_instructions" msgid="398978611683075868">"Nacrtajte šablon"</string>
     <string name="kg_sim_pin_instructions" msgid="2319508550934557331">"Unesite PIN SIM kartice"</string>
     <string name="kg_pin_instructions" msgid="2377242233495111557">"Unesite PIN"</string>
@@ -1431,18 +1443,18 @@
     <string name="kg_login_invalid_input" msgid="5754664119319872197">"Nevažeće korisničko ime ili lozinka."</string>
     <string name="kg_login_account_recovery_hint" msgid="5690709132841752974">"Zaboravili ste korisničko ime ili lozinku?\nPosetite adresu "<b>"google.com/accounts/recovery"</b>"."</string>
     <string name="kg_login_checking_password" msgid="1052685197710252395">"Provera naloga…"</string>
-    <string name="kg_too_many_failed_pin_attempts_dialog_message" msgid="8276745642049502550">"Uneli ste netačni PIN <xliff:g id="NUMBER_0">%1$d</xliff:g> puta. \n\nPokušajte ponovo za <xliff:g id="NUMBER_1">%2$d</xliff:g> sekunde(i)."</string>
-    <string name="kg_too_many_failed_password_attempts_dialog_message" msgid="7813713389422226531">"Uneli ste netačnu lozinku <xliff:g id="NUMBER_0">%1$d</xliff:g> puta. \n\nPokušajte ponovo za <xliff:g id="NUMBER_1">%2$d</xliff:g> sekunde(i)."</string>
-    <string name="kg_too_many_failed_pattern_attempts_dialog_message" msgid="74089475965050805">"Nacrtali ste šablon za otključavanje netačno <xliff:g id="NUMBER_0">%1$d</xliff:g> puta. \n\nPokušajte ponovo za <xliff:g id="NUMBER_1">%2$d</xliff:g> sekunde(i)."</string>
+    <string name="kg_too_many_failed_pin_attempts_dialog_message" msgid="8276745642049502550">"Uneli ste netačni PIN <xliff:g id="NUMBER_0">%1$d</xliff:g> puta. \n\nProbajte ponovo za <xliff:g id="NUMBER_1">%2$d</xliff:g> sekunde(i)."</string>
+    <string name="kg_too_many_failed_password_attempts_dialog_message" msgid="7813713389422226531">"Uneli ste netačnu lozinku <xliff:g id="NUMBER_0">%1$d</xliff:g> puta. \n\nProbajte ponovo za <xliff:g id="NUMBER_1">%2$d</xliff:g> sekunde(i)."</string>
+    <string name="kg_too_many_failed_pattern_attempts_dialog_message" msgid="74089475965050805">"Nacrtali ste šablon za otključavanje netačno <xliff:g id="NUMBER_0">%1$d</xliff:g> puta. \n\nProbajte ponovo za <xliff:g id="NUMBER_1">%2$d</xliff:g> sekunde(i)."</string>
     <string name="kg_failed_attempts_almost_at_wipe" product="tablet" msgid="1575557200627128949">"Pokušali ste da otključate tablet netačno <xliff:g id="NUMBER_0">%1$d</xliff:g> puta. Nakon još <xliff:g id="NUMBER_1">%2$d</xliff:g> neuspešna(ih) pokušaja tablet će biti resetovan na fabrička podešavanja i svi korisnički podaci će biti izgubljeni."</string>
     <string name="kg_failed_attempts_almost_at_wipe" product="tv" msgid="5621231220154419413">"Pokušali ste da otključate TV netačno <xliff:g id="NUMBER_0">%1$d</xliff:g> puta. Posle još <xliff:g id="NUMBER_1">%2$d</xliff:g> neuspešna(ih) pokušaja TV će biti resetovan na podrazumevana fabrička podešavanja i svi korisnički podaci će biti izgubljeni."</string>
     <string name="kg_failed_attempts_almost_at_wipe" product="default" msgid="4051015943038199910">"Pokušali ste da otključate telefon netačno <xliff:g id="NUMBER_0">%1$d</xliff:g> puta. Posle još <xliff:g id="NUMBER_1">%2$d</xliff:g> neuspešna(ih) pokušaja telefon će biti resetovan na fabrička podešavanja i svi korisnički podaci će biti izgubljeni."</string>
     <string name="kg_failed_attempts_now_wiping" product="tablet" msgid="2072996269148483637">"Pokušali ste da otključate tablet netačno <xliff:g id="NUMBER">%d</xliff:g> puta. Tablet će sada biti vraćen na podrazumevana fabrička podešavanja."</string>
     <string name="kg_failed_attempts_now_wiping" product="tv" msgid="4987878286750741463">"Pokušali ste da otključate TV netačno <xliff:g id="NUMBER">%d</xliff:g> puta. TV će sada biti resetovan na podrazumevana fabrička podešavanja."</string>
     <string name="kg_failed_attempts_now_wiping" product="default" msgid="4817627474419471518">"Pokušali ste da otključate telefon netačno <xliff:g id="NUMBER">%d</xliff:g> puta. Telefon će sada biti vraćen na podrazumevana fabrička podešavanja."</string>
-    <string name="kg_failed_attempts_almost_at_login" product="tablet" msgid="3253575572118914370">"Nacrtali ste šablon za otključavanje netačno <xliff:g id="NUMBER_0">%1$d</xliff:g> puta. Posle još <xliff:g id="NUMBER_1">%2$d</xliff:g> neuspešna(ih) pokušaja, od vas će biti zatraženo da otključate tablet pomoću naloga e-pošte.\n\nPokušajte ponovo za <xliff:g id="NUMBER_2">%3$d</xliff:g> sekunde(i)."</string>
-    <string name="kg_failed_attempts_almost_at_login" product="tv" msgid="4224651132862313471">"Neispravno ste nacrtali šablon za otključavanje <xliff:g id="NUMBER_0">%1$d</xliff:g> puta. Posle još <xliff:g id="NUMBER_1">%2$d</xliff:g> neuspešna(ih) pokušaja, od vas će biti zatraženo da otključate TV pomoću naloga e-pošte.\n\n Pokušajte ponovo za <xliff:g id="NUMBER_2">%3$d</xliff:g> sek."</string>
-    <string name="kg_failed_attempts_almost_at_login" product="default" msgid="1437638152015574839">"Nacrtali ste šablon za otključavanje netačno <xliff:g id="NUMBER_0">%1$d</xliff:g> puta. Posle još <xliff:g id="NUMBER_1">%2$d</xliff:g> neuspešna(ih) pokušaja, od vas će biti zatraženo da otključate telefon pomoću naloga e-pošte.\n\nPokušajte ponovo za <xliff:g id="NUMBER_2">%3$d</xliff:g> sekunde(i)."</string>
+    <string name="kg_failed_attempts_almost_at_login" product="tablet" msgid="3253575572118914370">"Nacrtali ste šablon za otključavanje netačno <xliff:g id="NUMBER_0">%1$d</xliff:g> puta. Posle još <xliff:g id="NUMBER_1">%2$d</xliff:g> neuspešna(ih) pokušaja, od vas će biti zatraženo da otključate tablet pomoću naloga e-pošte.\n\nProbajte ponovo za <xliff:g id="NUMBER_2">%3$d</xliff:g> sekunde(i)."</string>
+    <string name="kg_failed_attempts_almost_at_login" product="tv" msgid="4224651132862313471">"Neispravno ste nacrtali šablon za otključavanje <xliff:g id="NUMBER_0">%1$d</xliff:g> puta. Posle još <xliff:g id="NUMBER_1">%2$d</xliff:g> neuspešna(ih) pokušaja, od vas će biti zatraženo da otključate TV pomoću naloga e-pošte.\n\n Probajte ponovo za <xliff:g id="NUMBER_2">%3$d</xliff:g> sek."</string>
+    <string name="kg_failed_attempts_almost_at_login" product="default" msgid="1437638152015574839">"Nacrtali ste šablon za otključavanje netačno <xliff:g id="NUMBER_0">%1$d</xliff:g> puta. Posle još <xliff:g id="NUMBER_1">%2$d</xliff:g> neuspešna(ih) pokušaja, od vas će biti zatraženo da otključate telefon pomoću naloga e-pošte.\n\nProbajte ponovo za <xliff:g id="NUMBER_2">%3$d</xliff:g> sekunde(i)."</string>
     <string name="kg_text_message_separator" product="default" msgid="4160700433287233771">" – "</string>
     <string name="kg_reordering_delete_drop_target_text" msgid="7899202978204438708">"Ukloni"</string>
     <string name="safe_media_volume_warning" product="default" msgid="2276318909314492312">"Želite da pojačate zvuk iznad preporučenog nivoa?\n\nSlušanje glasne muzike duže vreme može da vam ošteti sluh."</string>
@@ -1553,14 +1565,14 @@
     <string name="restr_pin_enter_new_pin" msgid="5959606691619959184">"Novi PIN"</string>
     <string name="restr_pin_confirm_pin" msgid="8501523829633146239">"Potvrdite novi PIN"</string>
     <string name="restr_pin_create_pin" msgid="8017600000263450337">"Napravite PIN za izmenu ograničenja"</string>
-    <string name="restr_pin_error_doesnt_match" msgid="2224214190906994548">"PIN-ovi se ne podudaraju. Pokušajte ponovo."</string>
+    <string name="restr_pin_error_doesnt_match" msgid="2224214190906994548">"PIN-ovi se ne podudaraju. Probajte ponovo."</string>
     <string name="restr_pin_error_too_short" msgid="8173982756265777792">"PIN je prekratak. Mora da sadrži najmanje 4 cifre."</string>
     <plurals name="restr_pin_countdown" formatted="false" msgid="9061246974881224688">
-      <item quantity="one">Pokušajte ponovo za <xliff:g id="COUNT">%d</xliff:g> sekundu</item>
-      <item quantity="few">Pokušajte ponovo za <xliff:g id="COUNT">%d</xliff:g> sekunde</item>
-      <item quantity="other">Pokušajte ponovo za <xliff:g id="COUNT">%d</xliff:g> sekundi</item>
+      <item quantity="one">Probajte ponovo za <xliff:g id="COUNT">%d</xliff:g> sekundu</item>
+      <item quantity="few">Probajte ponovo za <xliff:g id="COUNT">%d</xliff:g> sekunde</item>
+      <item quantity="other">Probajte ponovo za <xliff:g id="COUNT">%d</xliff:g> sekundi</item>
     </plurals>
-    <string name="restr_pin_try_later" msgid="973144472490532377">"Pokušajte ponovo kasnije"</string>
+    <string name="restr_pin_try_later" msgid="973144472490532377">"Probajte ponovo kasnije"</string>
     <string name="immersive_cling_title" msgid="8394201622932303336">"Prikazuje se ceo ekran"</string>
     <string name="immersive_cling_description" msgid="3482371193207536040">"Da biste izašli, prevucite nadole odozgo."</string>
     <string name="immersive_cling_positive" msgid="5016839404568297683">"Važi"</string>
@@ -1672,6 +1684,7 @@
     <string name="search_language_hint" msgid="7042102592055108574">"Unesite naziv jezika"</string>
     <string name="language_picker_section_suggested" msgid="8414489646861640885">"Predloženi"</string>
     <string name="language_picker_section_all" msgid="3097279199511617537">"Svi jezici"</string>
+    <string name="region_picker_section_all" msgid="8966316787153001779">"Svi regioni"</string>
     <string name="locale_search_menu" msgid="2560710726687249178">"Pretraži"</string>
     <string name="work_mode_off_title" msgid="8954725060677558855">"Režim za Work je ISKLJUČEN"</string>
     <string name="work_mode_off_message" msgid="3286169091278094476">"Dozvoljava profilu za Work da funkcioniše, uključujući aplikacije, sinhronizaciju u pozadini i srodne funkcije."</string>

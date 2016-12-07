@@ -3149,11 +3149,14 @@ public final class ActivityStackSupervisor implements DisplayListener {
         final boolean nowVisible = allResumedActivitiesVisible();
         for (int activityNdx = mStoppingActivities.size() - 1; activityNdx >= 0; --activityNdx) {
             ActivityRecord s = mStoppingActivities.get(activityNdx);
+            // TODO: Remove mWaitingVisibleActivities list and just remove activity from
+            // mStoppingActivities when something else comes up.
             boolean waitingVisible = mWaitingVisibleActivities.contains(s);
             if (DEBUG_STATES) Slog.v(TAG, "Stopping " + s + ": nowVisible=" + nowVisible
                     + " waitingVisible=" + waitingVisible + " finishing=" + s.finishing);
             if (waitingVisible && nowVisible) {
                 mWaitingVisibleActivities.remove(s);
+                waitingVisible = false;
                 if (s.finishing) {
                     // If this activity is finishing, it is sitting on top of
                     // everyone else but we now know it is no longer needed...
@@ -3162,7 +3165,6 @@ public final class ActivityStackSupervisor implements DisplayListener {
                     // hidden by the activities in front of it.
                     if (DEBUG_STATES) Slog.v(TAG, "Before stopping, can hide: " + s);
                     mWindowManager.setAppVisibility(s.appToken, false);
-                    waitingVisible = false;
                 }
             }
             if ((!waitingVisible || mService.isSleepingOrShuttingDownLocked()) && remove) {
@@ -3775,6 +3777,12 @@ public final class ActivityStackSupervisor implements DisplayListener {
 
     void activityRelaunchedLocked(IBinder token) {
         mWindowManager.notifyAppRelaunchingFinished(token);
+        if (mService.isSleepingOrShuttingDownLocked()) {
+            final ActivityRecord r = ActivityRecord.isInStackLocked(token);
+            if (r != null) {
+                r.setSleeping(true, true);
+            }
+        }
     }
 
     void activityRelaunchingLocked(ActivityRecord r) {

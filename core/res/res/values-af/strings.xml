@@ -214,6 +214,7 @@
     <string name="global_actions" product="default" msgid="2406416831541615258">"Foonopsies"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Skermslot"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Sit af"</string>
+    <string name="global_action_emergency" msgid="7112311161137421166">"Noodgeval"</string>
     <string name="global_action_bug_report" msgid="7934010578922304799">"Foutverslag"</string>
     <string name="bugreport_title" msgid="2667494803742548533">"Neem foutverslag"</string>
     <string name="bugreport_message" msgid="398447048750350456">"Dit sal inligting oor die huidige toestand van jou toestel insamel om as \'n e-posboodskap te stuur. Dit sal \'n tydjie neem vandat die foutverslag begin is totdat dit reg is om gestuur te word; wees asseblief geduldig."</string>
@@ -1076,6 +1077,17 @@
     <skip />
     <string name="wifi_no_internet" msgid="8451173622563841546">"Wi-Fi het geen internettoegang nie"</string>
     <string name="wifi_no_internet_detailed" msgid="8083079241212301741">"Tik vir opsies"</string>
+    <string name="network_switch_metered" msgid="4671730921726992671">"Het oorgeskakel na <xliff:g id="NETWORK_TYPE">%1$s</xliff:g>"</string>
+    <string name="network_switch_metered_detail" msgid="5325661434777870353">"Toestel gebruik <xliff:g id="NEW_NETWORK">%1$s</xliff:g> wanneer <xliff:g id="PREVIOUS_NETWORK">%2$s</xliff:g> geen internetverbinding het nie. Heffings kan geld."</string>
+    <string name="network_switch_metered_toast" msgid="5779283181685974304">"Het oorgeskakel van <xliff:g id="PREVIOUS_NETWORK">%1$s</xliff:g> na <xliff:g id="NEW_NETWORK">%2$s</xliff:g>"</string>
+  <string-array name="network_switch_type_name">
+    <item msgid="2952042958050315394">"sellulêre data"</item>
+    <item msgid="75483255295529161">"Wi-Fi"</item>
+    <item msgid="6862614801537202646">"Bluetooth"</item>
+    <item msgid="5447331121797802871">"Ethernet"</item>
+    <item msgid="8257233890381651999">"VPN"</item>
+  </string-array>
+    <string name="network_switch_type_name_unknown" msgid="4552612897806660656">"\'n onbekende netwerktipe"</string>
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Kon nie aan Wi-Fikoppel nie"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" het \'n swak internetverbinding."</string>
     <string name="wifi_connect_alert_title" msgid="8455846016001810172">"Laat verbinding toe?"</string>
@@ -1153,7 +1165,6 @@
     <string name="select_keyboard_layout_notification_message" msgid="8084622969903004900">"Tik om taal en uitleg te kies"</string>
     <string name="fast_scroll_alphabet" msgid="5433275485499039199">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
     <string name="fast_scroll_numeric_alphabet" msgid="4030170524595123610">" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
-    <string name="candidates_style" msgid="4333913089637062257"><u>"kandidate"</u></string>
     <string name="ext_media_checking_notification_title" msgid="5734005953288045806">"Berei tans <xliff:g id="NAME">%s</xliff:g> voor"</string>
     <string name="ext_media_checking_notification_message" msgid="4747432538578886744">"Kyk tans vir foute"</string>
     <string name="ext_media_new_notification_message" msgid="7589986898808506239">"Nuwe <xliff:g id="NAME">%s</xliff:g> bespeur"</string>
@@ -1232,8 +1243,9 @@
     <string name="vpn_text_long" msgid="4907843483284977618">"Gekoppel aan <xliff:g id="SESSION">%s</xliff:g>. Tik om die netwerk te bestuur."</string>
     <string name="vpn_lockdown_connecting" msgid="6443438964440960745">"Altydaan-VPN koppel tans..."</string>
     <string name="vpn_lockdown_connected" msgid="8202679674819213931">"Altydaan-VPN gekoppel"</string>
+    <string name="vpn_lockdown_disconnected" msgid="4532298952570796327">"Altydaan-VPN is ontkoppel"</string>
     <string name="vpn_lockdown_error" msgid="6009249814034708175">"Altydaan-VPN-fout"</string>
-    <string name="vpn_lockdown_config" msgid="4655589351146766608">"Tik om op te stel"</string>
+    <string name="vpn_lockdown_config" msgid="5099330695245008680">"Tik om op te stel"</string>
     <string name="upload_file" msgid="2897957172366730416">"Kies lêer"</string>
     <string name="no_file_chosen" msgid="6363648562170759465">"Geen lêer gekies nie"</string>
     <string name="reset" msgid="2448168080964209908">"Stel terug"</string>
@@ -1317,7 +1329,7 @@
     <string name="storage_usb_drive_label" msgid="4501418548927759953">"<xliff:g id="MANUFACTURER">%s</xliff:g>-USB-datastokkie"</string>
     <string name="storage_usb" msgid="3017954059538517278">"USB-berging"</string>
     <string name="extract_edit_menu_button" msgid="8940478730496610137">"Redigeer"</string>
-    <string name="data_usage_warning_title" msgid="1955638862122232342">"Dataverbruik-waarskuwing"</string>
+    <string name="data_usage_warning_title" msgid="3620440638180218181">"Datagebruik-opletberig"</string>
     <string name="data_usage_warning_body" msgid="6660692274311972007">"Tik om gebruik en instellings te bekyk."</string>
     <string name="data_usage_3g_limit_title" msgid="4361523876818447683">"2G-3G-datalimiet bereik"</string>
     <string name="data_usage_4g_limit_title" msgid="4609566827219442376">"4G-datalimiet bereik"</string>
@@ -1636,6 +1648,7 @@
     <string name="search_language_hint" msgid="7042102592055108574">"Voer taalnaam in"</string>
     <string name="language_picker_section_suggested" msgid="8414489646861640885">"Voorgestel"</string>
     <string name="language_picker_section_all" msgid="3097279199511617537">"Alle tale"</string>
+    <string name="region_picker_section_all" msgid="8966316787153001779">"Allle streke"</string>
     <string name="locale_search_menu" msgid="2560710726687249178">"Soek"</string>
     <string name="work_mode_off_title" msgid="8954725060677558855">"Werkmodus is AF"</string>
     <string name="work_mode_off_message" msgid="3286169091278094476">"Stel werkprofiel in staat om te werk, insluitend programme, agtergrondsinkronisering en verwante kenmerke."</string>

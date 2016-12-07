@@ -3813,9 +3813,9 @@ public class ShortcutManagerTest1 extends BaseShortcutManagerTest {
         addPackage(CALLING_PACKAGE_1, CALLING_UID_1, 10, "sig1");
         addPackage(CALLING_PACKAGE_2, CALLING_UID_1, 10, "sig1", "sig2");
 
-        final ShortcutPackageInfo spi1 = ShortcutPackageInfo.generateForInstalledPackage(
+        final ShortcutPackageInfo spi1 = ShortcutPackageInfo.generateForInstalledPackageForTest(
                 mService, CALLING_PACKAGE_1, USER_0);
-        final ShortcutPackageInfo spi2 = ShortcutPackageInfo.generateForInstalledPackage(
+        final ShortcutPackageInfo spi2 = ShortcutPackageInfo.generateForInstalledPackageForTest(
                 mService, CALLING_PACKAGE_2, USER_0);
 
         checkCanRestoreTo(true, spi1, 10, "sig1");
@@ -3945,11 +3945,11 @@ public class ShortcutManagerTest1 extends BaseShortcutManagerTest {
         mInjectedPackages.remove(CALLING_PACKAGE_1);
         mInjectedPackages.remove(CALLING_PACKAGE_3);
 
-        mService.handleUnlockUser(USER_0);
+        mService.checkPackageChanges(USER_0);
 
         assertNull(mService.getPackageShortcutForTest(CALLING_PACKAGE_1, "s1", USER_0));
         assertNotNull(mService.getPackageShortcutForTest(CALLING_PACKAGE_2, "s1", USER_0));
-        assertNull(mService.getPackageShortcutForTest(CALLING_PACKAGE_3, "s1", USER_0));
+        assertNull(mService.getPackageShortcutForTest(CALLING_PACKAGE_3, "s1", USER_0));  // ---------------
         assertNotNull(mService.getPackageShortcutForTest(CALLING_PACKAGE_1, "s1", USER_10));
         assertNull(mService.getPackageShortcutForTest(CALLING_PACKAGE_2, "s1", USER_10));
         assertNotNull(mService.getPackageShortcutForTest(CALLING_PACKAGE_3, "s1", USER_10));
@@ -3961,7 +3961,7 @@ public class ShortcutManagerTest1 extends BaseShortcutManagerTest {
         assertFalse(bitmapDirectoryExists(CALLING_PACKAGE_2, USER_10));
         assertTrue(bitmapDirectoryExists(CALLING_PACKAGE_3, USER_10));
 
-        mService.handleUnlockUser(USER_10);
+        mService.checkPackageChanges(USER_10);
 
         assertNull(mService.getPackageShortcutForTest(CALLING_PACKAGE_1, "s1", USER_0));
         assertNotNull(mService.getPackageShortcutForTest(CALLING_PACKAGE_2, "s1", USER_0));
@@ -4154,7 +4154,7 @@ public class ShortcutManagerTest1 extends BaseShortcutManagerTest {
         updatePackageVersion(CALLING_PACKAGE_1, 1);
 
         // Then send the broadcast, to only user-0.
-                mService.mPackageMonitor.onReceive(getTestContext(),
+        mService.mPackageMonitor.onReceive(getTestContext(),
                 genPackageUpdateIntent(CALLING_PACKAGE_1, USER_0));
 
         waitOnMainThread();
@@ -4186,10 +4186,13 @@ public class ShortcutManagerTest1 extends BaseShortcutManagerTest {
         mInjectedCurrentTimeMillis = START_TIME + 200;
 
         mRunningUsers.put(USER_10, true);
+        mUnlockedUsers.put(USER_10, true);
 
         reset(c0);
         reset(c10);
+        setPackageLastUpdateTime(CALLING_PACKAGE_1, mInjectedCurrentTimeMillis);
         mService.handleUnlockUser(USER_10);
+        mService.checkPackageChanges(USER_10);
 
         waitOnMainThread();
 
@@ -4221,7 +4224,7 @@ public class ShortcutManagerTest1 extends BaseShortcutManagerTest {
         // Then send the broadcast, to only user-0.
                 mService.mPackageMonitor.onReceive(getTestContext(),
                 genPackageUpdateIntent(CALLING_PACKAGE_2, USER_0));
-        mService.handleUnlockUser(USER_10);
+        mService.checkPackageChanges(USER_10);
 
         waitOnMainThread();
 
@@ -4243,9 +4246,9 @@ public class ShortcutManagerTest1 extends BaseShortcutManagerTest {
         updatePackageVersion(CALLING_PACKAGE_3, 100);
 
         // Then send the broadcast, to only user-0.
-                mService.mPackageMonitor.onReceive(getTestContext(),
+        mService.mPackageMonitor.onReceive(getTestContext(),
                 genPackageUpdateIntent(CALLING_PACKAGE_3, USER_0));
-        mService.handleUnlockUser(USER_10);
+        mService.checkPackageChanges(USER_10);
 
         waitOnMainThread();
 
@@ -4342,6 +4345,128 @@ public class ShortcutManagerTest1 extends BaseShortcutManagerTest {
             assertEquals(0, s2.getTextResId());
             assertEquals(0, s2.getDisabledMessageResourceId());
         });
+    }
+
+    public void testHandlePackageUpdate_systemAppUpdate() {
+
+        // Package1 is a system app.  Package 2 is not a system app, so it's not scanned
+        // in this test at all.
+        mSystemPackages.add(CALLING_PACKAGE_1);
+
+        // Initial state: no shortcuts.
+        mService.checkPackageChanges(USER_0);
+
+        assertEquals(mInjectedCurrentTimeMillis,
+                mService.getUserShortcutsLocked(USER_0).getLastAppScanTime());
+        assertEquals(mInjectedBuildFingerprint,
+                mService.getUserShortcutsLocked(USER_0).getLastAppScanOsFingerprint());
+
+        // They have no shortcuts.
+        runWithCaller(CALLING_PACKAGE_1, USER_0, () -> {
+            assertWith(getCallerShortcuts())
+                    .isEmpty();
+        });
+
+        runWithCaller(CALLING_PACKAGE_2, USER_0, () -> {
+            assertWith(getCallerShortcuts())
+                    .isEmpty();
+        });
+
+        // Next.
+        // Update the packages -- now they have 1 manifest shortcut.
+        // But checkPackageChanges() don't notice it, since their version code / timestamp haven't
+        // changed.
+        addManifestShortcutResource(
+                new ComponentName(CALLING_PACKAGE_1, ShortcutActivity.class.getName()),
+                R.xml.shortcut_1);
+        addManifestShortcutResource(
+                new ComponentName(CALLING_PACKAGE_2, ShortcutActivity.class.getName()),
+                R.xml.shortcut_1);
+        mInjectedCurrentTimeMillis += 1000;
+        mService.checkPackageChanges(USER_0);
+
+        runWithCaller(CALLING_PACKAGE_1, USER_0, () -> {
+            assertWith(getCallerShortcuts())
+                    .isEmpty();
+        });
+        runWithCaller(CALLING_PACKAGE_2, USER_0, () -> {
+            assertWith(getCallerShortcuts())
+                    .isEmpty();
+        });
+
+        // Next.
+        // Update the build finger print.  All system apps will be scanned now.
+        mInjectedBuildFingerprint = "update1";
+        mInjectedCurrentTimeMillis += 1000;
+        mService.checkPackageChanges(USER_0);
+
+        runWithCaller(CALLING_PACKAGE_1, USER_0, () -> {
+            assertWith(getCallerShortcuts())
+                    .haveIds("ms1");
+        });
+        runWithCaller(CALLING_PACKAGE_2, USER_0, () -> {
+            assertWith(getCallerShortcuts())
+                    .isEmpty();
+        });
+
+        // Next.
+        // Update manifest shortcuts.
+        mInjectedBuildFingerprint = "update2";
+        addManifestShortcutResource(
+                new ComponentName(CALLING_PACKAGE_1, ShortcutActivity.class.getName()),
+                R.xml.shortcut_2);
+        addManifestShortcutResource(
+                new ComponentName(CALLING_PACKAGE_2, ShortcutActivity.class.getName()),
+                R.xml.shortcut_2);
+        mInjectedCurrentTimeMillis += 1000;
+        mService.checkPackageChanges(USER_0);
+
+        // Fingerprint hasn't changed, so CALLING_PACKAGE_1 wasn't scanned.
+        runWithCaller(CALLING_PACKAGE_1, USER_0, () -> {
+            assertWith(getCallerShortcuts())
+                    .haveIds("ms1");
+        });
+        runWithCaller(CALLING_PACKAGE_2, USER_0, () -> {
+            assertWith(getCallerShortcuts())
+                    .isEmpty();
+        });
+
+        // Update the fingerprint, but CALLING_PACKAGE_1's version code hasn't changed, so
+        // still not scanned.
+        mInjectedBuildFingerprint = "update2";
+        mInjectedCurrentTimeMillis += 1000;
+        mService.checkPackageChanges(USER_0);
+
+        runWithCaller(CALLING_PACKAGE_1, USER_0, () -> {
+            assertWith(getCallerShortcuts())
+                    .haveIds("ms1");
+        });
+        runWithCaller(CALLING_PACKAGE_2, USER_0, () -> {
+            assertWith(getCallerShortcuts())
+                    .isEmpty();
+        });
+
+        // Now update the version code, so CALLING_PACKAGE_1 is scanned again.
+        mInjectedBuildFingerprint = "update3";
+        mInjectedCurrentTimeMillis += 1000;
+        updatePackageVersion(CALLING_PACKAGE_1, 1);
+        mService.checkPackageChanges(USER_0);
+
+        runWithCaller(CALLING_PACKAGE_1, USER_0, () -> {
+            assertWith(getCallerShortcuts())
+                    .haveIds("ms1", "ms2");
+        });
+        runWithCaller(CALLING_PACKAGE_2, USER_0, () -> {
+            assertWith(getCallerShortcuts())
+                    .isEmpty();
+        });
+
+        // Make sure getLastAppScanTime / getLastAppScanOsFingerprint are persisted.
+        initService();
+        assertEquals(mInjectedCurrentTimeMillis,
+                mService.getUserShortcutsLocked(USER_0).getLastAppScanTime());
+        assertEquals(mInjectedBuildFingerprint,
+                mService.getUserShortcutsLocked(USER_0).getLastAppScanOsFingerprint());
     }
 
     public void testHandlePackageChanged() {
@@ -5234,6 +5359,12 @@ public class ShortcutManagerTest1 extends BaseShortcutManagerTest {
     /**
      * It's the case with preintalled apps -- when applyRestore() is called, the system
      * apps are already installed, so manifest shortcuts need to be re-published.
+     *
+     * Also, when a restore target app is already installed, and
+     * - if it has allowBackup=true, we'll restore normally, so all existing shortcuts will be
+     * replaced. (but manifest shortcuts will be re-published anyway.)  We log a warning on
+     * logcat.
+     * - if it has allowBackup=false, we don't touch any of the existing shortcuts.
      */
     public void testBackupAndRestore_appAlreadyInstalledWhenRestored() {
         // Pre-backup.  Same as testBackupAndRestore_manifestRePublished().
@@ -5265,6 +5396,19 @@ public class ShortcutManagerTest1 extends BaseShortcutManagerTest {
         mService.mPackageMonitor.onReceive(mServiceContext,
                 genPackageAddIntent(CALLING_PACKAGE_1, USER_0));
 
+        // Set up shortcuts for package 3, which won't be backed up / restored.
+        addManifestShortcutResource(
+                new ComponentName(CALLING_PACKAGE_3, ShortcutActivity.class.getName()),
+                R.xml.shortcut_1);
+        updatePackageVersion(CALLING_PACKAGE_3, 1);
+        mService.mPackageMonitor.onReceive(mServiceContext,
+                genPackageAddIntent(CALLING_PACKAGE_3, USER_0));
+
+        runWithCaller(CALLING_PACKAGE_3, USER_0, () -> {
+            assertTrue(getManager().setDynamicShortcuts(list(
+                    makeShortcut("s1"))));
+        });
+
         // Make sure the manifest shortcuts have been published.
         runWithCaller(CALLING_PACKAGE_1, USER_0, () -> {
             assertWith(getCallerShortcuts())
@@ -5288,6 +5432,11 @@ public class ShortcutManagerTest1 extends BaseShortcutManagerTest {
                     .selectByIds("ms2")
                     .areAllNotManifest()
                     .areAllDisabled();
+        });
+
+        runWithCaller(CALLING_PACKAGE_3, USER_0, () -> {
+            assertWith(getCallerShortcuts())
+                    .haveIds("s1", "ms1");
         });
 
         // Backup and *without restarting the service, just call applyRestore()*.
@@ -5328,6 +5477,12 @@ public class ShortcutManagerTest1 extends BaseShortcutManagerTest {
                     .selectByIds("s1", "s2")
                     .areAllNotDynamic()
             ;
+        });
+
+        // Package 3 still has the same shortcuts.
+        runWithCaller(CALLING_PACKAGE_3, USER_0, () -> {
+            assertWith(getCallerShortcuts())
+                    .haveIds("s1", "ms1");
         });
     }
 
@@ -5506,6 +5661,32 @@ public class ShortcutManagerTest1 extends BaseShortcutManagerTest {
                                 buildAllQuery(CALLING_PACKAGE_1), HANDLE_USER_P0);
                     });
         });
+        // Check the user-IDs.
+        assertEquals(USER_0,
+                mService.getUserShortcutsLocked(USER_0).getPackageShortcuts(CALLING_PACKAGE_1)
+                        .getOwnerUserId());
+        assertEquals(USER_0,
+                mService.getUserShortcutsLocked(USER_0).getPackageShortcuts(CALLING_PACKAGE_1)
+                        .getPackageUserId());
+        assertEquals(USER_P0,
+                mService.getUserShortcutsLocked(USER_P0).getPackageShortcuts(CALLING_PACKAGE_1)
+                        .getOwnerUserId());
+        assertEquals(USER_P0,
+                mService.getUserShortcutsLocked(USER_P0).getPackageShortcuts(CALLING_PACKAGE_1)
+                        .getPackageUserId());
+
+        assertEquals(USER_0,
+                mService.getUserShortcutsLocked(USER_0).getLauncherShortcuts(LAUNCHER_1, USER_0)
+                        .getOwnerUserId());
+        assertEquals(USER_0,
+                mService.getUserShortcutsLocked(USER_0).getLauncherShortcuts(LAUNCHER_1, USER_0)
+                        .getPackageUserId());
+        assertEquals(USER_P0,
+                mService.getUserShortcutsLocked(USER_P0).getLauncherShortcuts(LAUNCHER_1, USER_0)
+                        .getOwnerUserId());
+        assertEquals(USER_0,
+                mService.getUserShortcutsLocked(USER_P0).getLauncherShortcuts(LAUNCHER_1, USER_0)
+                        .getPackageUserId());
     }
 
     public void testOnApplicationActive_permission() {

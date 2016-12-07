@@ -242,7 +242,7 @@
     <string name="data_usage_disabled_dialog_4g_title" msgid="1601769736881078016">"Dátové prenosy 4G sú pozastavené"</string>
     <string name="data_usage_disabled_dialog_mobile_title" msgid="4651001290947318931">"Mobilné dáta sú pozastavené"</string>
     <string name="data_usage_disabled_dialog_title" msgid="3932437232199671967">"Dáta sú pozastavené"</string>
-    <string name="data_usage_disabled_dialog" msgid="8453242888903772524">"Keďže ste dosiahli nastavený limit pre mobilné dáta, na zariadení bola pre zvyšok tohto cyklu pozastavená spotreba dát.\n\nJej opätovné spustenie môže mať za následok účtovanie poplatkov vaším operátorom."</string>
+    <string name="data_usage_disabled_dialog" msgid="1841738975235283398">"Dosiahli ste nastavený limit dát. Už nepoužívate mobilné dátové pripojenie.\n\nAk ho však obnovíte, môžu vám byť účtované poplatky za spotrebu dát."</string>
     <string name="data_usage_disabled_dialog_enable" msgid="1412395410306390593">"Znova spustiť"</string>
     <string name="status_bar_settings_signal_meter_disconnected" msgid="1940231521274147771">"Bez prip. na Internet"</string>
     <string name="status_bar_settings_signal_meter_wifi_nossid" msgid="6557486452774597820">"Wi-Fi: pripojené"</string>
@@ -410,6 +410,7 @@
     <string name="device_owned_footer" msgid="3802752663326030053">"Zariadenie môže byť sledované"</string>
     <string name="profile_owned_footer" msgid="8021888108553696069">"Profil môže byť monitorovaný"</string>
     <string name="vpn_footer" msgid="2388611096129106812">"Sieť môže byť sledovaná"</string>
+    <string name="branded_vpn_footer" msgid="2168111859226496230">"Sieť môže byť monitorovaná"</string>
     <string name="monitoring_title_device_owned" msgid="7121079311903859610">"Sledovanie zariadenia"</string>
     <string name="monitoring_title_profile_owned" msgid="6790109874733501487">"Monitorovanie profilu"</string>
     <string name="monitoring_title" msgid="169206259253048106">"Sledovanie siete"</string>
@@ -422,6 +423,7 @@
     <string name="legacy_vpn_name" msgid="6604123105765737830">"VPN"</string>
     <string name="monitoring_description_app" msgid="6259179342284742878">"Ste pripojený/-á k aplikácii <xliff:g id="APPLICATION">%1$s</xliff:g>, ktorá môže sledovať vašu aktivitu v sieti vrátane e-mailových správ, aplikácií a webových stránok."</string>
     <string name="monitoring_description_app_personal" msgid="484599052118316268">"Ste pripojený/-á k aplikácii <xliff:g id="APPLICATION">%1$s</xliff:g>, ktorá môže sledovať vašu osobnú aktivitu v sieti vrátane e-mailových správ, aplikácií a webových stránok."</string>
+    <string name="branded_monitoring_description_app_personal" msgid="2669518213949202599">"Ste pripojený/-á k aplikácii <xliff:g id="APPLICATION">%1$s</xliff:g>, ktorá môže sledovať vašu osobnú aktivitu v sieti vrátane e-mailových správ, aplikácií a webových stránok."</string>
     <string name="monitoring_description_app_work" msgid="1754325860918060897">"Váš pracovný profil spravuje organizácia <xliff:g id="ORGANIZATION">%1$s</xliff:g>. Je pripojený k aplikácii <xliff:g id="APPLICATION">%2$s</xliff:g>, ktorá môže sledovať vašu pracovnú aktivitu v sieti vrátane e-mailových správ, aplikácií a webových stránok.\n\nĎalšie informácie získate od svojho správcu."</string>
     <string name="monitoring_description_app_personal_work" msgid="4946600443852045903">"Váš pracovný profil spravuje organizácia <xliff:g id="ORGANIZATION">%1$s</xliff:g>. Je pripojený k aplikácii <xliff:g id="APPLICATION_WORK">%2$s</xliff:g>, ktorá môže sledovať vašu pracovnú aktivitu v sieti vrátane e-mailových správ, aplikácií a webových stránok.\n\nSte tiež pripojený/-á k aplikácii <xliff:g id="APPLICATION_PERSONAL">%3$s</xliff:g>, ktorá môže sledovať vašu osobnú aktivitu v sieti."</string>
     <string name="monitoring_description_vpn_app_device_owned" msgid="4970443827043261703">"Vaše zariadenie spravuje organizácia <xliff:g id="ORGANIZATION">%1$s</xliff:g>.\n\nSprávca môže sledovať a spravovať nastavenia, podnikový prístup, aplikácie a údaje priradené k vášmu účtu, ako aj informácie o polohe zariadenia.\n\nSte pripojený/-á k aplikácii <xliff:g id="APPLICATION">%2$s</xliff:g>, ktorá môže sledovať vašu aktivitu v sieti vrátane e-mailových správ, aplikácii a webových stránok.\n\nĎalšie informácie získate od svojho správcu."</string>
@@ -498,8 +500,6 @@
     <string name="clock_seconds_desc" msgid="6282693067130470675">"Zobrazí sekundy v stavovom riadku. Môže to ovplyvňovať výdrž batérie."</string>
     <string name="qs_rearrange" msgid="8060918697551068765">"Zmeniť usporiadanie Rýchlych nastavení"</string>
     <string name="show_brightness" msgid="6613930842805942519">"Zobraziť jas v Rýchlych nastaveniach"</string>
-    <string name="overview_nav_bar_gesture" msgid="8579814204727917764">"Aktivovať rozdelenú obrazovku prejdením prstom"</string>
-    <string name="overview_nav_bar_gesture_desc" msgid="6329167382305102615">"Umožňuje aktivovať rozdelenú obrazovku prejdením prstom nahor od tlačidla Prehľad"</string>
     <string name="experimental" msgid="6198182315536726162">"Experimentálne"</string>
     <string name="enable_bluetooth_title" msgid="5027037706500635269">"Zapnúť Bluetooth?"</string>
     <string name="enable_bluetooth_message" msgid="9106595990708985385">"Ak chcete klávesnicu pripojiť k tabletu, najprv musíte zapnúť Bluetooth."</string>
@@ -571,7 +571,7 @@
     <string name="keyboard_shortcut_group_applications_browser" msgid="6465985474000766533">"Prehliadač"</string>
     <string name="keyboard_shortcut_group_applications_contacts" msgid="2064197111278436375">"Kontakty"</string>
     <string name="keyboard_shortcut_group_applications_email" msgid="6257036897441939004">"E-mail"</string>
-    <string name="keyboard_shortcut_group_applications_im" msgid="1892749399083161405">"Okamžité správy"</string>
+    <string name="keyboard_shortcut_group_applications_im" msgid="1892749399083161405">"Čet"</string>
     <string name="keyboard_shortcut_group_applications_music" msgid="4775559515850922780">"Hudba"</string>
     <string name="keyboard_shortcut_group_applications_youtube" msgid="6555453761294723317">"YouTube"</string>
     <string name="keyboard_shortcut_group_applications_calendar" msgid="9043614299194991263">"Kalendár"</string>
@@ -657,4 +657,5 @@
     <string name="accessibility_quick_settings_open_settings" msgid="7806613775728380737">"Otvoriť nastavenia <xliff:g id="ID_1">%s</xliff:g>"</string>
     <string name="accessibility_quick_settings_edit" msgid="7839992848995240393">"Upraviť poradie nastavení"</string>
     <string name="accessibility_quick_settings_page" msgid="5032979051755200721">"Strana <xliff:g id="ID_1">%1$d</xliff:g> z <xliff:g id="ID_2">%2$d</xliff:g>"</string>
+    <string name="cant_silence_or_block" msgid="999689262131488625">"Upozornenia nie je možné stlmiť ani blokovať"</string>
 </resources>

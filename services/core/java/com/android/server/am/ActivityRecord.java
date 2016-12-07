@@ -17,6 +17,7 @@
 package com.android.server.am;
 
 import static android.app.ActivityManager.StackId;
+import static android.app.ActivityManager.StackId.DOCKED_STACK_ID;
 import static android.app.ActivityManager.StackId.FREEFORM_WORKSPACE_STACK_ID;
 import static android.app.ActivityManager.StackId.PINNED_STACK_ID;
 import static android.content.pm.ActivityInfo.RESIZE_MODE_CROP_WINDOWS;
@@ -946,21 +947,25 @@ final class ActivityRecord {
         // The activity now gets access to the data associated with this Intent.
         service.grantUriPermissionFromIntentLocked(callingUid, packageName,
                 intent, getUriPermissionsLocked(), userId);
-        // We want to immediately deliver the intent to the activity if
-        // it is currently the top resumed activity...  however, if the
-        // device is sleeping, then all activities are stopped, so in that
-        // case we will deliver it if this is the current top activity on its
-        // stack.
         final ReferrerIntent rintent = new ReferrerIntent(intent, referrer);
         boolean unsent = true;
-        if ((state == ActivityState.RESUMED
-                || (service.isSleepingLocked() && task.stack != null
-                    && task.stack.topRunningActivityLocked() == this))
-                && app != null && app.thread != null) {
+        final ActivityStack stack = task.stack;
+        final boolean isTopActivityInStack =
+                stack != null && stack.topRunningActivityLocked() == this;
+        final boolean isTopActivityWhileSleeping =
+                service.isSleepingLocked() && isTopActivityInStack;
+
+        // We want to immediately deliver the intent to the activity if:
+        // - It is currently resumed or paused. i.e. it is currently visible to the user and we want
+        //   the user to see the visual effects caused by the intent delivery now.
+        // - The device is sleeping and it is the top activity behind the lock screen (b/6700897).
+        if ((state == ActivityState.RESUMED || state == ActivityState.PAUSED
+                || isTopActivityWhileSleeping) && app != null && app.thread != null) {
             try {
                 ArrayList<ReferrerIntent> ar = new ArrayList<>(1);
                 ar.add(rintent);
-                app.thread.scheduleNewIntent(ar, appToken);
+                app.thread.scheduleNewIntent(
+                        ar, appToken, state == ActivityState.PAUSED /* andPause */);
                 unsent = false;
             } catch (RemoteException e) {
                 Slog.w(TAG, "Exception thrown sending new intent to " + this, e);
@@ -1309,8 +1314,12 @@ final class ActivityRecord {
                 state == ActivityState.RESUMED;
     }
 
-    public void setSleeping(boolean _sleeping) {
-        if (sleeping == _sleeping) {
+    void setSleeping(boolean _sleeping) {
+        setSleeping(_sleeping, false);
+    }
+
+    void setSleeping(boolean _sleeping, boolean force) {
+        if (!force && sleeping == _sleeping) {
             return;
         }
         if (app != null && app.thread != null) {

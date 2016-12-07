@@ -35,6 +35,8 @@ import android.util.Log;
 
 import com.android.systemui.R;
 
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
@@ -109,6 +111,7 @@ public class FlashlightController {
     public void setFlashlight(boolean enabled) {
         boolean pendingError = false;
         synchronized (this) {
+            if (mCameraId == null) return;
             if (mFlashlightEnabled != enabled) {
                 mFlashlightEnabled = enabled;
                 try {
@@ -315,6 +318,17 @@ public class FlashlightController {
             }
         }
     };
+
+    public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
+        pw.println("FlashlightController state:");
+
+        pw.print("  mCameraId=");
+        pw.println(mCameraId);
+        pw.print("  mFlashlightEnabled=");
+        pw.println(mFlashlightEnabled);
+        pw.print("  mTorchAvailable=");
+        pw.println(mTorchAvailable);
+    }
 
     public interface FlashlightListener {
 

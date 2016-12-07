@@ -238,7 +238,7 @@
     <string name="data_usage_disabled_dialog_4g_title" msgid="1601769736881078016">"หยุดการใช้ข้อมูล 4G ชั่วคราวแล้ว"</string>
     <string name="data_usage_disabled_dialog_mobile_title" msgid="4651001290947318931">"หยุดการใช้ข้อมูลมือถือชั่วคราวแล้ว"</string>
     <string name="data_usage_disabled_dialog_title" msgid="3932437232199671967">"หยุดการใช้ข้อมูลชั่วคราวแล้ว"</string>
-    <string name="data_usage_disabled_dialog" msgid="8453242888903772524">"เนื่องจากใช้งานข้อมูลถึงขีดจำกัดที่กำหนดไว้แล้ว อุปกรณ์จึงหยุดการใช้งานข้อมูลไว้ชั่วคราวตลอดระยะเวลาที่เหลือของรอบนี้\n\nการทำให้กลับมาทำงานอีกครั้งอาจทำให้เกิดค่าใช้จ่ายจากผู้ให้บริการ"</string>
+    <string name="data_usage_disabled_dialog" msgid="1841738975235283398">"คุณใช้อินเทอร์เน็ตเกินปริมาณที่กำหนดไว้ ระบบจะไม่ใช้เครือข่ายมือถือต่อไป\n\nหากใช้ต่อ อาจมีค่าบริการตามปริมาณการใช้อินเทอร์เน็ต"</string>
     <string name="data_usage_disabled_dialog_enable" msgid="1412395410306390593">"ทำต่อ"</string>
     <string name="status_bar_settings_signal_meter_disconnected" msgid="1940231521274147771">"ไม่มีอินเทอร์เน็ต"</string>
     <string name="status_bar_settings_signal_meter_wifi_nossid" msgid="6557486452774597820">"เชื่อมต่อ WiFi แล้ว"</string>
@@ -404,6 +404,7 @@
     <string name="device_owned_footer" msgid="3802752663326030053">"อาจมีการตรวจสอบอุปกรณ์"</string>
     <string name="profile_owned_footer" msgid="8021888108553696069">"อาจมีการตรวจสอบโปรไฟล์"</string>
     <string name="vpn_footer" msgid="2388611096129106812">"เครือข่ายอาจได้รับการตรวจสอบ"</string>
+    <string name="branded_vpn_footer" msgid="2168111859226496230">"เครือข่ายอาจถูกตรวจสอบ"</string>
     <string name="monitoring_title_device_owned" msgid="7121079311903859610">"การตรวจสอบอุปกรณ์"</string>
     <string name="monitoring_title_profile_owned" msgid="6790109874733501487">"การตรวจสอบโปรไฟล์"</string>
     <string name="monitoring_title" msgid="169206259253048106">"การตรวจสอบเครือข่าย"</string>
@@ -416,6 +417,7 @@
     <string name="legacy_vpn_name" msgid="6604123105765737830">"VPN"</string>
     <string name="monitoring_description_app" msgid="6259179342284742878">"คุณเชื่อมต่อกับ <xliff:g id="APPLICATION">%1$s</xliff:g> ซึ่งสามารถตรวจสอบกิจกรรมในเครือข่ายของคุณ รวมถึงอีเมล แอป และเว็บไซต์ได้"</string>
     <string name="monitoring_description_app_personal" msgid="484599052118316268">"คุณเชื่อมต่อกับ <xliff:g id="APPLICATION">%1$s</xliff:g> ซึ่งสามารถตรวจสอบกิจกรรมในเครือข่ายส่วนตัวของคุณ รวมถึงอีเมล แอป และเว็บไซต์ได้"</string>
+    <string name="branded_monitoring_description_app_personal" msgid="2669518213949202599">"คุณเชื่อมต่อกับ <xliff:g id="APPLICATION">%1$s</xliff:g> ซึ่งสามารถตรวจสอบกิจกรรมในเครือข่ายส่วนตัวของคุณ รวมถึงอีเมล แอป และเว็บไซต์ได้"</string>
     <string name="monitoring_description_app_work" msgid="1754325860918060897">"โปรไฟล์งานได้รับการจัดการโดย <xliff:g id="ORGANIZATION">%1$s</xliff:g> โดยมีการเชื่อมต่อกับ <xliff:g id="APPLICATION">%2$s</xliff:g> ซึ่งสามารถตรวจสอบกิจกรรมในเครือข่าย รวมถึงอีเมล แอป และเว็บไซต์ได้\n\nสำหรับข้อมูลเพิ่มเติม โปรดติดต่อผู้ดูแลระบบ"</string>
     <string name="monitoring_description_app_personal_work" msgid="4946600443852045903">"โปรไฟล์งานได้รับการจัดการโดย <xliff:g id="ORGANIZATION">%1$s</xliff:g> โดยมีการเชื่อมต่อกับ <xliff:g id="APPLICATION_WORK">%2$s</xliff:g> ซึ่งสามารถตรวจสอบกิจกรรมในเครือข่าย รวมถึงอีเมล แอป และเว็บไซต์ได้\n\nนอกจากนี้ คุณยังเชื่อมต่อกับ <xliff:g id="APPLICATION_PERSONAL">%3$s</xliff:g> ซึ่งสามารถตรวจสอบกิจกรรมในเครือข่ายส่วนตัวได้"</string>
     <string name="monitoring_description_vpn_app_device_owned" msgid="4970443827043261703">"อุปกรณ์ได้รับการจัดการโดย <xliff:g id="ORGANIZATION">%1$s</xliff:g>\n\nผู้ดูและรบบของคุณสามารถตรวจสอบและจัดการการตั้งค่า การเข้าถึงของบริษัท แอป ข้อมูลที่เชื่อมโยงกับอุปกรณ์ และข้อมูลตำแหน่งของอุปกรณ์ได้\n\nคุณมีการเชื่อมต่อกับ <xliff:g id="APPLICATION">%2$s</xliff:g> ซึ่งสามารถตรวจสอบกิจกรรมในเครือข่ายรวมถึงอีเมล แอป และเว็บไซต์ได้\n\nสำหรับข้อมูลเพิ่มเติม โปรดติดต่อผู้ดูแลระบบ"</string>
@@ -492,8 +494,6 @@
     <string name="clock_seconds_desc" msgid="6282693067130470675">"แสดงวินาทีของนาฬิกาในแถบสถานะ อาจส่งผลต่ออายุแบตเตอรี"</string>
     <string name="qs_rearrange" msgid="8060918697551068765">"จัดเรียงการตั้งค่าด่วนใหม่"</string>
     <string name="show_brightness" msgid="6613930842805942519">"แสดงความสว่างในการตั้งค่าด่วน"</string>
-    <string name="overview_nav_bar_gesture" msgid="8579814204727917764">"เปิดใช้ท่าทางสัมผัสการเลื่อนขึ้นเพื่อแยกหน้าจอ"</string>
-    <string name="overview_nav_bar_gesture_desc" msgid="6329167382305102615">"เปิดใช้ท่าทางสัมผัสเพื่อเข้าสู่โหมดแยกหน้าจอโดยเลื่อนขึ้นจากปุ่มภาพรวม"</string>
     <string name="experimental" msgid="6198182315536726162">"ทดสอบ"</string>
     <string name="enable_bluetooth_title" msgid="5027037706500635269">"เปิดบลูทูธไหม"</string>
     <string name="enable_bluetooth_message" msgid="9106595990708985385">"หากต้องการเชื่อมต่อแป้นพิมพ์กับแท็บเล็ต คุณต้องเปิดบลูทูธก่อน"</string>
@@ -651,4 +651,5 @@
     <string name="accessibility_quick_settings_open_settings" msgid="7806613775728380737">"เปิดการตั้งค่า <xliff:g id="ID_1">%s</xliff:g>"</string>
     <string name="accessibility_quick_settings_edit" msgid="7839992848995240393">"แก้ไขลำดับการตั้งค่า"</string>
     <string name="accessibility_quick_settings_page" msgid="5032979051755200721">"หน้า <xliff:g id="ID_1">%1$d</xliff:g> จาก <xliff:g id="ID_2">%2$d</xliff:g>"</string>
+    <string name="cant_silence_or_block" msgid="999689262131488625">"ไม่สามารถปิดเสียงหรือบล็อกการแจ้งเตือน"</string>
 </resources>

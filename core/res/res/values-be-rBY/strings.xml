@@ -218,6 +218,7 @@
     <string name="global_actions" product="default" msgid="2406416831541615258">"Параметры тэлефона"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Блакіроўка экрана"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Выключыць"</string>
+    <string name="global_action_emergency" msgid="7112311161137421166">"SOS-выклік"</string>
     <string name="global_action_bug_report" msgid="7934010578922304799">"Справаздача пра памылкі"</string>
     <string name="bugreport_title" msgid="2667494803742548533">"Справаздача пра памылку"</string>
     <string name="bugreport_message" msgid="398447048750350456">"Будзе збiрацца iнфармацыя пра бягучы стан прылады, якая будзе адпраўляцца на электронную пошту. Стварэнне справаздачы пра памылкi зойме некаторы час."</string>
@@ -1126,6 +1127,17 @@
     <skip />
     <string name="wifi_no_internet" msgid="8451173622563841546">"У Wi-Fi няма доступу да Інтэрнэту"</string>
     <string name="wifi_no_internet_detailed" msgid="8083079241212301741">"Дакраніцеся, каб убачыць параметры"</string>
+    <string name="network_switch_metered" msgid="4671730921726992671">"Выкананы пераход да <xliff:g id="NETWORK_TYPE">%1$s</xliff:g>"</string>
+    <string name="network_switch_metered_detail" msgid="5325661434777870353">"Прылада выкарыстоўвае <xliff:g id="NEW_NETWORK">%1$s</xliff:g>, калі ў <xliff:g id="PREVIOUS_NETWORK">%2$s</xliff:g> няма доступу да інтэрнэту. Можа спаганяцца дадатковая плата."</string>
+    <string name="network_switch_metered_toast" msgid="5779283181685974304">"Выкананы пераход з <xliff:g id="PREVIOUS_NETWORK">%1$s</xliff:g> да <xliff:g id="NEW_NETWORK">%2$s</xliff:g>"</string>
+  <string-array name="network_switch_type_name">
+    <item msgid="2952042958050315394">"сотавая перадача даных"</item>
+    <item msgid="75483255295529161">"Wi-Fi"</item>
+    <item msgid="6862614801537202646">"Bluetooth"</item>
+    <item msgid="5447331121797802871">"Ethernet"</item>
+    <item msgid="8257233890381651999">"VPN"</item>
+  </string-array>
+    <string name="network_switch_type_name_unknown" msgid="4552612897806660656">"невядомы тып сеткі"</string>
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Немагчыма падключыцца да Wi-Fi"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" дрэннае падключэнне да Інтэрнэту."</string>
     <string name="wifi_connect_alert_title" msgid="8455846016001810172">"Дазволіць падключэнне?"</string>
@@ -1203,7 +1215,6 @@
     <string name="select_keyboard_layout_notification_message" msgid="8084622969903004900">"Дакраніцеся, каб выбраць мову і раскладку"</string>
     <string name="fast_scroll_alphabet" msgid="5433275485499039199">" АБВГДЕЁЖЗІЙКЛМНОПРСТУЎФХЦЧШ\'ЫЬЭЮЯ"</string>
     <string name="fast_scroll_numeric_alphabet" msgid="4030170524595123610">" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
-    <string name="candidates_style" msgid="4333913089637062257"><u>"кандыдат."</u></string>
     <string name="ext_media_checking_notification_title" msgid="5734005953288045806">"Падрыхтоўка <xliff:g id="NAME">%s</xliff:g>"</string>
     <string name="ext_media_checking_notification_message" msgid="4747432538578886744">"Праверка на наяўнасць памылак"</string>
     <string name="ext_media_new_notification_message" msgid="7589986898808506239">"Выяўлены новы носьбіт <xliff:g id="NAME">%s</xliff:g>"</string>
@@ -1282,8 +1293,9 @@
     <string name="vpn_text_long" msgid="4907843483284977618">"Падлучаны да <xliff:g id="SESSION">%s</xliff:g>. Націсніце, каб кiраваць сеткай."</string>
     <string name="vpn_lockdown_connecting" msgid="6443438964440960745">"Падключэнне заўсёды ўключанага VPN..."</string>
     <string name="vpn_lockdown_connected" msgid="8202679674819213931">"Заўсёды ўключаны i падключаны VPN"</string>
+    <string name="vpn_lockdown_disconnected" msgid="4532298952570796327">"Заўсёды ўключаны VPN адключаны"</string>
     <string name="vpn_lockdown_error" msgid="6009249814034708175">"Памылка заўсёды ўключанага VPN"</string>
-    <string name="vpn_lockdown_config" msgid="4655589351146766608">"Дакраніцеся, каб сканфігураваць"</string>
+    <string name="vpn_lockdown_config" msgid="5099330695245008680">"Дакраніцеся, каб наладзіць"</string>
     <string name="upload_file" msgid="2897957172366730416">"Выберыце файл"</string>
     <string name="no_file_chosen" msgid="6363648562170759465">"Файл не выбраны"</string>
     <string name="reset" msgid="2448168080964209908">"Скінуць"</string>
@@ -1369,7 +1381,7 @@
     <string name="storage_usb_drive_label" msgid="4501418548927759953">"USB-дыск <xliff:g id="MANUFACTURER">%s</xliff:g>"</string>
     <string name="storage_usb" msgid="3017954059538517278">"USB-назапашвальнік"</string>
     <string name="extract_edit_menu_button" msgid="8940478730496610137">"Рэдагаваць"</string>
-    <string name="data_usage_warning_title" msgid="1955638862122232342">"Папярэджанне выкарыстання дадзеных"</string>
+    <string name="data_usage_warning_title" msgid="3620440638180218181">"Абвестка аб выкарыстанні трафіка"</string>
     <string name="data_usage_warning_body" msgid="6660692274311972007">"Прагляд выкарыстання і налад."</string>
     <string name="data_usage_3g_limit_title" msgid="4361523876818447683">"Дасягнуты ліміт трафіку 2G-3G"</string>
     <string name="data_usage_4g_limit_title" msgid="4609566827219442376">"Дасягнуты ліміт трафіку 4G"</string>
@@ -1708,6 +1720,7 @@
     <string name="search_language_hint" msgid="7042102592055108574">"Увядзіце назву мовы"</string>
     <string name="language_picker_section_suggested" msgid="8414489646861640885">"Прапанаваныя"</string>
     <string name="language_picker_section_all" msgid="3097279199511617537">"Усе мовы"</string>
+    <string name="region_picker_section_all" msgid="8966316787153001779">"Усе рэгіёны"</string>
     <string name="locale_search_menu" msgid="2560710726687249178">"Шукаць"</string>
     <string name="work_mode_off_title" msgid="8954725060677558855">"Рэжым працы АДКЛЮЧАНЫ"</string>
     <string name="work_mode_off_message" msgid="3286169091278094476">"Дазволіць функцыянаванне працоўнага профілю, у тым ліку праграм, фонавай сінхранізацыі і звязаных з імі функцый."</string>

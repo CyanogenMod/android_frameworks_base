@@ -1402,6 +1402,9 @@ public final class DisplayManagerService extends SystemService {
                 throw new IllegalArgumentException("width, height, and densityDpi must be "
                         + "greater than 0");
             }
+            if (surface != null && surface.isSingleBuffered()) {
+                throw new IllegalArgumentException("Surface can't be single-buffered");
+            }
 
             if ((flags & DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC) != 0) {
                 flags |= DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR;
@@ -1460,6 +1463,9 @@ public final class DisplayManagerService extends SystemService {
 
         @Override // Binder call
         public void setVirtualDisplaySurface(IVirtualDisplayCallback callback, Surface surface) {
+            if (surface != null && surface.isSingleBuffered()) {
+                throw new IllegalArgumentException("Surface can't be single-buffered");
+            }
             final long token = Binder.clearCallingIdentity();
             try {
                 setVirtualDisplaySurfaceInternal(callback.asBinder(), surface);

@@ -64,8 +64,10 @@
     <string name="wifi_disabled_password_failure">Authentication problem</string>
     <!-- Summary for the remembered network but currently not in range. -->
     <string name="wifi_not_in_range">Not in range</string>
+    <!-- Summary for the network but no internet connection was detected. -->
+    <string name="wifi_no_internet_no_reconnect">No Internet Access Detected, won\'t automatically reconnect.</string>
     <!-- Summary for the remembered network but no internet connection was detected. -->
-    <string name="wifi_no_internet">No Internet Access Detected, won\'t automatically reconnect.</string>
+    <string name="wifi_no_internet">No Internet Access.</string>
     <!-- Summary for saved networks -->
     <string name="saved_network">Saved by <xliff:g id="name">%1$s</xliff:g></string>
 
@@ -586,11 +588,6 @@
     <!-- UI debug setting: force right to left layout summary [CHAR LIMIT=100] -->
     <string name="force_rtl_layout_all_locales_summary">Force screen layout direction to RTL for all locales</string>
 
-    <!-- UI debug setting: show how CPU is being used? [CHAR LIMIT=25] -->
-    <string name="show_cpu_usage">Show CPU usage</string>
-    <!-- UI debug setting: show cpu usage summary [CHAR LIMIT=50] -->
-    <string name="show_cpu_usage_summary">Screen overlay showing current CPU usage</string>
-
     <!-- UI debug setting: force hardware acceleration to render apps [CHAR LIMIT=25] -->
     <string name="force_hw_ui">Force GPU rendering</string>
     <!-- UI debug setting: force hardware acceleration summary [CHAR LIMIT=50] -->
@@ -868,5 +865,8 @@
     <string name="screen_zoom_summary_custom">Custom (<xliff:g id="densityDpi" example="160">%d</xliff:g>)</string>
     <!-- Label for Help and feedback menu item -->
     <string name="help_feedback_label">Help &amp; feedback</string>
+
+    <!-- Content description for drawer menu button [CHAR_LIMIT=30]-->
+    <string name="content_description_menu_button">Menu</string>
 
 </resources>

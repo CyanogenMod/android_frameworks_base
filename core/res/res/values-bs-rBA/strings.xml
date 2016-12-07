@@ -216,6 +216,7 @@
     <string name="global_actions" product="default" msgid="2406416831541615258">"Opcije telefona"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Zaključavanje ekrana"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Isključi telefon"</string>
+    <string name="global_action_emergency" msgid="7112311161137421166">"Hitni slučaj"</string>
     <string name="global_action_bug_report" msgid="7934010578922304799">"Izvještaj o greškama"</string>
     <string name="bugreport_title" msgid="2667494803742548533">"Kreirajte izvještaj o greškama"</string>
     <string name="bugreport_message" msgid="398447048750350456">"Ovim će se prikupljati informacije o trenutnom stanju uređaja, koji će biti poslani kao poruka e-pošte. Može malo potrajati dok se izvještaj o greškama ne kreira i bude spreman za slanje. Budite strpljivi."</string>
@@ -1103,6 +1104,17 @@
     <skip />
     <string name="wifi_no_internet" msgid="8451173622563841546">"Wi-Fi nema pristup Internetu"</string>
     <string name="wifi_no_internet_detailed" msgid="8083079241212301741">"Dodirnite za opcije"</string>
+    <string name="network_switch_metered" msgid="4671730921726992671">"Prebačeno na: <xliff:g id="NETWORK_TYPE">%1$s</xliff:g>"</string>
+    <string name="network_switch_metered_detail" msgid="5325661434777870353">"Kada na uređaju <xliff:g id="PREVIOUS_NETWORK">%2$s</xliff:g> nema pristup internetu, koristi se <xliff:g id="NEW_NETWORK">%1$s</xliff:g>. Moguća je naplata usluge."</string>
+    <string name="network_switch_metered_toast" msgid="5779283181685974304">"Prebačeno iz mreže <xliff:g id="PREVIOUS_NETWORK">%1$s</xliff:g> u <xliff:g id="NEW_NETWORK">%2$s</xliff:g> mrežu"</string>
+  <string-array name="network_switch_type_name">
+    <item msgid="2952042958050315394">"mobilni podaci"</item>
+    <item msgid="75483255295529161">"Wi-Fi"</item>
+    <item msgid="6862614801537202646">"Bluetooth"</item>
+    <item msgid="5447331121797802871">"Ethernet"</item>
+    <item msgid="8257233890381651999">"VPN"</item>
+  </string-array>
+    <string name="network_switch_type_name_unknown" msgid="4552612897806660656">"nepoznata vrsta mreže"</string>
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Problem prilikom spajanja na Wi-Fi mrežu"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" ima lošu internet vezu."</string>
     <string name="wifi_connect_alert_title" msgid="8455846016001810172">"Želite li dozvoliti povezivanje?"</string>
@@ -1180,7 +1192,6 @@
     <string name="select_keyboard_layout_notification_message" msgid="8084622969903004900">"Dodirnite za odabir jezika i rasporeda"</string>
     <string name="fast_scroll_alphabet" msgid="5433275485499039199">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
     <string name="fast_scroll_numeric_alphabet" msgid="4030170524595123610">" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
-    <string name="candidates_style" msgid="4333913089637062257"><u>"kandidati"</u></string>
     <string name="ext_media_checking_notification_title" msgid="5734005953288045806">"Priprema se <xliff:g id="NAME">%s</xliff:g>"</string>
     <string name="ext_media_checking_notification_message" msgid="4747432538578886744">"Provjera grešaka"</string>
     <string name="ext_media_new_notification_message" msgid="7589986898808506239">"Novi uređaj <xliff:g id="NAME">%s</xliff:g> je otkriven"</string>
@@ -1259,8 +1270,9 @@
     <string name="vpn_text_long" msgid="4907843483284977618">"Povezano sa sesijom <xliff:g id="SESSION">%s</xliff:g>. Dodirnite da upravljate mrežom."</string>
     <string name="vpn_lockdown_connecting" msgid="6443438964440960745">"Povezivanje na uvijek aktivni VPN…"</string>
     <string name="vpn_lockdown_connected" msgid="8202679674819213931">"Povezan na uvijek aktivni VPN"</string>
+    <string name="vpn_lockdown_disconnected" msgid="4532298952570796327">"Uvijek aktivni VPN nije povezan"</string>
     <string name="vpn_lockdown_error" msgid="6009249814034708175">"Greška u povezivanju na uvijek aktivni VPN"</string>
-    <string name="vpn_lockdown_config" msgid="4655589351146766608">"Dodirnite za konfiguriranje"</string>
+    <string name="vpn_lockdown_config" msgid="5099330695245008680">"Dodirnite za postavke"</string>
     <string name="upload_file" msgid="2897957172366730416">"Odabir fajla"</string>
     <string name="no_file_chosen" msgid="6363648562170759465">"Nije izabran nijedan fajl"</string>
     <string name="reset" msgid="2448168080964209908">"Ponovno pokretanje"</string>
@@ -1345,7 +1357,7 @@
     <string name="storage_usb_drive_label" msgid="4501418548927759953">"<xliff:g id="MANUFACTURER">%s</xliff:g> USB disk"</string>
     <string name="storage_usb" msgid="3017954059538517278">"USB pohrana"</string>
     <string name="extract_edit_menu_button" msgid="8940478730496610137">"Uredi"</string>
-    <string name="data_usage_warning_title" msgid="1955638862122232342">"Upozorenje za prijenos podataka"</string>
+    <string name="data_usage_warning_title" msgid="3620440638180218181">"Upozorenje o prijenosu podataka"</string>
     <string name="data_usage_warning_body" msgid="6660692274311972007">"Dodirnite za prikaz upotrebe i postavki."</string>
     <string name="data_usage_3g_limit_title" msgid="4361523876818447683">"Dostignut limit za 2G-3G podatke"</string>
     <string name="data_usage_4g_limit_title" msgid="4609566827219442376">"Dostignut limit za 4G podatke"</string>
@@ -1586,7 +1598,7 @@
     <string name="package_updated_device_owner" msgid="8856631322440187071">"Ažurirao administrator"</string>
     <string name="package_deleted_device_owner" msgid="7650577387493101353">"Izbrisao administrator"</string>
     <string name="battery_saver_description" msgid="1960431123816253034">"Da bi se trajanje baterije produžilo, opcija za štednju baterije minimizira rad uređaja i ograničava vibriranje, usluge lokacije i većinu prijenosa podataka u pozadini. E-pošta, poruke i druge aplikacije koje se oslanjaju na sinhronizaciju ne mogu biti ažurirane dok ih ne otvorite.\n\nŠtednja baterije se automatski isključi prilikom punjenja uređaja."</string>
-    <string name="data_saver_description" msgid="6015391409098303235">"Da bi se smanjilo korištenje podataka, usluga Ušteda podataka sprečava da neke aplikacije šalju ili primaju podatke u pozadini. Aplikacija koju trenutno koristite može pristupiti podacima, ali se to može desiti rjeđe. To može značiti, naprimjer, da se slike ne prikazuju sve dok ih ne dodirnete."</string>
+    <string name="data_saver_description" msgid="6015391409098303235">"Da bi se smanjio prijenos podataka, usluga Ušteda podataka sprečava da neke aplikacije šalju ili primaju podatke u pozadini. Aplikacija koju trenutno koristite može pristupiti podacima, ali se to može desiti rjeđe. To može značiti, naprimjer, da se slike ne prikazuju sve dok ih ne dodirnete."</string>
     <string name="data_saver_enable_title" msgid="4674073932722787417">"Uključiti Uštedu podataka?"</string>
     <string name="data_saver_enable_button" msgid="7147735965247211818">"Uključi"</string>
     <plurals name="zen_mode_duration_minutes_summary" formatted="false" msgid="4367877408072000848">
@@ -1674,6 +1686,7 @@
     <string name="search_language_hint" msgid="7042102592055108574">"Ukucajte naziv jezika"</string>
     <string name="language_picker_section_suggested" msgid="8414489646861640885">"Predloženo"</string>
     <string name="language_picker_section_all" msgid="3097279199511617537">"Svi jezici"</string>
+    <string name="region_picker_section_all" msgid="8966316787153001779">"Sve regije"</string>
     <string name="locale_search_menu" msgid="2560710726687249178">"Pretraga"</string>
     <string name="work_mode_off_title" msgid="8954725060677558855">"Radni način rada je ISKLJUČEN"</string>
     <string name="work_mode_off_message" msgid="3286169091278094476">"Omogući radnom profilu da funkcionira, uključujući aplikacije, sinhronizaciju u pozadini i povezane funkcije."</string>

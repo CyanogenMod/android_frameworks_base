@@ -1880,6 +1880,7 @@ public abstract class ContentResolver {
         if (extras != null) {
             String accountName = extras.getString(SYNC_EXTRAS_ACCOUNT);
             if (!TextUtils.isEmpty(accountName)) {
+                // TODO: No references to Google in AOSP
                 account = new Account(accountName, "com.google");
             }
             extras.remove(SYNC_EXTRAS_ACCOUNT);

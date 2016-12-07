@@ -923,9 +923,10 @@ public final class PowerManagerService extends SystemService
     }
 
     private void updateLowPowerModeLocked() {
-        if (mIsPowered && mLowPowerModeSetting) {
+        if ((mIsPowered || !mBatteryLevelLow && !mBootCompleted) && mLowPowerModeSetting) {
             if (DEBUG_SPEW) {
-                Slog.d(TAG, "updateLowPowerModeLocked: powered, turning setting off");
+                Slog.d(TAG, "updateLowPowerModeLocked: powered or booting with sufficient battery,"
+                        + " turning setting off");
             }
             // Turn setting off if powered
             Settings.Global.putInt(mContext.getContentResolver(),
@@ -2687,18 +2688,18 @@ public final class PowerManagerService extends SystemService
 
     boolean setDeviceIdleModeInternal(boolean enabled) {
         synchronized (mLock) {
-            if (mDeviceIdleMode != enabled) {
-                mDeviceIdleMode = enabled;
-                updateWakeLockDisabledStatesLocked();
-                if (enabled) {
-                    EventLogTags.writeDeviceIdleOnPhase("power");
-                } else {
-                    EventLogTags.writeDeviceIdleOffPhase("power");
-                }
-                return true;
+            if (mDeviceIdleMode == enabled) {
+                return false;
             }
-            return false;
+            mDeviceIdleMode = enabled;
+            updateWakeLockDisabledStatesLocked();
         }
+        if (enabled) {
+            EventLogTags.writeDeviceIdleOnPhase("power");
+        } else {
+            EventLogTags.writeDeviceIdleOffPhase("power");
+        }
+        return true;
     }
 
     boolean setLightDeviceIdleModeInternal(boolean enabled) {

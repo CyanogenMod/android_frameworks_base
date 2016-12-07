@@ -238,7 +238,7 @@
     <string name="data_usage_disabled_dialog_4g_title" msgid="1601769736881078016">"Данните от 4G са поставени на пауза"</string>
     <string name="data_usage_disabled_dialog_mobile_title" msgid="4651001290947318931">"Мобилните данни са поставени на пауза"</string>
     <string name="data_usage_disabled_dialog_title" msgid="3932437232199671967">"Данните са поставени на пауза"</string>
-    <string name="data_usage_disabled_dialog" msgid="8453242888903772524">"Тъй като зададеното от вас ограничение за данни бе достигнато, устройството постави преноса им на пауза за остатъка от този цикъл.\n\nВъзобновяването може да доведе до таксуване от оператора ви."</string>
+    <string name="data_usage_disabled_dialog" msgid="1841738975235283398">"Достигнахте зададеното от вас ограничение за данните. Вече не използвате мобилната мрежа.\n\nАко възобновите връзката с нея, може да бъдете таксувани за пренос на данни."</string>
     <string name="data_usage_disabled_dialog_enable" msgid="1412395410306390593">"Възобновяване"</string>
     <string name="status_bar_settings_signal_meter_disconnected" msgid="1940231521274147771">"Няма връзка с интернет"</string>
     <string name="status_bar_settings_signal_meter_wifi_nossid" msgid="6557486452774597820">"Wi-Fi: Има връзка"</string>
@@ -404,6 +404,7 @@
     <string name="device_owned_footer" msgid="3802752663326030053">"Устройството може да се наблюдава"</string>
     <string name="profile_owned_footer" msgid="8021888108553696069">"Възможно е потребителският профил да се наблюдава"</string>
     <string name="vpn_footer" msgid="2388611096129106812">"Мрежата може да се наблюдава"</string>
+    <string name="branded_vpn_footer" msgid="2168111859226496230">"Мрежата може да се наблюдава"</string>
     <string name="monitoring_title_device_owned" msgid="7121079311903859610">"Наблюдение на устройството"</string>
     <string name="monitoring_title_profile_owned" msgid="6790109874733501487">"Наблюдаване на потр. профил"</string>
     <string name="monitoring_title" msgid="169206259253048106">"Наблюдение на мрежата"</string>
@@ -416,6 +417,7 @@
     <string name="legacy_vpn_name" msgid="6604123105765737830">"VPN"</string>
     <string name="monitoring_description_app" msgid="6259179342284742878">"Установена е връзка с приложението <xliff:g id="APPLICATION">%1$s</xliff:g>, което може да наблюдава активността ви в мрежата, включително имейли, приложения и уебсайтове."</string>
     <string name="monitoring_description_app_personal" msgid="484599052118316268">"Установена е връзка с приложението <xliff:g id="APPLICATION">%1$s</xliff:g>, което може да наблюдава личната ви активност в мрежата, включително имейли, приложения и уебсайтове."</string>
+    <string name="branded_monitoring_description_app_personal" msgid="2669518213949202599">"Установена е връзка с приложението <xliff:g id="APPLICATION">%1$s</xliff:g>, което може да наблюдава личната ви активност в мрежата, включително имейли, приложения и уебсайтове."</string>
     <string name="monitoring_description_app_work" msgid="1754325860918060897">"Служебният ви потребителски профил се управлява от <xliff:g id="ORGANIZATION">%1$s</xliff:g>. Той е свързан с приложението <xliff:g id="APPLICATION">%2$s</xliff:g>, което може да наблюдава служебната ви активност в мрежата, включително имейли, приложения и уебсайтове.\n\nЗа още информация се свържете с администратора си."</string>
     <string name="monitoring_description_app_personal_work" msgid="4946600443852045903">"Служебният ви потребителски профил се управлява от <xliff:g id="ORGANIZATION">%1$s</xliff:g>. Той е свързан с приложението <xliff:g id="APPLICATION_WORK">%2$s</xliff:g>, което може да наблюдава служебната ви активност в мрежата, включително имейли, приложения и уебсайтове.\n\nУстановена е връзка и с приложението <xliff:g id="APPLICATION_PERSONAL">%3$s</xliff:g>, което може да наблюдава личната ви активност в мрежата."</string>
     <string name="monitoring_description_vpn_app_device_owned" msgid="4970443827043261703">"Устройството ви се управлява от <xliff:g id="ORGANIZATION">%1$s</xliff:g>.\n\nАдминистраторът ви може да наблюдава и управлява настройките, корпоративния достъп, приложенията и данните, свързани с устройството ви, включително информацията за местоположението му.\n\nУстановена е връзка с приложението <xliff:g id="APPLICATION">%2$s</xliff:g>, което може да наблюдава активността ви в мрежата, включително имейли, приложения и уебсайтове.\n\nЗа още информация се свържете с администратора си."</string>
@@ -492,8 +494,6 @@
     <string name="clock_seconds_desc" msgid="6282693067130470675">"Показване на секундите на часовника в лентата на състоянието. Може да се отрази на живота на батерията."</string>
     <string name="qs_rearrange" msgid="8060918697551068765">"Пренареждане на бързите настройки"</string>
     <string name="show_brightness" msgid="6613930842805942519">"Показване на яркостта от бързите настройки"</string>
-    <string name="overview_nav_bar_gesture" msgid="8579814204727917764">"Разделяне на екрана с прекарване на пръст нагоре: Активиране"</string>
-    <string name="overview_nav_bar_gesture_desc" msgid="6329167382305102615">"Активиране на жеста за влизане в режим на разделен екран чрез прокарване на пръст нагоре от бутона за общ преглед"</string>
     <string name="experimental" msgid="6198182315536726162">"Експериментални"</string>
     <string name="enable_bluetooth_title" msgid="5027037706500635269">"Да се включи ли Bluetooth?"</string>
     <string name="enable_bluetooth_message" msgid="9106595990708985385">"За да свържете клавиатурата с таблета си, първо трябва да включите Bluetooth."</string>
@@ -651,4 +651,5 @@
     <string name="accessibility_quick_settings_open_settings" msgid="7806613775728380737">"Отваряне на настройките за <xliff:g id="ID_1">%s</xliff:g>."</string>
     <string name="accessibility_quick_settings_edit" msgid="7839992848995240393">"Редактиране на подредбата на настройките."</string>
     <string name="accessibility_quick_settings_page" msgid="5032979051755200721">"Страница <xliff:g id="ID_1">%1$d</xliff:g> от <xliff:g id="ID_2">%2$d</xliff:g>"</string>
+    <string name="cant_silence_or_block" msgid="999689262131488625">"Известията не могат да бъдат заглушавани, нито блокирани"</string>
 </resources>

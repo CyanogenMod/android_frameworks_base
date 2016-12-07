@@ -78,6 +78,18 @@ public class PipManager {
         sSettingsPackageAndClassNamePairList.add(new Pair<String, String>(
                 "com.google.android.leanbacklauncher",
                 "com.google.android.leanbacklauncher.settings.HomeScreenSettingsActivity"));
+        sSettingsPackageAndClassNamePairList.add(new Pair<String, String>(
+                "com.google.android.apps.mediashell",
+                "com.google.android.apps.mediashell.settings.CastSettingsActivity"));
+        sSettingsPackageAndClassNamePairList.add(new Pair<String, String>(
+                "com.google.android.katniss",
+                "com.google.android.katniss.setting.SpeechSettingsActivity"));
+        sSettingsPackageAndClassNamePairList.add(new Pair<String, String>(
+                "com.google.android.katniss",
+                "com.google.android.katniss.setting.SearchSettingsActivity"));
+        sSettingsPackageAndClassNamePairList.add(new Pair<String, String>(
+                "com.google.android.gsf.notouch",
+                "com.google.android.gsf.notouch.UsageDiagnosticsSettingActivity"));
     }
 
     /**
@@ -711,10 +723,7 @@ public class PipManager {
         return mPipRecentsOverlayManager;
     }
 
-    private void updatePipVisibility(boolean visible) {
-        TvStatusBar statusBar = ((SystemUIApplication) mContext).getComponent(TvStatusBar.class);
-        if (statusBar != null) {
-            statusBar.updatePipVisibility(visible);
-        }
+    private void updatePipVisibility(final boolean visible) {
+        SystemServicesProxy.getInstance(mContext).setTvPipVisibility(visible);
     }
 }

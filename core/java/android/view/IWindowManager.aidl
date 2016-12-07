@@ -73,8 +73,8 @@ interface IWindowManager
     void clearForcedDisplaySize(int displayId);
     int getInitialDisplayDensity(int displayId);
     int getBaseDisplayDensity(int displayId);
-    void setForcedDisplayDensity(int displayId, int density);
-    void clearForcedDisplayDensity(int displayId);
+    void setForcedDisplayDensityForUser(int displayId, int density, int userId);
+    void clearForcedDisplayDensityForUser(int displayId, int userId);
     void setForcedDisplayScalingMode(int displayId, int mode); // 0 = auto, 1 = disable
 
     void setOverscan(int displayId, int left, int top, int right, int bottom);
@@ -329,6 +329,16 @@ interface IWindowManager
      * Called by the status bar to notify Views of changes to System UI visiblity.
      */
     oneway void statusBarVisibilityChanged(int visibility);
+
+    /**
+     * Called by System UI to notify of changes to the visibility of Recents.
+     */
+    oneway void setRecentsVisibility(boolean visible);
+
+    /**
+     * Called by System UI to notify of changes to the visibility of PIP.
+     */
+    oneway void setTvPipVisibility(boolean visible);
 
     /**
      * Device has a software navigation bar (separate from the status bar).

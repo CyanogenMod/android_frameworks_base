@@ -239,7 +239,7 @@
     <string name="data_usage_disabled_dialog_4g_title" msgid="1601769736881078016">"4G podaci su pauzirani"</string>
     <string name="data_usage_disabled_dialog_mobile_title" msgid="4651001290947318931">"Mobilni podaci su pauzirani"</string>
     <string name="data_usage_disabled_dialog_title" msgid="3932437232199671967">"Podaci su pauzirani"</string>
-    <string name="data_usage_disabled_dialog" msgid="8453242888903772524">"Zbog toga što ste dostigli podešeno ograničenje za podatke, uređaj je pauzirao korišćenje podataka tokom ostatka ovog ciklusa.\n\nAko nastavite, mobilni operater može da vam naplati dodatne troškove."</string>
+    <string name="data_usage_disabled_dialog" msgid="1841738975235283398">"Ograničenje potrošnje podataka koje ste podesili je dostignuto. Više ne koristite mobilne podatke.\n\nAko nastavite, možda će biti naplaćeni troškovi za potrošnju podataka."</string>
     <string name="data_usage_disabled_dialog_enable" msgid="1412395410306390593">"Nastavi"</string>
     <string name="status_bar_settings_signal_meter_disconnected" msgid="1940231521274147771">"Nema internet veze"</string>
     <string name="status_bar_settings_signal_meter_wifi_nossid" msgid="6557486452774597820">"Wi-Fi je povezan"</string>
@@ -406,6 +406,7 @@
     <string name="device_owned_footer" msgid="3802752663326030053">"Uređaj se možda nadgleda"</string>
     <string name="profile_owned_footer" msgid="8021888108553696069">"Profil se možda nadgleda"</string>
     <string name="vpn_footer" msgid="2388611096129106812">"Mreža se možda nadgleda"</string>
+    <string name="branded_vpn_footer" msgid="2168111859226496230">"Mreža se možda nadgleda"</string>
     <string name="monitoring_title_device_owned" msgid="7121079311903859610">"Nadgledanje uređaja"</string>
     <string name="monitoring_title_profile_owned" msgid="6790109874733501487">"Nadgledanje profila"</string>
     <string name="monitoring_title" msgid="169206259253048106">"Nadgledanje mreže"</string>
@@ -418,6 +419,7 @@
     <string name="legacy_vpn_name" msgid="6604123105765737830">"VPN"</string>
     <string name="monitoring_description_app" msgid="6259179342284742878">"Povezani ste sa aplikacijom <xliff:g id="APPLICATION">%1$s</xliff:g>, koja može da nadgleda aktivnosti na mreži, uključujući imejlove, aplikacije i veb-sajtove."</string>
     <string name="monitoring_description_app_personal" msgid="484599052118316268">"Povezani ste sa aplikacijom <xliff:g id="APPLICATION">%1$s</xliff:g>, koja može da nadgleda aktivnosti na ličnoj mreži, uključujući imejlove, aplikacije i veb-sajtove."</string>
+    <string name="branded_monitoring_description_app_personal" msgid="2669518213949202599">"Povezani ste sa aplikacijom <xliff:g id="APPLICATION">%1$s</xliff:g>, koja može da nadgleda aktivnosti na ličnoj mreži, uključujući imejlove, aplikacije i veb-sajtove."</string>
     <string name="monitoring_description_app_work" msgid="1754325860918060897">"Profilom za Work upravlja <xliff:g id="ORGANIZATION">%1$s</xliff:g>. Povezan je sa aplikacijom <xliff:g id="APPLICATION">%2$s</xliff:g>, koja može da nadgleda aktivnosti na poslovnoj mreži, uključujući imejlove, aplikacije i veb-sajtove.\n\nViše informacija potražite od administratora."</string>
     <string name="monitoring_description_app_personal_work" msgid="4946600443852045903">"Profilom za Work upravlja <xliff:g id="ORGANIZATION">%1$s</xliff:g>. Povezan je sa aplikacijom <xliff:g id="APPLICATION_WORK">%2$s</xliff:g>, koja može da nadgleda aktivnosti na poslovnoj mreži, uključujući imejlove, aplikacije i veb-sajtove.\n\nPovezani ste i sa aplikacijom <xliff:g id="APPLICATION_PERSONAL">%3$s</xliff:g>, koja može da nadgleda aktivnosti na ličnoj mreži."</string>
     <string name="monitoring_description_vpn_app_device_owned" msgid="4970443827043261703">"Uređajem upravlja <xliff:g id="ORGANIZATION">%1$s</xliff:g>.\n\nAdministrator može da nadgleda podešavanja, korporativni pristup, aplikacije, podatke povezane sa uređajem i informacije o lokaciji uređaja, kao i da upravlja njima.\n\nPovezani ste sa aplikacijom <xliff:g id="APPLICATION">%2$s</xliff:g>, koja može da nadgleda aktivnosti na mreži, uključujući imejlove, aplikacije i veb-sajtove.\n\nViše informacija potražite od administratora."</string>
@@ -494,8 +496,6 @@
     <string name="clock_seconds_desc" msgid="6282693067130470675">"Sekunde na satu se prikazuju na statusnoj traci. To može da utiče na trajanje baterije."</string>
     <string name="qs_rearrange" msgid="8060918697551068765">"Preuredi Brza podešavanja"</string>
     <string name="show_brightness" msgid="6613930842805942519">"Prikaži osvetljenost u Brzim podešavanjima"</string>
-    <string name="overview_nav_bar_gesture" msgid="8579814204727917764">"Omogući pokret za prevlačenje nagore za podeljeni ekran"</string>
-    <string name="overview_nav_bar_gesture_desc" msgid="6329167382305102615">"Omogućava pokret za prelazak na podeljeni ekran prevlačenjem nagore od dugmeta Pregled"</string>
     <string name="experimental" msgid="6198182315536726162">"Eksperimentalno"</string>
     <string name="enable_bluetooth_title" msgid="5027037706500635269">"Želite li da uključite Bluetooth?"</string>
     <string name="enable_bluetooth_message" msgid="9106595990708985385">"Da biste povezali tastaturu sa tabletom, prvo morate da uključite Bluetooth."</string>
@@ -653,4 +653,5 @@
     <string name="accessibility_quick_settings_open_settings" msgid="7806613775728380737">"Otvori podešavanja za <xliff:g id="ID_1">%s</xliff:g>."</string>
     <string name="accessibility_quick_settings_edit" msgid="7839992848995240393">"Izmeni redosled podešavanja."</string>
     <string name="accessibility_quick_settings_page" msgid="5032979051755200721">"<xliff:g id="ID_1">%1$d</xliff:g>. strana od <xliff:g id="ID_2">%2$d</xliff:g>"</string>
+    <string name="cant_silence_or_block" msgid="999689262131488625">"Zvuk obaveštenja ne može da se isključi niti ona mogu da se blokiraju"</string>
 </resources>

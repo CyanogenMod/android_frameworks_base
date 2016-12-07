@@ -434,9 +434,9 @@ public class KeyguardPatternView extends LinearLayout implements KeyguardSecurit
 
     @Override
     public boolean startDisappearAnimation(final Runnable finishRunnable) {
-        float durationMultiplier = mKeyguardUpdateMonitor.isUserUnlocked()
-                ? 1f
-                : DISAPPEAR_MULTIPLIER_LOCKED;
+        float durationMultiplier = mKeyguardUpdateMonitor.needsSlowUnlockTransition()
+                ? DISAPPEAR_MULTIPLIER_LOCKED
+                : 1f;
         mLockPatternView.clearPattern();
         enableClipping(false);
         setTranslationY(0);
@@ -445,9 +445,10 @@ public class KeyguardPatternView extends LinearLayout implements KeyguardSecurit
                 -mDisappearAnimationUtils.getStartTranslation(),
                 mDisappearAnimationUtils.getInterpolator());
 
-        DisappearAnimationUtils disappearAnimationUtils = mKeyguardUpdateMonitor.isUserUnlocked()
-                ? mDisappearAnimationUtils
-                : mDisappearAnimationUtilsLocked;
+        DisappearAnimationUtils disappearAnimationUtils = mKeyguardUpdateMonitor
+                .needsSlowUnlockTransition()
+                        ? mDisappearAnimationUtilsLocked
+                        : mDisappearAnimationUtils;
         disappearAnimationUtils.startAnimation2d(mLockPatternView.getCellStates(),
                 () -> {
                     enableClipping(true);

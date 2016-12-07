@@ -60,12 +60,6 @@ public class FilesActivity extends BaseActivity {
 
     public static final String TAG = "FilesActivity";
 
-    // See comments where this const is referenced for details.
-    private static final int DRAWER_NO_FIDDLE_DELAY = 1500;
-
-    // Track the time we opened the drawer in response to back being pressed.
-    // We use the time gap to figure out whether to close app or reopen the drawer.
-    private long mDrawerLastFiddled;
     private DocumentClipper mClipper;
 
     public FilesActivity() {
@@ -341,8 +335,18 @@ public class FilesActivity extends BaseActivity {
 
         // Fall back to traditional VIEW action...
         intent = new Intent(Intent.ACTION_VIEW);
-        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.setData(doc.derivedUri);
+        intent.setDataAndType(doc.derivedUri, doc.mimeType);
+
+        // Downloads has traditionally added the WRITE permission
+        // in the TrampolineActivity. Since this behavior is long
+        // established, we set the same permission for non-managed files
+        // This ensures consistent behavior between the Downloads root
+        // and other roots.
+        int flags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
+        if (doc.isWriteSupported()) {
+            flags |= Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
+        }
+        intent.setFlags(flags);
 
         if (DEBUG && intent.getClipData() != null) {
             Log.d(TAG, "Starting intent w/ clip data: " + intent.getClipData());
@@ -383,34 +387,6 @@ public class FilesActivity extends BaseActivity {
             default:
                 return super.onKeyShortcut(keyCode, event);
         }
-    }
-
-    // Do some "do what a I want" drawer fiddling, but don't
-    // do it if user already hit back recently and we recently
-    // did some fiddling.
-    @Override
-    boolean onBeforePopDir() {
-        int size = mState.stack.size();
-
-        if (mDrawer.isPresent()
-                && (System.currentTimeMillis() - mDrawerLastFiddled) > DRAWER_NO_FIDDLE_DELAY) {
-            // Close drawer if it is open.
-            if (mDrawer.isOpen()) {
-                mDrawer.setOpen(false);
-                mDrawerLastFiddled = System.currentTimeMillis();
-                return true;
-            }
-
-            // Open the Close drawer if it is closed and we're at the top of a root.
-            if (size <= 1) {
-                mDrawer.setOpen(true);
-                // Remember so we don't just close it again if back is pressed again.
-                mDrawerLastFiddled = System.currentTimeMillis();
-                return true;
-            }
-        }
-
-        return false;
     }
 
     // Turns out only DocumentsActivity was ever calling saveStackBlocking.

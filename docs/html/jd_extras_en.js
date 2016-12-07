@@ -156,6 +156,16 @@ METADATA['en'].extras = METADATA['en'].extras.concat([
     "lang":"en"
   },
   {
+    "title":"GPU Debugger",
+    "summary":"Use the GPU Debugger to analyze and debug your OpenGL ES apps. Inspect the GPU state and understand what caused a specific rendering outcome.",
+    "url":"studio/debug/am-gpu-debugger.html",
+    "image":"images/tools/thumbnails/am-gpu-debugger_2-2_2x.png",
+    "type":"tools",
+    "keywords": ["android","performance","profiling","tools","monitor","debug"],
+    "tags": ["android","performance","profiling","tools","monitor","debug"],
+    "lang":"en"
+  },
+  {
     "title":"HPROF Viewer and Analyzer",
     "summary":"Use the Memory Monitor to dump the Java heap to an HPROF file. The HPROF Viewer displays classes, instances of each class, and a reference tree to help you track memory usage and find memory leaks.",
     "url":"studio/profile/am-hprof.html",
@@ -1020,6 +1030,17 @@ METADATA['en'].extras = METADATA['en'].extras.concat([
     "tags": [],
     "image":"images/google/gps-play_games_logo.png",
     "type":"distribute"
+  },
+  {
+    "title": "Play Games Quality",
+    "category": "google",
+    "summary": "Meet the basic expectations of game players through compelling features and an intuitive, well-designed UI.",
+    "url": "https://developers.google.com/games/services/checklist",
+    "group": "",
+    "keywords": ["games", "play games", "quality"],
+    "tags": [],
+    "image": "images/cards/distribute/engage/card-game-services.png",
+    "type": "distribute"
   },
   {
     "title":"Get Started with Analytics",
@@ -2960,7 +2981,6 @@ METADATA['en'].extras = METADATA['en'].extras.concat([
     "type": "distribute",
     "category": "google"
   },
-
   {
     "lang": "en",
     "group": "",
@@ -2969,7 +2989,7 @@ METADATA['en'].extras = METADATA['en'].extras.concat([
     "timestamp": 1383243492000,
     "image": "images/cards/google-search_2x.png",
     "title": "Set Up App Indexing",
-    "summary": "Surface your app content in Google seaerch. Deep link direct to your apps.",
+    "summary": "Surface your app content in Google search. Deep link direct to your apps.",
     "keywords": ["search", "appindexing", "engagement", "getusers"],
     "type": "distribute",
     "category": "google"
@@ -4117,8 +4137,8 @@ METADATA['en'].collections = {
   "develop/landing/tools": {
     "title": "",
     "resources": [
-      "https://www.youtube.com/watch?v=ZOz_yr8Yxq8&list=PLWz5rJ2EKKc_w6fodMGrA1_tsI3pqPbqa",
-      "https://www.youtube.com/watch?v=eOV2owswDkE&list=PLWz5rJ2EKKc_w6fodMGrA1_tsI3pqPbqa",
+      "https://www.youtube.com/watch?v=NbHsi3-uR8E&list=PLWz5rJ2EKKc_w6fodMGrA1_tsI3pqPbqa",
+      "https://www.youtube.com/watch?v=-SY5nkNVUn0&list=PLWz5rJ2EKKc_w6fodMGrA1_tsI3pqPbqa",
       "https://www.youtube.com/watch?v=StqAZ1OQbqA&list=PLWz5rJ2EKKc_w6fodMGrA1_tsI3pqPbqa",
       "https://www.youtube.com/watch?v=-SY5nkNVUn0&list=PLWz5rJ2EKKc_w6fodMGrA1_tsI3pqPbqa",
       "https://www.youtube.com/watch?v=4rI4tTd7-J8&list=PLWz5rJ2EKKc_w6fodMGrA1_tsI3pqPbqa",
@@ -4366,6 +4386,7 @@ METADATA['en'].collections = {
       "distribute/essentials/quality/wear.html",
       "distribute/essentials/quality/tv.html",
       "distribute/essentials/quality/auto.html",
+      "https://developers.google.com/games/services/checklist",
       "distribute/essentials/quality/billions.html",
       "https://developers.google.com/edu/guidelines"
     ]
@@ -5354,6 +5375,47 @@ METADATA['en'].collections = {
       "https://storage.googleapis.com/androiddevelopers/shareables/stories/Senri_LeosFortune_gpgs.pdf"
     ]
   },
+  "distribute/stories/games/docs": {
+    "title": "",
+    "resources": [
+      "distribute/stories/games/animoca-star-girl.html",
+      "distribute/stories/games/happy-labs-experiment.html",
+      "distribute/stories/games/playlab-puzzles.html",
+      "distribute/stories/games/upbeat-games.html",
+      "distribute/stories/games/tapps.html",
+      "distribute/stories/games/noodlecake-super-stickman.html",
+      "distribute/stories/games/glu-tap-baseball.html",
+      "distribute/stories/games/doctor-who-legacy.html",
+      "distribute/stories/games/glu-dh.html",
+      "distribute/stories/games/dots.html",
+      "distribute/stories/games/kongregate-adv-cap.html",
+      "distribute/stories/games/kongregate-global-assault.html",
+      "distribute/stories/games/leos-fortune.html",
+      "distribute/stories/games/tiny-co.html",
+      "distribute/stories/games/g4a-indian-rummy.html",
+      "distribute/stories/games/rvappstudios-zombie.html",
+      "distribute/stories/games/glu-eternity-warriors.html",
+      "distribute/stories/games/hotheadgames-firefight.html",
+      "distribute/stories/games/concrete-bowling.html",
+      "distribute/stories/games/gameloft-asphalt8.html"
+    ]
+  },
+  "distribute/stories/apps/docs": {
+    "title": "",
+    "resources": [
+      "distribute/stories/apps/condenast-shopping.html",
+      "distribute/stories/apps/economist-espresso.html",
+      "distribute/stories/apps/expressen-sports.html",
+      "distribute/stories/apps/drupe-communications.html",
+      "distribute/stories/apps/noom-health.html",
+      "distribute/stories/apps/aftenposten.html",
+      "distribute/stories/apps/el-mundo.html",
+      "distribute/stories/apps/segundamano.html",
+      "distribute/stories/apps/remember-the-milk.html",
+      "distribute/stories/apps/intuit-mint.html",
+      "distribute/stories/apps/sayhi.html",
+    ]
+  },
   "training/testing/overview": {
     "title": "",
     "resources": [
@@ -5451,6 +5513,12 @@ METADATA['en'].collections = {
        "studio/profile/am-allocation.html",
        "studio/profile/am-methodtrace.html",
        "studio/profile/am-sysinfo.html"
+    ]
+  },
+"tools/help/gpu": {
+    "title": "",
+    "resources": [
+       "studio/debug/am-gpu-debugger.html"
     ]
   },
   "tools/help/shot": {
@@ -5552,7 +5620,7 @@ METADATA['en'].collections = {
     "title": "",
     "resources": [
     "https://medium.com/google-developers/how-often-should-you-update-android-studio-db25785c488e#.8blbql35x",
-    "http://android-developers.blogspot.com/2016/04/android-studio-2-0.html",
+    "https://android-developers.blogspot.com/2016/09/android-studio-2-2.html",
     "https://medium.com/google-developers/writing-more-code-by-writing-less-code-with-android-studio-live-templates-244f648d17c7#.hczcm02du",
     ]
   },

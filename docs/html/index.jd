@@ -6,16 +6,6 @@ nonavpage=true
 
 @jd:body
 
-<script>
-  $(document).ready(function() {
-    if (useUpdatedTemplates) {
-      $("#useUpdatedTemplates").css("display","block");
-    } else {
-      $("#useOldTemplates").css("display","block");
-    }
-  })
-</script>
-
 <section class="dac-expand dac-hero" style="background-color:#b2dfdb;">
   <div class="wrap" style="max-width:1000px;margin-top:0">
     <div class="col-7of16 col-push-8of16">
@@ -45,7 +35,7 @@ nonavpage=true
   </div>
 </section>
 
-<div id="useUpdatedTemplates" style="display:none" class="dac-section dac-slim dac-gray dac-expand">
+<div class="dac-section dac-slim dac-gray dac-expand">
   <div class="wrap dac-offset-parent">
     <a class="dac-fab dac-scroll-button" data-scroll-button href="#build-apps">
       <i class="dac-sprite dac-arrow-down-gray"></i>
@@ -73,27 +63,44 @@ nonavpage=true
   </div><!-- end .wrap -->
 </div><!-- end .dac-actions -->
 
-<div id="useOldTemplates" style="display:none" class="actions-bar dac-expand dac-invert">
-  <div class="wrap dac-offset-parent">
-    <a class="dac-fab dac-scroll-button" data-scroll-button="" href="#build-apps">
-      <i class="dac-sprite dac-arrow-down-gray"></i>
+
+<section class="dac-expand dac-hero" style="background-color:#FFF0B4;">
+  <div class="wrap" style="max-width:1000px;margin-top:0;overflow:auto">
+    <div class="col-7of16 col-push-8of16 dac-hero-figure">
+      <a href="/studio/index.html">
+        <img class="dac-hero-image" style="padding-top:24px"
+          src="/studio/images/hero_image_studio_2-2_2x.png">
+      </a>
+    </div>
+    <div class="col-7of16 col-pull-6of16">
+        <h1 class="dac-hero-title" style="color:#004d40">Android Studio 2.2</h1>
+
+<p class="dac-hero-description" style="color:#004d40">Packed with 20+ new
+features, Android Studio 2.2 focuses on speed, smarts, and Android platform
+support.</p>
+
+<p class="dac-hero-description" style="color:#004d40">Develop faster with
+features such as the new Layout Editor, and develop smarter with the new APK
+analyzer, expanded code analysis and more.</p>
+
+<p class="dac-hero-description" style="color:#004d40">Plus, this update
+includes support for all the latest developer features in Android 7.0 Nougat,
+with an updated emulator to test them all out.</p>
+
+<p style="margin-top:24px">
+   <a class="dac-hero-cta" href="/studio/index.html" style="color:#004d40">
+      <span class="dac-sprite dac-auto-chevron"></span>
+      Get Android Studio 2.2
     </a>
-    <div class="actions">
-      <div><a href="{@docRoot}studio/index.html">
-        <span class="dac-sprite dac-auto-chevron-large"></span>
-        Get Android Studio
-      </a></div>
-      <div><a href="{@docRoot}samples/index.html">
-        <span class="dac-sprite dac-auto-chevron-large"></span>
-        Browse Samples
-      </a></div>
-      <div><a href="{@docRoot}distribute/stories/index.html">
-        <span class="dac-sprite dac-auto-chevron-large"></span>
-        Watch Stories
-      </a></div>
-    </div><!-- end .actions -->
-  </div><!-- end .wrap -->
-</div>
+  &nbsp;&nbsp;&nbsp;&nbsp;<wbr>
+   <a class="dac-hero-cta" href="/studio/features.html" style="color:#004d40">
+    <span class="dac-sprite dac-auto-chevron"></span>
+    See more features</a>
+</p>
+    </div>
+  </div>
+</section>
+
 
 <section class="dac-section dac-light" id="build-apps"><div class="wrap">
   <h1 class="dac-section-title">Build Beautiful Apps</h1>

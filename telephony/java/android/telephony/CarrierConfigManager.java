@@ -286,13 +286,23 @@ public class CarrierConfigManager {
             "carrier_wfc_supports_wifi_only_bool";
 
     /**
-     * Default WFC_IMS_mode 0: WIFI_ONLY
-     *                      1: CELLULAR_PREFERRED
-     *                      2: WIFI_PREFERRED
+     * Default WFC_IMS_MODE for home network   0: WIFI_ONLY
+     *                                         1: CELLULAR_PREFERRED
+     *                                         2: WIFI_PREFERRED
      * @hide
      */
     public static final String KEY_CARRIER_DEFAULT_WFC_IMS_MODE_INT =
             "carrier_default_wfc_ims_mode_int";
+
+    /**
+     * Default WFC_IMS_MODE for roaming
+     * See {@link KEY_CARRIER_DEFAULT_WFC_IMS_MODE_INT} for valid values.
+     *
+     * @hide
+     */
+    public static final String KEY_CARRIER_DEFAULT_WFC_IMS_ROAMING_MODE_INT =
+            "carrier_default_wfc_ims_roaming_mode_int";
+
     /**
      * Default WFC_IMS_enabled: true VoWiFi by default is on
      *                          false VoWiFi by default is off
@@ -433,18 +443,11 @@ public class CarrierConfigManager {
             "disable_severe_when_extreme_disabled_bool";
 
     /**
-     * The data call APN retry configuration for default type APN.
+     * The data call retry configuration for different types of APN.
      * @hide
      */
-    public static final String KEY_CARRIER_DATA_CALL_RETRY_CONFIG_DEFAULT_STRING =
-            "carrier_data_call_retry_config_default_string";
-
-    /**
-     * The data call APN retry configuration for other type APNs.
-     * @hide
-     */
-    public static final String KEY_CARRIER_DATA_CALL_RETRY_CONFIG_OTHERS_STRING =
-            "carrier_data_call_retry_config_others_string";
+    public static final String KEY_CARRIER_DATA_CALL_RETRY_CONFIG_STRINGS =
+            "carrier_data_call_retry_config_strings";
 
     /**
      * Delay between trying APN from the pool
@@ -668,6 +671,20 @@ public class CarrierConfigManager {
     public static final String KEY_ALLOW_ADDING_APNS_BOOL = "allow_adding_apns_bool";
 
     /**
+     * APN types that user is not allowed to modify
+     * @hide
+     */
+    public static final String KEY_READ_ONLY_APN_TYPES_STRING_ARRAY =
+            "read_only_apn_types_string_array";
+
+    /**
+     * APN fields that user is not allowed to modify
+     * @hide
+     */
+    public static final String KEY_READ_ONLY_APN_FIELDS_STRING_ARRAY =
+            "read_only_apn_fields_string_array";
+
+    /**
      * Boolean indicating if intent for emergency call state changes should be broadcast
      * @hide
      */
@@ -686,6 +703,16 @@ public class CarrierConfigManager {
      */
     public static final String KEY_CARRIER_ADDITIONAL_CBS_CHANNELS_STRINGS =
             "carrier_additional_cbs_channels_strings";
+
+    /**
+      * Indicates whether STK LAUNCH_BROWSER command is disabled.
+      * If {@code true}, then the browser will not be launched
+      * on UI for the LAUNCH_BROWSER STK command.
+      * @hide
+      */
+    public static final String KEY_STK_DISABLE_LAUNCH_BROWSER_BOOL =
+            "stk_disable_launch_browser_bool";
+
 
     // These variables are used by the MMS service and exposed through another API, {@link
     // SmsManager}. The variable names and string values are copied from there.
@@ -895,6 +922,11 @@ public class CarrierConfigManager {
 
     /**
      * Flag indicating whether the carrier supports the Hold command while in an IMS call.
+     * <p>
+     * The device configuration value {@code config_device_respects_hold_carrier_config} ultimately
+     * controls whether this carrier configuration option is used.  Where
+     * {@code config_device_respects_hold_carrier_config} is false, the value of the
+     * {@link #KEY_ALLOW_HOLD_IN_IMS_CALL_BOOL} carrier configuration option is ignored.
      * @hide
      */
     public static final String KEY_ALLOW_HOLD_IN_IMS_CALL_BOOL = "allow_hold_in_ims_call";
@@ -970,6 +1002,18 @@ public class CarrierConfigManager {
      */
     public static final String FILTERED_CNAP_NAMES_STRING_ARRAY = "filtered_cnap_names_string_array";
 
+    /**
+     * Determine whether user can change Wi-Fi Calling preference in roaming.
+     * {@code false} - roaming preference {@link KEY_CARRIER_DEFAULT_WFC_IMS_ROAMING_MODE_INT} is
+     *                 the same as home preference {@link KEY_CARRIER_DEFAULT_WFC_IMS_MODE_INT}
+     *                 and cannot be changed.
+     * {@code true}  - roaming preference can be changed by user independently.
+     *
+     * @hide
+     */
+    public static final String KEY_EDITABLE_WFC_ROAMING_MODE_BOOL =
+            "editable_wfc_roaming_mode_bool";
+
     /** The default value for every variable. */
     private final static PersistableBundle sDefaults;
 
@@ -992,6 +1036,7 @@ public class CarrierConfigManager {
         sDefaults.putBoolean(KEY_CARRIER_DEFAULT_WFC_IMS_ROAMING_ENABLED_BOOL, false);
         sDefaults.putBoolean(KEY_CARRIER_PROMOTE_WFC_ON_CALL_FAIL_BOOL, false);
         sDefaults.putInt(KEY_CARRIER_DEFAULT_WFC_IMS_MODE_INT, 2);
+        sDefaults.putInt(KEY_CARRIER_DEFAULT_WFC_IMS_ROAMING_MODE_INT, 2);
         sDefaults.putBoolean(KEY_CARRIER_FORCE_DISABLE_ETWS_CMAS_TEST_BOOL, false);
         sDefaults.putBoolean(KEY_CARRIER_VOLTE_PROVISIONING_REQUIRED_BOOL, false);
         sDefaults.putBoolean(KEY_CARRIER_VOLTE_TTY_SUPPORTED_BOOL, true);
@@ -1039,14 +1084,17 @@ public class CarrierConfigManager {
         sDefaults.putString(KEY_CI_ACTION_ON_SYS_UPDATE_EXTRA_VAL_STRING, "");
         sDefaults.putBoolean(KEY_CSP_ENABLED_BOOL, false);
         sDefaults.putBoolean(KEY_ALLOW_ADDING_APNS_BOOL, true);
+        sDefaults.putStringArray(KEY_READ_ONLY_APN_TYPES_STRING_ARRAY, null);
+        sDefaults.putStringArray(KEY_READ_ONLY_APN_FIELDS_STRING_ARRAY, null);
         sDefaults.putBoolean(KEY_BROADCAST_EMERGENCY_CALL_STATE_CHANGES_BOOL, false);
         sDefaults.putBoolean(KEY_ALWAYS_SHOW_EMERGENCY_ALERT_ONOFF_BOOL, false);
         sDefaults.putBoolean(KEY_DISABLE_SEVERE_WHEN_EXTREME_DISABLED_BOOL, true);
-        sDefaults.putString(KEY_CARRIER_DATA_CALL_RETRY_CONFIG_DEFAULT_STRING,
-                "default_randomization=2000,5000,10000,20000,40000,80000:5000,160000:5000,"
-                        + "320000:5000,640000:5000,1280000:5000,1800000:5000");
-        sDefaults.putString(KEY_CARRIER_DATA_CALL_RETRY_CONFIG_OTHERS_STRING,
-                "max_retries=3, 5000, 5000, 5000");
+        sDefaults.putStringArray(KEY_CARRIER_DATA_CALL_RETRY_CONFIG_STRINGS, new String[]{
+                "default:default_randomization=2000,5000,10000,20000,40000,80000:5000,160000:5000,"
+                        + "320000:5000,640000:5000,1280000:5000,1800000:5000",
+                "mms:default_randomization=2000,5000,10000,20000,40000,80000:5000,160000:5000,"
+                        + "320000:5000,640000:5000,1280000:5000,1800000:5000",
+                "others:max_retries=3, 5000, 5000, 5000"});
         sDefaults.putLong(KEY_CARRIER_DATA_CALL_APN_DELAY_DEFAULT_LONG, 20000);
         sDefaults.putLong(KEY_CARRIER_DATA_CALL_APN_DELAY_FASTER_LONG, 3000);
         sDefaults.putString(KEY_CARRIER_ERI_FILE_NAME_STRING, "eri.xml");
@@ -1144,6 +1192,8 @@ public class CarrierConfigManager {
         sDefaults.putBoolean(KEY_ENHANCED_4G_LTE_TITLE_VARIANT_BOOL, false);
         sDefaults.putBoolean(KEY_NOTIFY_VT_HANDOVER_TO_WIFI_FAILURE_BOOL, false);
         sDefaults.putStringArray(FILTERED_CNAP_NAMES_STRING_ARRAY, null);
+        sDefaults.putBoolean(KEY_EDITABLE_WFC_ROAMING_MODE_BOOL, false);
+        sDefaults.putBoolean(KEY_STK_DISABLE_LAUNCH_BROWSER_BOOL, false);
     }
 
     /**

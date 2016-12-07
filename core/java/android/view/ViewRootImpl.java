@@ -2167,7 +2167,12 @@ public final class ViewRootImpl implements ViewParent,
         }
 
         if (changedVisibility || regainedFocus) {
-            host.sendAccessibilityEvent(AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED);
+            // Toasts are presented as notifications - don't present them as windows as well
+            boolean isToast = (mWindowAttributes == null) ? false
+                    : (mWindowAttributes.type == WindowManager.LayoutParams.TYPE_TOAST);
+            if (!isToast) {
+                host.sendAccessibilityEvent(AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED);
+            }
         }
 
         mFirst = false;
@@ -5524,9 +5529,11 @@ public final class ViewRootImpl implements ViewParent,
             if (what == DragEvent.ACTION_DRAG_EXITED) {
                 // A direct EXITED event means that the window manager knows we've just crossed
                 // a window boundary, so the current drag target within this one must have
-                // just been exited.  Send it the usual notifications and then we're done
-                // for now.
-                mView.dispatchDragEvent(event);
+                // just been exited. Send the EXITED notification to the current drag view, if any.
+                if (View.sCascadedDragDrop) {
+                    mView.dispatchDragEnterExitInPreN(event);
+                }
+                setDragFocus(null, event);
             } else {
                 // For events with a [screen] location, translate into window coordinates
                 if ((what == DragEvent.ACTION_DRAG_LOCATION) || (what == DragEvent.ACTION_DROP)) {
@@ -5548,6 +5555,12 @@ public final class ViewRootImpl implements ViewParent,
 
                 // Now dispatch the drag/drop event
                 boolean result = mView.dispatchDragEvent(event);
+
+                if (what == DragEvent.ACTION_DRAG_LOCATION && !event.mEventHandlerWasCalled) {
+                    // If the LOCATION event wasn't delivered to any handler, no view now has a drag
+                    // focus.
+                    setDragFocus(null, event);
+                }
 
                 // If we changed apparent drag target, tell the OS about it
                 if (prevDragView != mCurrentDragView) {
@@ -5576,6 +5589,7 @@ public final class ViewRootImpl implements ViewParent,
 
                 // When the drag operation ends, reset drag-related state
                 if (what == DragEvent.ACTION_DRAG_ENDED) {
+                    mCurrentDragView = null;
                     setLocalDragState(null);
                     mAttachInfo.mDragToken = null;
                     if (mAttachInfo.mDragSurface != null) {
@@ -5635,10 +5649,33 @@ public final class ViewRootImpl implements ViewParent,
         return mLastTouchSource;
     }
 
-    public void setDragFocus(View newDragTarget) {
-        if (mCurrentDragView != newDragTarget) {
-            mCurrentDragView = newDragTarget;
+    public void setDragFocus(View newDragTarget, DragEvent event) {
+        if (mCurrentDragView != newDragTarget && !View.sCascadedDragDrop) {
+            // Send EXITED and ENTERED notifications to the old and new drag focus views.
+
+            final float tx = event.mX;
+            final float ty = event.mY;
+            final int action = event.mAction;
+            // Position should not be available for ACTION_DRAG_ENTERED and ACTION_DRAG_EXITED.
+            event.mX = 0;
+            event.mY = 0;
+
+            if (mCurrentDragView != null) {
+                event.mAction = DragEvent.ACTION_DRAG_EXITED;
+                mCurrentDragView.callDragEventHandler(event);
+            }
+
+            if (newDragTarget != null) {
+                event.mAction = DragEvent.ACTION_DRAG_ENTERED;
+                newDragTarget.callDragEventHandler(event);
+            }
+
+            event.mAction = action;
+            event.mX = tx;
+            event.mY = ty;
         }
+
+        mCurrentDragView = newDragTarget;
     }
 
     private AudioManager getAudioManager() {

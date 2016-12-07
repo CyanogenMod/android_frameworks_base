@@ -214,6 +214,7 @@
     <string name="global_actions" product="default" msgid="2406416831541615258">"ફોન વિકલ્પો"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"સ્ક્રીન લૉક"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"પાવર બંધ"</string>
+    <string name="global_action_emergency" msgid="7112311161137421166">"કટોકટી"</string>
     <string name="global_action_bug_report" msgid="7934010578922304799">"બગ રિપોર્ટ"</string>
     <string name="bugreport_title" msgid="2667494803742548533">"બગ રિપોર્ટ લો"</string>
     <string name="bugreport_message" msgid="398447048750350456">"આ, એક ઇ-મેઇલ સંદેશ તરીકે મોકલવા માટે, તમારા વર્તમાન ઉપકરણ સ્થિતિ વિશેની માહિતી એકત્રિત કરશે. એક બગ રિપોર્ટ પ્રારંભ કરીને તે મોકલવા માટે તૈયાર ન થઈ જાય ત્યાં સુધી તેમાં થોડો સમય લાગશે; કૃપા કરીને ધીરજ રાખો."</string>
@@ -1076,6 +1077,17 @@
     <skip />
     <string name="wifi_no_internet" msgid="8451173622563841546">"Wi-Fi ને કોઈ ઇન્ટરનેટ ઍક્સેસ નથી"</string>
     <string name="wifi_no_internet_detailed" msgid="8083079241212301741">"વિકલ્પો માટે ટૅપ કરો"</string>
+    <string name="network_switch_metered" msgid="4671730921726992671">"<xliff:g id="NETWORK_TYPE">%1$s</xliff:g> પર સ્વિચ કર્યું"</string>
+    <string name="network_switch_metered_detail" msgid="5325661434777870353">"જ્યારે <xliff:g id="PREVIOUS_NETWORK">%2$s</xliff:g> પાસે કોઈ ઇન્ટરનેટ ઍક્સેસ ન હોય ત્યારે ઉપકરણ <xliff:g id="NEW_NETWORK">%1$s</xliff:g> નો ઉપયોગ કરે છે. શુલ્ક લાગુ થઈ શકે છે."</string>
+    <string name="network_switch_metered_toast" msgid="5779283181685974304">"<xliff:g id="PREVIOUS_NETWORK">%1$s</xliff:g> પરથી <xliff:g id="NEW_NETWORK">%2$s</xliff:g> પર સ્વિચ કર્યું"</string>
+  <string-array name="network_switch_type_name">
+    <item msgid="2952042958050315394">"સેલ્યુલર ડેટા"</item>
+    <item msgid="75483255295529161">"Wi-Fi"</item>
+    <item msgid="6862614801537202646">"Bluetooth"</item>
+    <item msgid="5447331121797802871">"ઇથરનેટ"</item>
+    <item msgid="8257233890381651999">"VPN"</item>
+  </string-array>
+    <string name="network_switch_type_name_unknown" msgid="4552612897806660656">"અજાણ્યો નેટવર્ક પ્રકાર"</string>
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Wi-Fi સાથે કનેક્ટ કરી શકાયું નથી"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" નબળું ઇન્ટરનેટ કનેક્શન ધરાવે છે."</string>
     <string name="wifi_connect_alert_title" msgid="8455846016001810172">"કનેક્શનની મંજૂરી આપીએ?"</string>
@@ -1153,7 +1165,6 @@
     <string name="select_keyboard_layout_notification_message" msgid="8084622969903004900">"ભાષા અને લેઆઉટ પસંદ કરવા માટે ટૅપ કરો"</string>
     <string name="fast_scroll_alphabet" msgid="5433275485499039199">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
     <string name="fast_scroll_numeric_alphabet" msgid="4030170524595123610">" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
-    <string name="candidates_style" msgid="4333913089637062257"><u>"ઉમેદવારો"</u></string>
     <string name="ext_media_checking_notification_title" msgid="5734005953288045806">"<xliff:g id="NAME">%s</xliff:g> ને તૈયાર કરી રહ્યું છે"</string>
     <string name="ext_media_checking_notification_message" msgid="4747432538578886744">"ભૂલો માટે તપાસી રહ્યું છે"</string>
     <string name="ext_media_new_notification_message" msgid="7589986898808506239">"નવું <xliff:g id="NAME">%s</xliff:g> મળ્યું"</string>
@@ -1232,8 +1243,9 @@
     <string name="vpn_text_long" msgid="4907843483284977618">"<xliff:g id="SESSION">%s</xliff:g> થી કનેક્ટ થયાં. નેટવર્કને સંચાલિત કરવા માટે ટૅપ કરો."</string>
     <string name="vpn_lockdown_connecting" msgid="6443438964440960745">"હંમેશા-ચાલુ VPN કનેક્ટ થઈ રહ્યું છે…"</string>
     <string name="vpn_lockdown_connected" msgid="8202679674819213931">"હંમેશા-ચાલુ VPN કનેક્ટ થયું"</string>
+    <string name="vpn_lockdown_disconnected" msgid="4532298952570796327">"હંમેશાં-ચાલુ VPN ડિસ્કનેક્ટ થયું"</string>
     <string name="vpn_lockdown_error" msgid="6009249814034708175">"હંમેશાં ચાલુ VPN ભૂલ"</string>
-    <string name="vpn_lockdown_config" msgid="4655589351146766608">"ગોઠવવા માટે ટૅપ કરો"</string>
+    <string name="vpn_lockdown_config" msgid="5099330695245008680">"સેટ કરવા માટે ટૅપ કરો"</string>
     <string name="upload_file" msgid="2897957172366730416">"ફાઇલ પસંદ કરો"</string>
     <string name="no_file_chosen" msgid="6363648562170759465">"કોઈ ફાઇલ પસંદ કરેલી નથી"</string>
     <string name="reset" msgid="2448168080964209908">"ફરીથી સેટ કરો"</string>
@@ -1317,7 +1329,7 @@
     <string name="storage_usb_drive_label" msgid="4501418548927759953">"<xliff:g id="MANUFACTURER">%s</xliff:g> USB ડ્રાઇવ"</string>
     <string name="storage_usb" msgid="3017954059538517278">"USB સંગ્રહ"</string>
     <string name="extract_edit_menu_button" msgid="8940478730496610137">"સંપાદિત કરો"</string>
-    <string name="data_usage_warning_title" msgid="1955638862122232342">"ડેટા વપરાશ ચેતવણી"</string>
+    <string name="data_usage_warning_title" msgid="3620440638180218181">"ડેટા વપરાશ ચેતવણી"</string>
     <string name="data_usage_warning_body" msgid="6660692274311972007">"વપરાશ અને સેટિંગ્સ જોવા ટૅપ કરો."</string>
     <string name="data_usage_3g_limit_title" msgid="4361523876818447683">"2G-3G ડેટા મર્યાદા પર પહોંચ્યાં"</string>
     <string name="data_usage_4g_limit_title" msgid="4609566827219442376">"4G ડેટા મર્યાદા સુધી પહોંચ્યાં"</string>
@@ -1636,6 +1648,7 @@
     <string name="search_language_hint" msgid="7042102592055108574">"ભાષાનું નામ ટાઇપ કરો"</string>
     <string name="language_picker_section_suggested" msgid="8414489646861640885">"સૂચવેલા"</string>
     <string name="language_picker_section_all" msgid="3097279199511617537">"બધી ભાષાઓ"</string>
+    <string name="region_picker_section_all" msgid="8966316787153001779">"તમામ પ્રદેશ"</string>
     <string name="locale_search_menu" msgid="2560710726687249178">"શોધ"</string>
     <string name="work_mode_off_title" msgid="8954725060677558855">"કાર્ય મોડ બંધ છે"</string>
     <string name="work_mode_off_message" msgid="3286169091278094476">"કાર્ય પ્રોફાઇલને ઍપ્લિકેશનો, પૃષ્ઠભૂમિ સમન્વયન અને સંબંધિત સુવિધાઓ સહિતનું કાર્ય કરવાની મંજૂરી આપો."</string>
