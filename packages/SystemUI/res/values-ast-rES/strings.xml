@@ -442,7 +442,6 @@
   <!-- Title of dialog shown when data usage has exceeded limit and has been disabled. [CHAR LIMIT=48] -->
   <string name="data_usage_disabled_dialog_title">Datos posaos</string>
   <!-- Body of dialog shown when data usage has exceeded limit and has been disabled. [CHAR LIMIT=NONE] -->
-  <string name="data_usage_disabled_dialog">Darréu qu\'algamóse la llende de datos afitada, el preséu paró l\'usu de datos pal restu d\'esti ciclu.\n\nReanudar esto, podría tener como resultáu cargos del fornidor.</string>
   <!-- Dialog button indicating that data connection should be re-enabled. [CHAR LIMIT=28] -->
   <string name="data_usage_disabled_dialog_enable">Reanudar</string>
   <!-- Text to display underneath the graphical signal strength meter when
@@ -754,6 +753,8 @@
   <string name="profile_owned_footer">El perfil pue ser monitoreáu</string>
   <!-- Footer vpn present text [CHAR LIMIT=50] -->
   <string name="vpn_footer">La rede pue ser monitoreada</string>
+  <!-- Footer vpn present text [CHAR LIMIT=50] -->
+  <string name="branded_vpn_footer">La rede pue ser monitoreada</string>
   <!-- Monitoring dialog title for device owned devices [CHAR LIMIT=35] -->
   <string name="monitoring_title_device_owned">Monitoréu de preseos</string>
   <!-- Monitoring dialog title for profile owned devices [CHAR LIMIT=35] -->
@@ -778,6 +779,8 @@
   <string name="monitoring_description_app">Tas coneutáu a <xliff:g id="application">%1$s</xliff:g>, que pue monitorear la to actividá personal na rede, correos, apps y sitios web.</string>
   <!-- Monitoring dialog text for single app (inside personal profile) [CHAR LIMIT=400] -->
   <string name="monitoring_description_app_personal">Tas coneutáu a <xliff:g id="application">%1$s</xliff:g>, que pue monitorear la to actividá personal na rede, correos, apps y sitios web.</string>
+  <!-- Monitoring dialog text for single app (inside personal profile) [CHAR LIMIT=400] -->
+  <string name="branded_monitoring_description_app_personal">Tas coneutáu a <xliff:g id="application">%1$s</xliff:g>, que pue monitorear la to actividá personal na rede, correos, apps y sitios web.</string>
   <!-- Monitoring dialog text for single app (inside work profile) [CHAR LIMIT=400] -->
   <string name="monitoring_description_app_work"><xliff:g id="organization">%1$s</xliff:g> xestiona\'l to perfil de trabayu. Ta coneutáu a <xliff:g id="application">%2$s</xliff:g>, que pue supervisar l\'actividá de la rede, incluyíos los correos-e, les apps y los sitios web.\n\nPa obtener más información, contauta col alministrador.</string>
   <!-- Monitoring dialog text for multiple apps (in personal and work profiles) [CHAR LIMIT=400] -->
@@ -909,8 +912,6 @@
   <!-- Button that leads to page to rearrange quick settings tiles [CHAR LIMIT=60] -->
   <!-- Option to show brightness bar in quick settings [CHAR LIMIT=60] -->
   <!-- Option to use new paging layout in quick settings [CHAR LIMIT=60] -->
-  <!-- Toggle to enable the gesture to enter split-screen by swiping up from the Overview button. [CHAR LIMIT=60]-->
-  <!-- Description for the toggle to enable the gesture to enter split-screen by swiping up from the Overview button. [CHAR LIMIT=NONE]-->
   <!-- Category in the System UI Tuner settings, where new/experimental
          settings are -->
   <!-- Dialog title asking if Bluetooth should be enabled [CHAR LIMIT=NONE] -->
@@ -1070,5 +1071,7 @@
   <!-- accessibility label for quick settings items that open a details page [CHAR LIMIT=NONE] -->
   <!-- accessibility label for quick settings items that open a details page [CHAR LIMIT=NONE] -->
   <!-- accessibility label for button to edit quick settings [CHAR LIMIT=NONE] -->
-  <!-- accessibility label for paging indicator in quick settings [CHAR LIMITi=NONE] -->
+  <!-- accessibility label for paging indicator in quick settings [CHAR LIMIT=NONE] -->
+  <!-- Label that replaces other notification controls when the notification is from the system
+         and cannot be silenced (see @string/show_silently) or blocked (see @string/block) -->
 </resources>

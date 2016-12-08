@@ -230,6 +230,7 @@
   <!-- label for item that turns off power in phone options dialog -->
   <!-- label for item that restarts phone in phone options dialog -->
   <!-- TODO: promote to separate string-->
+  <!-- label for item that starts emergency call -->
   <!-- label for item that generates a bug report in the phone options dialog -->
   <!-- Take bug report menu title [CHAR LIMIT=NONE] -->
   <!-- Message in bugreport dialog describing what it does [CHAR LIMIT=NONE] -->
@@ -1261,6 +1262,7 @@
   <!-- The text of the notification when VPN is active with a session name. -->
   <!-- Notification title when connecting to lockdown VPN. -->
   <!-- Notification title when connected to lockdown VPN. -->
+  <!-- Notification title when not connected to lockdown VPN. -->
   <!-- Notification title when error connecting to lockdown VPN. -->
   <!-- Notification body that indicates user can touch to configure lockdown VPN connection. -->
   <!-- Localized strings for WebView -->
@@ -1364,7 +1366,7 @@
   <!-- Storage description for a USB drive from a specific manufacturer. [CHAR LIMIT=NONE] -->
   <!-- Storage description for USB storage. [CHAR LIMIT=NONE] -->
   <!-- Button text for the edit menu in input method extract mode. [CHAR LIMIT=16] -->
-  <!-- Notification title when data usage has exceeded warning threshold. [CHAR LIMIT=32] -->
+  <!-- Notification title when data usage has exceeded warning threshold. [CHAR LIMIT=50] -->
   <!-- Notification body when data usage has exceeded warning threshold. [CHAR LIMIT=32] -->
   <!-- Notification title when 2G-3G data usage has exceeded limit threshold, and has been disabled. [CHAR LIMIT=32] -->
   <!-- Notification title when 4G data usage has exceeded limit threshold, and has been disabled. [CHAR LIMIT=32] -->
@@ -1687,6 +1689,8 @@
   <!-- Hint text in a search edit box (used to filter long language / country lists) [CHAR LIMIT=25] -->
   <!-- List section subheader for the language picker, containing a list of suggested languages determined by the default region [CHAR LIMIT=30] -->
   <!-- List section subheader for the language picker, containing a list of all languages available [CHAR LIMIT=30] -->
+  <!-- List section subheader for the region picker, containing a list of all regions supported for the selected language.
+    Warning: this is a more 'neutral' term for 'country', not for the sub-divisions of a country. [CHAR LIMIT=30] -->
   <!-- Menu item in the locale menu  [CHAR LIMIT=30] -->
   <!-- Title for dialog displayed when work profile is turned off. [CHAR LIMIT=30] -->
   <!-- Message displayed in dialog when work profile is turned off. [CHAR LIMIT=NONE] -->

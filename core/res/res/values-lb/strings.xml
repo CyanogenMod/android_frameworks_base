@@ -397,6 +397,7 @@
   <string name="global_action_power_off">Ausmaachen</string>
   <!-- label for item that restarts phone in phone options dialog -->
   <!-- TODO: promote to separate string-->
+  <!-- label for item that starts emergency call -->
   <!-- label for item that generates a bug report in the phone options dialog -->
   <string name="global_action_bug_report">Feelerbericht</string>
   <!-- Take bug report menu title [CHAR LIMIT=NONE] -->
@@ -2092,7 +2093,6 @@ Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwunge vun Elemen
          where the user can associate language with physical keyboard layout. -->
   <string name="fast_scroll_alphabet">\u0020ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
   <string name="fast_scroll_numeric_alphabet">\u00200123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
-  <string name="candidates_style"><u>Kandidaten</u></string>
   <!-- External media notification strings -->
   <!-- Notification title when external media is being checked [CHAR LIMIT=30] -->
   <!-- Notification body when external media is being checked [CHAR LIMIT=NONE] -->
@@ -2208,6 +2208,7 @@ Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwunge vun Elemen
   <string name="vpn_lockdown_connecting">Permanent aktive VPN gëtt connectéiert\u2026</string>
   <!-- Notification title when connected to lockdown VPN. -->
   <string name="vpn_lockdown_connected">Permanent aktive VPN connectéiert</string>
+  <!-- Notification title when not connected to lockdown VPN. -->
   <!-- Notification title when error connecting to lockdown VPN. -->
   <string name="vpn_lockdown_error">Feeler beim permanent aktive VPN</string>
   <!-- Notification body that indicates user can touch to configure lockdown VPN connection. -->
@@ -2388,8 +2389,7 @@ Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwunge vun Elemen
   <string name="storage_usb">USB-Späicher</string>
   <!-- Button text for the edit menu in input method extract mode. [CHAR LIMIT=16] -->
   <string name="extract_edit_menu_button">Änneren</string>
-  <!-- Notification title when data usage has exceeded warning threshold. [CHAR LIMIT=32] -->
-  <string name="data_usage_warning_title">Dateverbrauchswarnung</string>
+  <!-- Notification title when data usage has exceeded warning threshold. [CHAR LIMIT=50] -->
   <!-- Notification body when data usage has exceeded warning threshold. [CHAR LIMIT=32] -->
   <!-- Notification title when 2G-3G data usage has exceeded limit threshold, and has been disabled. [CHAR LIMIT=32] -->
   <string name="data_usage_3g_limit_title">2G/3G Datelimitt erreecht</string>
@@ -2961,6 +2961,8 @@ Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwunge vun Elemen
   <!-- Hint text in a search edit box (used to filter long language / country lists) [CHAR LIMIT=25] -->
   <!-- List section subheader for the language picker, containing a list of suggested languages determined by the default region [CHAR LIMIT=30] -->
   <!-- List section subheader for the language picker, containing a list of all languages available [CHAR LIMIT=30] -->
+  <!-- List section subheader for the region picker, containing a list of all regions supported for the selected language.
+    Warning: this is a more 'neutral' term for 'country', not for the sub-divisions of a country. [CHAR LIMIT=30] -->
   <!-- Menu item in the locale menu  [CHAR LIMIT=30] -->
   <string name="locale_search_menu">Sichen</string>
   <!-- Title for dialog displayed when work profile is turned off. [CHAR LIMIT=30] -->
