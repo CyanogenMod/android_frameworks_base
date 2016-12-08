@@ -565,6 +565,7 @@
   <!-- Footer device owned text [CHAR LIMIT=50] -->
   <!-- Footer profile owned text [CHAR LIMIT=50] -->
   <!-- Footer vpn present text [CHAR LIMIT=50] -->
+  <!-- Footer vpn present text [CHAR LIMIT=50] -->
   <!-- Monitoring dialog title for device owned devices [CHAR LIMIT=35] -->
   <!-- Monitoring dialog title for profile owned devices [CHAR LIMIT=35] -->
   <!-- Monitoring dialog title for normal devices  [CHAR LIMIT=35]-->
@@ -576,6 +577,7 @@
   <!-- Monitoring dialog VPN with profile owner text [CHAR LIMIT=400] -->
   <!-- Name for a generic legacy VPN connection [CHAR LIMIT=20] -->
   <!-- Monitoring dialog text for single app (no profile or device owner) [CHAR LIMIT=400] -->
+  <!-- Monitoring dialog text for single app (inside personal profile) [CHAR LIMIT=400] -->
   <!-- Monitoring dialog text for single app (inside personal profile) [CHAR LIMIT=400] -->
   <!-- Monitoring dialog text for single app (inside work profile) [CHAR LIMIT=400] -->
   <!-- Monitoring dialog text for multiple apps (in personal and work profiles) [CHAR LIMIT=400] -->
@@ -662,8 +664,6 @@
   <!-- Button that leads to page to rearrange quick settings tiles [CHAR LIMIT=60] -->
   <!-- Option to show brightness bar in quick settings [CHAR LIMIT=60] -->
   <!-- Option to use new paging layout in quick settings [CHAR LIMIT=60] -->
-  <!-- Toggle to enable the gesture to enter split-screen by swiping up from the Overview button. [CHAR LIMIT=60]-->
-  <!-- Description for the toggle to enable the gesture to enter split-screen by swiping up from the Overview button. [CHAR LIMIT=NONE]-->
   <!-- Category in the System UI Tuner settings, where new/experimental
          settings are -->
   <!-- Dialog title asking if Bluetooth should be enabled [CHAR LIMIT=NONE] -->
@@ -816,5 +816,7 @@
   <!-- accessibility label for quick settings items that open a details page [CHAR LIMIT=NONE] -->
   <!-- accessibility label for quick settings items that open a details page [CHAR LIMIT=NONE] -->
   <!-- accessibility label for button to edit quick settings [CHAR LIMIT=NONE] -->
-  <!-- accessibility label for paging indicator in quick settings [CHAR LIMITi=NONE] -->
+  <!-- accessibility label for paging indicator in quick settings [CHAR LIMIT=NONE] -->
+  <!-- Label that replaces other notification controls when the notification is from the system
+         and cannot be silenced (see @string/show_silently) or blocked (see @string/block) -->
 </resources>
