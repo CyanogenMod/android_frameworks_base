@@ -66,6 +66,9 @@
     <java-symbol type="string" name="global_action_current_user" />
     <java-symbol type="dimen" name="global_actions_avatar_size" />
 
+    <!-- Screenshot action status message -->
+    <java-symbol type="string" name="global_actions_screenshot_status" />
+
     <!-- Support Samsung docks -->
     <java-symbol type="bool" name="config_forceAnalogCarDock" />
     <java-symbol type="bool" name="config_forceAnalogDeskDock" />
