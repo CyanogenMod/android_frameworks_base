@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2015 The CyanogenMod Project
+* Copyright (C) 2016 The CyanogenMod Project
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -50,6 +50,8 @@ public class VisualizerView extends View
     private ValueAnimator[] mValueAnimators;
     private float[] mFFTPoints;
 
+    protected ScrimController mScrimController;
+
     private int mStatusBarState;
     private boolean mVisualizerEnabled = false;
     private boolean mVisible = false;
@@ -58,6 +60,7 @@ public class VisualizerView extends View
     private boolean mDisplaying = false; // the state we're animating to
     private boolean mDozing = false;
     private boolean mOccluded = false;
+    private boolean mAnimate = false;
 
     private int mColor;
     private Bitmap mCurrentBitmap;
@@ -264,12 +267,13 @@ public class VisualizerView extends View
         }
     }
 
-    public void setOccluded(boolean occluded) {
+    public void setOccluded(boolean occluded, boolean animate) {
         if (mOccluded != occluded) {
             if (DEBUG) {
-                Log.i(TAG, "setOccluded() called with occluded = [" + occluded + "]");
+                Log.i(TAG, "setOccluded() called with occluded = [" + occluded + "] animate=" + animate);
             }
             mOccluded = occluded;
+            mAnimate = animate;
             checkStateChanged();
         }
     }
@@ -340,24 +344,15 @@ public class VisualizerView extends View
             if (!mDisplaying) {
                 mDisplaying = true;
                 AsyncTask.execute(mLinkVisualizer);
-                animate()
-                        .alpha(1f)
-                        .withEndAction(null)
-                        .setDuration(800);
+                if (mAnimate) {
+                    mScrimController.animateKeyguardUnoccluding(800);
+                }
             }
         } else {
             if (mDisplaying) {
                 mDisplaying = false;
-                if (mVisible) {
-                    animate()
-                            .alpha(0f)
-                            .withEndAction(mAsyncUnlinkVisualizer)
-                            .setDuration(600);
-                } else {
-                    animate().
-                            alpha(0f)
-                            .withEndAction(mAsyncUnlinkVisualizer)
-                            .setDuration(0);
+                if (mVisible && mAnimate && !mOccluded) {
+                    mScrimController.animateKeyguardUnoccluding(600);
                 }
             }
         }
