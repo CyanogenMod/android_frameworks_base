@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2015 The CyanogenMod Project
+* Copyright (C) 2016 The CyanogenMod Project
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -264,10 +264,10 @@ public class VisualizerView extends View
         }
     }
 
-    public void setOccluded(boolean occluded) {
+    public void setOccluded(boolean occluded, boolean animate) {
         if (mOccluded != occluded) {
             if (DEBUG) {
-                Log.i(TAG, "setOccluded() called with occluded = [" + occluded + "]");
+                Log.i(TAG, "setOccluded() called with occluded = [" + occluded + "] animate=" + animate);
             }
             mOccluded = occluded;
             checkStateChanged();
