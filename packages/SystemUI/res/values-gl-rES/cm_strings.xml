@@ -29,12 +29,45 @@
   <string name="led_notification_title">Configuración de luz</string>
   <string name="led_notification_text">Luz LED activada por configuración</string>
   <!-- Content description of the superuser tile -->
+  <string name="accessibility_su_active">Sesión de superusuario activa</string>
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">A lanterna está acesa</string>
   <string name="quick_settings_tile_flashlight_not_summary">Toca para apagala</string>
   <!-- [CHAR LIMIT=NONE] Importance Tuner setting title -->
+  <string name="cm_power_notification_controls_description">Cos controis das notificacións de enerxía, podes definir un nivel de importancia entre 0 e 6 para as notificacións dunha aplicación.
+        \n\n<b>Nivel 6</b>
+        \n- Amosar na parte superior da lista de notificacións
+        \n- Permitir interrupcións a pantalla completa
+        \n- Sempre intrusivas
+        \n\n<b>Nivel 5</b>
+        \n- Previr interrupcións a pantalla completa
+        \n- Sempre intrusivas
+        \n\n<b>Nivel 4</b>
+        \n- Previr interrupcións a pantalla completa
+        \n- Nunca intrusivas
+        \n\n<b>Nivel 3</b>
+        \n- Previr interrupcións a pantalla completa
+        \n- Nunca intrusivas
+        \n- Nunca reproducir sons ou vibrar
+        \n\n<b>Nivel 2</b>
+        \n- Previr interrupcións a pantalla completa
+        \n- Nunca intrusivas
+        \n- Nunca reproducir sons ou vibrar
+        \n- Ocultar na pantalla de bloqueo
+        \n- Amosar ao final da lista de notificacións
+        \n\n<b>Nivel 1</b>
+        \n- Previr interrupcións a pantalla completa
+        \n- Nunca intrusivas
+        \n- Nunca reproducir sons ou vibrar
+        \n- Ocultar na pantalla de bloqueo e na barra de estado
+        \n- Amosar ao final da lista de notificacións
+        \n\n<b>Nivel 0</b>
+        \n- Bloquear todas as notificacións
+    </string>
   <!-- Notification importance level title-->
+  <string name="importance_level_title">Importancia: nivel %1$d</string>
   <!-- [CHAR LIMIT=100] Notification Importance slider: very low importance level description -->
+  <string name="notification_importance_very_low">Sen interrupción a pantalla completa, intrusión, son ou vibración. Ocultar da pantalla de bloqueo.</string>
   <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">Amosarase mentres esté fixado. Para deixar de fixalo, mantén tocado o botón Atrás.</string>
   <!-- Strings for lockscreen shortcut hints -->
@@ -52,6 +85,8 @@
   <string name="accessibility_dpad_left">Cursor á esquerda</string>
   <string name="accessibility_dpad_right">Cursor á dereita</string>
   <!-- NavBar Tuner -->
+  <string name="menu_ime_always_show">Menu /Alternador de Teclado (mostrar sempre)</string>
+  <string name="search">Buscar</string>
   <!-- Wi-Fi hotspot label when enabled -->
   <plurals name="wifi_hotspot_connected_clients_label">
     <item quantity="one">%1$d cliente</item>

@@ -28,10 +28,12 @@
   <!-- label for item that opens the profile choosing dialog -->
   <string name="global_action_choose_profile">Profil</string>
   <!-- label for item that restarts the phone in phone options dialog -->
+  <string name="global_action_reboot">Redémarrer</string>
   <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Actuel</string>
   <!-- Restart menu -->
   <!-- Button to restart the phone, within the Restart Options dialog -->
+  <string name="reboot_reboot">Redémarrer</string>
   <!-- Button to restart the phone into recovery, within the Restart Options dialog -->
   <string name="reboot_recovery">Récupération</string>
   <!-- Button to restart the phone into bootloader, within the Restart Options dialog -->
@@ -39,10 +41,15 @@
   <!-- Button to restart the phone into download, within the Restart Options dialog -->
   <string name="reboot_download">Download</string>
   <!-- Button to soft restart the device, within the Restart Options dialog -->
+  <string name="reboot_soft">Redémarrage logiciel</string>
   <!-- Title of dialog to confirm restarting. -->
+  <string name="reboot_title">Redémarrer</string>
   <!-- Restart Confirmation Dialog.  When the user chooses to restart the device, there will
          be a confirmation dialog.  This is the message. -->
+  <string name="reboot_confirm" product="tablet">Votre tablette va redémarrer.</string>
+  <string name="reboot_confirm" product="default">Votre téléphone va redémarrer.</string>
   <!-- Restart Progress Dialog. This is shown if the user chooses to restart the phone. -->
+  <string name="reboot_progress">Redémarrage\u2026</string>
   <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ADB sur réseau activé</string>
   <!-- ADB over USB and network notification -->
@@ -112,6 +119,7 @@
   <string name="app_ops_use_fingerprint">utiliser les empreintes digitales</string>
   <string name="app_ops_add_voicemail">ajouter un message vocal</string>
   <string name="app_ops_read_phone_state">accéder à l\'état du téléphone</string>
+  <string name="app_ops_scan_wifi">rechercher les réseaux Wi-Fi</string>
   <string name="app_ops_change_wallpaper">changer le fond d\'écran</string>
   <string name="app_ops_assist_structure">utiliser l\'aide à la structure</string>
   <string name="app_ops_assist_screenshot">prendre une capture d\'écran</string>
@@ -122,6 +130,7 @@
   <string name="app_ops_write_external_storage">écrire sur le stockage externe</string>
   <string name="app_ops_turn_on_screen">allumer l\'écran</string>
   <string name="app_ops_get_accounts">obtenir les comptes de l\'appareil</string>
+  <string name="app_ops_run_in_background">ouvrir en arrière-plan</string>
   <string name="app_ops_wifi_change">changer l\'état du Wi-Fi</string>
   <string name="app_ops_su">obtenir l\'accès root</string>
   <!-- Protected Apps Notification -->
