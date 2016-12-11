@@ -29,12 +29,45 @@
   <string name="led_notification_title">Індыкатар падзей</string>
   <string name="led_notification_text">Светадыёд уключаны параметрамі</string>
   <!-- Content description of the superuser tile -->
+  <string name="accessibility_su_active">Актыўна сэсія суперкарыстальніка</string>
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">Выбліск уключаны</string>
   <string name="quick_settings_tile_flashlight_not_summary">Націсніце, каб уключыць</string>
   <!-- [CHAR LIMIT=NONE] Importance Tuner setting title -->
+  <string name="cm_power_notification_controls_description">З дапамогаю гэтае функцыі, можна рэдагаваць узровень істотнасьці паведамленьня ад 0 да 6 для кожнага дадатку.
+        \n\n<b>Узровень 6</b>
+        \n‒ Перасоўвае паведамленьне ў пачатак сьпісу.
+        \n‒ Паўнаэкраннае паведамленьне.
+        \n‒ Паказвае ўсплывальныя паведамленьні.
+        \n\n<b>Узровень 5</b>
+        \n‒ Не паказвае паўнаэкраннае паведамленьне.
+        \n‒ Паказвае ўсплывальныя паведамленьні.
+        \n\n<b>Узровень 4</b>
+        \n‒ Не паказвае паўнаэкраннае паведамленьне.
+        \n‒ Не паказвае ўсплывальныя паведамленьне.
+        \n\n<b>Рівень 3</b>
+         \n‒ Не паказвае паўнаэкраннае паведамленьне.
+        \n‒ Не паказвае ўсплывальныя паведамленьне.
+        \n‒ Не выкарыстоўвае гук й вібраваньне.
+        \n\n<b>Узровень 2</b>
+        \n‒ Не паказвае паўнаэкраннае паведамленьне.
+        \n‒ Не паказвае ўсплывальныя паведамленьне.
+        \n‒ Не выкарыстоўвае гук й вібраваньне.
+        \n‒ Не паказваць на экране блакаваньня.
+        \n‒ Перасунуць паведмленьне ў канец сьпісу.
+        \n\n<b>Узровень 1</b>
+        \n‒ Не паказвае паўнаэкраннае паведамленьне.
+        \n‒ Не паказвае ўсплывальныя паведамленьне.
+        \n‒ Не выкарыстоўвае гук й вібраваньне.
+        \n‒ Не паказваць на экране блакаваньня й радку стану.
+        \n‒ Перасунуць паведмленьне ў канец сьпісу.
+        \n\n<b>Узровень 0</b>
+        \n‒ Блакаваць усе паведамленьні дадаткаў
+    </string>
   <!-- Notification importance level title-->
+  <string name="importance_level_title">Важнасць: Узровень %1$d</string>
   <!-- [CHAR LIMIT=100] Notification Importance slider: very low importance level description -->
+  <string name="notification_importance_very_low">Не перапыняць рэжым поўнага экрану, не дазваляць кароткі паказ, прайграньне гуку або вібрацыю.</string>
   <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">Гэты дадатак застанецца актыўным, пакуль вы не скасуеце блакаванне доўгім націскам кнопкі \"Назад\".</string>
   <!-- Strings for lockscreen shortcut hints -->
@@ -51,6 +84,7 @@
   <string name="accessibility_dpad_left">Курсор налева</string>
   <string name="accessibility_dpad_right">Курсор направа</string>
   <!-- NavBar Tuner -->
+  <string name="search">Пошук</string>
   <!-- Wi-Fi hotspot label when enabled -->
   <!-- Path data for portrait battery -->
   <!-- Path data for landscape battery -->
