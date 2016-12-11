@@ -63,6 +63,8 @@ public class StatusBarWindowManager implements RemoteInputController.Callback,
             "cmsystem:" + CMSettings.System.LOCKSCREEN_ROTATION;
     private static final String LOCK_SCREEN_BLUR_ENABLED =
             "cmsecure:" + CMSettings.Secure.LOCK_SCREEN_BLUR_ENABLED;
+    private static final String LOCK_SCREEN_BLUR_WALLPAPER =
+            "cmsecure:" + CMSettings.Secure.LOCK_SCREEN_BLUR_WALLPAPER;
 
     private static final String TAG = "StatusBarWindowManager";
 
@@ -80,6 +82,7 @@ public class StatusBarWindowManager implements RemoteInputController.Callback,
     private final boolean mBlurSupported;
 
     private boolean mKeyguardBlurEnabled;
+    private boolean mKeyguardBlurWallpaper;
     private boolean mShowingMedia;
     private BlurLayer mKeyguardBlur;
     private final SurfaceSession mFxSession;
@@ -91,6 +94,7 @@ public class StatusBarWindowManager implements RemoteInputController.Callback,
     private static final int TYPE_LAYER_OFFSET = 1000;      // refer to WindowManagerService.TYPE_LAYER_OFFSET
 
     private static final int STATUS_BAR_LAYER = 16 * TYPE_LAYER_MULTIPLIER + TYPE_LAYER_OFFSET;
+    private static int BLUR_LAYER;
 
     private final State mCurrentState = new State();
 
@@ -155,21 +159,30 @@ public class StatusBarWindowManager implements RemoteInputController.Callback,
         mKeyguardBlurEnabled = mBlurSupported ?
                 CMSettings.Secure.getInt(mContext.getContentResolver(),
                 CMSettings.Secure.LOCK_SCREEN_BLUR_ENABLED, 1) == 1 : false;
+        mKeyguardBlurWallpaper = mBlurSupported ?
+                CMSettings.Secure.getInt(mContext.getContentResolver(),
+                CMSettings.Secure.LOCK_SCREEN_BLUR_WALLPAPER, 1) == 1 : false;
         if (mBlurSupported) {
             Display display = mWindowManager.getDefaultDisplay();
             Point xy = new Point();
             display.getRealSize(xy);
             mCurrentOrientation = mContext.getResources().getConfiguration().orientation;
             mKeyguardBlur = new BlurLayer(mFxSession, xy.x, xy.y, "KeyGuard");
+            if (mKeyguardBlurWallpaper) {
+                BLUR_LAYER = STATUS_BAR_LAYER - 2;
+            } else {
+                BLUR_LAYER = STATUS_BAR_LAYER - 1;
+            }
             if (mKeyguardBlur != null) {
-                mKeyguardBlur.setLayer(STATUS_BAR_LAYER - 1);
+                mKeyguardBlur.setLayer(BLUR_LAYER);
             }
         }
 
         TunerService.get(mContext).addTunable(this,
                 ACCELEROMETER_ROTATION,
                 LOCKSCREEN_ROTATION,
-                LOCK_SCREEN_BLUR_ENABLED);
+                LOCK_SCREEN_BLUR_ENABLED,
+                LOCK_SCREEN_BLUR_WALLPAPER);
 
     }
 
@@ -553,6 +566,11 @@ public class StatusBarWindowManager implements RemoteInputController.Callback,
                 mKeyguardBlurEnabled = mBlurSupported ?
                     CMSettings.Secure.getInt(mContext.getContentResolver(),
                     CMSettings.Secure.LOCK_SCREEN_BLUR_ENABLED, 1) == 1 : false;
+                break;
+            case LOCK_SCREEN_BLUR_WALLPAPER:
+                mKeyguardBlurWallpaper = mBlurSupported ?
+                    CMSettings.Secure.getInt(mContext.getContentResolver(),
+                    CMSettings.Secure.LOCK_SCREEN_BLUR_WALLPAPER, 1) == 1 : false;
                 break;
             default:
                 return;
