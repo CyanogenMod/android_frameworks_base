@@ -5117,6 +5117,14 @@ public final class Settings {
         public static final String LOCK_SCREEN_ALLOW_PRIVATE_NOTIFICATIONS =
                 "lock_screen_allow_private_notifications";
 
+
+        /**
+         * Separate password for encryption and the lockscreen.
+          * @hide
+         */
+        public static final String LOCK_SEPARATE_ENCRYPTION_PASSWORD =
+                "lock_separate_encryption_password";
+
         /**
          * When set by a user, allows notification remote input atop a securely locked screen
          * without having to unlock

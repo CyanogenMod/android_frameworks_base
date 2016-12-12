@@ -1638,6 +1638,7 @@ public class LockSettingsService extends ILockSettings.Stub {
         Secure.LOCK_BIOMETRIC_WEAK_FLAGS,
         Secure.LOCK_PATTERN_VISIBLE,
         Secure.LOCK_PATTERN_TACTILE_FEEDBACK_ENABLED,
+        Secure.LOCK_SEPARATE_ENCRYPTION_PASSWORD,
         Secure.LOCK_PATTERN_SIZE,
         Secure.LOCK_DOTS_VISIBLE,
         Secure.LOCK_SHOW_ERROR_PATH,

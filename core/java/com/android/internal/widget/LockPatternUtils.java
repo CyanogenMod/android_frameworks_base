@@ -592,7 +592,7 @@ public class LockPatternUtils {
             // well, we tried...
         }
 
-        if (userHandle == UserHandle.USER_SYSTEM) {
+        if (userHandle == UserHandle.USER_SYSTEM && !isSeparateEncryptionPasswordEnabled()) {
             // Set the encryption password to default.
             updateEncryptionPassword(StorageManager.CRYPT_TYPE_DEFAULT, null);
             setCredentialRequiredToDecrypt(false);
@@ -652,7 +652,8 @@ public class LockPatternUtils {
 
             // Update the device encryption password.
             if (userId == UserHandle.USER_SYSTEM
-                    && LockPatternUtils.isDeviceEncryptionEnabled()) {
+                    && LockPatternUtils.isDeviceEncryptionEnabled()
+                    && !isSeparateEncryptionPasswordEnabled()) {
                 if (!shouldEncryptWithCredentials(true)) {
                     clearEncryptionPassword();
                 } else {
@@ -885,7 +886,8 @@ public class LockPatternUtils {
 
             // Update the device encryption password.
             if (userHandle == UserHandle.USER_SYSTEM
-                    && LockPatternUtils.isDeviceEncryptionEnabled()) {
+                    && LockPatternUtils.isDeviceEncryptionEnabled()
+                    && !isSeparateEncryptionPasswordEnabled()) {
                 if (!shouldEncryptWithCredentials(true)) {
                     clearEncryptionPassword();
                 } else {
@@ -1289,6 +1291,72 @@ public class LockPatternUtils {
         } catch (RemoteException e) {
             Log.e(TAG, "Error changing password visible state", e);
         }
+    }
+
+    private void updateEncryptionPasswordFromPassword(String password) {
+        if (!TextUtils.isEmpty(password)) {
+            int computedQuality = computePasswordQuality(password);
+            boolean numeric = computedQuality
+                == DevicePolicyManager.PASSWORD_QUALITY_NUMERIC;
+            boolean numericComplex = computedQuality
+                == DevicePolicyManager.PASSWORD_QUALITY_NUMERIC_COMPLEX;
+            int type = numeric || numericComplex ? StorageManager.CRYPT_TYPE_PIN
+                : StorageManager.CRYPT_TYPE_PASSWORD;
+            updateEncryptionPassword(type, password);
+        } else {
+            clearEncryptionPassword();
+        }
+    }
+
+    /**
+     * Set the encryption password separately from the lockscreen password.
+     *
+     * @param password The password to save
+     */
+    public void setSeparateEncryptionPassword(String password) {
+        updateEncryptionPasswordFromPassword(password);
+        setSeparateEncryptionPasswordEnabled(true);
+    }
+
+    /**
+     * Replace the separate encryption password by tying it to the lockscreen
+     * password. No change will occur if the provided lockscreen password is
+     * incorrect.
+     *
+     * @param password The current lockscreen password
+     * @return Whether the lockscreen password was correct.
+     */
+    public void replaceSeparateEncryptionPassword(String password) {
+        updateEncryptionPasswordFromPassword(password);
+        setSeparateEncryptionPasswordEnabled(false);
+    }
+
+    /**
+     * Replace the separate encryption password by tying it to the lockscreen
+     * pattern. No change will occur if the provided lockscreen password is
+     * incorrect.
+     *
+     * @param pattern The current lockscreen pattern
+     * @return Whether the lockscreen pattern was correct.
+     */
+    public void replaceSeparateEncryptionPasswordWithPattern(List<LockPatternView.Cell> pattern,
+            byte gridSize) {
+        String stringPattern = patternToString(pattern, gridSize);
+        updateEncryptionPassword(StorageManager.CRYPT_TYPE_PATTERN, stringPattern);
+        setSeparateEncryptionPasswordEnabled(false);
+    }
+
+    /**
+     * @return Whether the encryption password is separate from the lockscreen password.
+     */
+    public boolean isSeparateEncryptionPasswordEnabled() {
+        return getBoolean(Settings.Secure.LOCK_SEPARATE_ENCRYPTION_PASSWORD,
+                false, UserHandle.USER_SYSTEM);
+    }
+
+    private void setSeparateEncryptionPasswordEnabled(boolean enabled) {
+        setBoolean(Settings.Secure.LOCK_SEPARATE_ENCRYPTION_PASSWORD,
+                enabled, UserHandle.USER_SYSTEM);
     }
 
     /**
