@@ -29,11 +29,43 @@
   <string name="led_notification_title">Paramètres du voyant</string>
   <string name="led_notification_text">LED activée par les paramètres</string>
   <!-- Content description of the superuser tile -->
+  <string name="accessibility_su_active">Session super-utilisateur active</string>
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">Lampe de poche allumée</string>
   <string name="quick_settings_tile_flashlight_not_summary">Toucher pour éteindre</string>
   <!-- [CHAR LIMIT=NONE] Importance Tuner setting title -->
+  <string name="cm_power_notification_controls_description">Avec le contrôle supérieur des notifications, vous pouvez donner une importance de 0 à 6 aux notifications d\'une appli.
+        \n\n<b>Niveau 6</b>
+        \n- Affichage en haut de la liste
+        \n- Autorise les interventions en plein écran
+        \n- Toujours intrusives
+        \n\n<b>Niveau 5</b>
+        \n- Empêche les interventions en plein écran
+        \n- Toujours intrusives
+        \n\n<b>Niveau 4</b>
+        \n- Empêche les interventions en plein écran
+        \n- Aucune intrusion
+        \n\n<b>Niveau 3</b>
+        \n- Empêche les interventions en plein écran
+        \n- Aucune intrusion
+        \n- Ne vibre ou sonne jamais
+        \n\n<b>Niveau 2</b>
+        \n- Empêche les interventions en plein écran
+        \n- Aucune intrusion
+        \n- Ne vibre ou sonne jamais
+        \n- Cache les notifications de l\'écran de verrouillage et de la barre d\'état
+        \n- Affichage tout en bas de la liste
+        \n\n<b>Niveau 1</b>
+        \n- Empêche les interventions en plein écran
+        \n- Aucune intrusion
+        \n- Ne vibre ou sonne jamais
+        \n- Cache les notifications de l\'écran de verrouillage et de la barre d\'état
+        \n- Affichage tout en bas de la liste
+        \n\n<b>Niveau 0</b>
+        \n- Bloque toutes les notifications d\'une application
+    </string>
   <!-- Notification importance level title-->
+  <string name="importance_level_title">Importance : niveau %1$d</string>
   <!-- [CHAR LIMIT=100] Notification Importance slider: very low importance level description -->
   <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">Cela le laisse en vue jusqu\'à ce que vous le détachiez. Appuyez et maintenez le bouton retour pour détacher.</string>
@@ -51,6 +83,8 @@
   <string name="accessibility_dpad_left">Curseur gauche</string>
   <string name="accessibility_dpad_right">Curseur droit</string>
   <!-- NavBar Tuner -->
+  <string name="menu_ime_always_show">(Dés)activation menu / clavier (toujours montrer)</string>
+  <string name="search">Rechercher</string>
   <!-- Wi-Fi hotspot label when enabled -->
   <plurals name="wifi_hotspot_connected_clients_label">
     <item quantity="one">%1$d client</item>

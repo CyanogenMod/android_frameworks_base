@@ -28,10 +28,12 @@
   <!-- label for item that opens the profile choosing dialog -->
   <string name="global_action_choose_profile">Профіль</string>
   <!-- label for item that restarts the phone in phone options dialog -->
+  <string name="global_action_reboot">Перазапусціць</string>
   <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Бягучы</string>
   <!-- Restart menu -->
   <!-- Button to restart the phone, within the Restart Options dialog -->
+  <string name="reboot_reboot">Перазапусціць</string>
   <!-- Button to restart the phone into recovery, within the Restart Options dialog -->
   <string name="reboot_recovery">Рэжым аднаўлення</string>
   <!-- Button to restart the phone into bootloader, within the Restart Options dialog -->
@@ -39,10 +41,15 @@
   <!-- Button to restart the phone into download, within the Restart Options dialog -->
   <string name="reboot_download">Спампоўкі</string>
   <!-- Button to soft restart the device, within the Restart Options dialog -->
+  <string name="reboot_soft">Мяккі перезапуск</string>
   <!-- Title of dialog to confirm restarting. -->
+  <string name="reboot_title">Перазапусціць</string>
   <!-- Restart Confirmation Dialog.  When the user chooses to restart the device, there will
          be a confirmation dialog.  This is the message. -->
+  <string name="reboot_confirm" product="tablet">Ваш пляншэт перазапусціцца.</string>
+  <string name="reboot_confirm" product="default">Ваш тэлефон перазапусціцца.</string>
   <!-- Restart Progress Dialog. This is shown if the user chooses to restart the phone. -->
+  <string name="reboot_progress">Перазапуск</string>
   <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ADB праз сетку ўключана</string>
   <!-- ADB over USB and network notification -->
@@ -61,7 +68,7 @@
   <!-- App ops requests -->
   <string name="app_ops_access_camera">атрымаць доступ да камеры</string>
   <string name="app_ops_access_location">атрымаць доступ да месцазнаходжання прылады</string>
-  <string name="app_ops_access_notifications">атрымаць доступ да апавяшчэнняў</string>
+  <string name="app_ops_access_notifications">чытаньне паведамленьняў</string>
   <string name="app_ops_activate_vpn">актываваць VPN</string>
   <string name="app_ops_auto_start">прызначыць запуск пры ўлучэнні прылады</string>
   <string name="app_ops_delete_call_log">выдаліць часопіс званкоў</string>
@@ -112,6 +119,7 @@
   <string name="app_ops_use_fingerprint">Выкарыстанне адбіткаў пальцаў</string>
   <string name="app_ops_add_voicemail">Дадаць галасавое паведамленне</string>
   <string name="app_ops_read_phone_state">атрыманне стану тэлефона</string>
+  <string name="app_ops_scan_wifi">шукаць сеткі Wi-Fi</string>
   <string name="app_ops_change_wallpaper">змена шпалер</string>
   <string name="app_ops_assist_structure">Выкарыстоўваць структуру падтрымкі</string>
   <string name="app_ops_assist_screenshot">зрабіць скрыншот</string>
@@ -122,6 +130,7 @@
   <string name="app_ops_write_external_storage">захоўваць дадзеныя на картку памяці</string>
   <string name="app_ops_turn_on_screen">улучэнне экрану</string>
   <string name="app_ops_get_accounts">атрымаць інфармацыю карыстальнікаў</string>
+  <string name="app_ops_run_in_background">працуе ў фоне</string>
   <string name="app_ops_wifi_change">Змяніць стан Wi-Fi</string>
   <string name="app_ops_su">атрымаць правы суперкарыстальніка</string>
   <!-- Protected Apps Notification -->
