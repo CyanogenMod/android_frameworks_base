@@ -31,6 +31,7 @@
   <string name="global_action_reboot">再起動</string>
   <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">現在</string>
+  <!-- status message in phone options dialog for screenshot action -->
   <!-- Restart menu -->
   <!-- Button to restart the phone, within the Restart Options dialog -->
   <string name="reboot_reboot">再起動</string>
