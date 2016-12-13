@@ -31,6 +31,7 @@
   <string name="global_action_reboot">Start på nytt</string>
   <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Nåværende</string>
+  <!-- status message in phone options dialog for screenshot action -->
   <!-- Restart menu -->
   <!-- Button to restart the phone, within the Restart Options dialog -->
   <string name="reboot_reboot">Start på nytt</string>
