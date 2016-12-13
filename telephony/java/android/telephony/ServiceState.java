@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.telephony.Rlog;
+import com.android.internal.telephony.PhoneConstants;
 
 /**
  * Contains phone state and service related information.
@@ -1170,6 +1171,9 @@ public class ServiceState implements Parcelable {
 
     /** @hide */
     public static boolean isGsm(int radioTechnology) {
+        if(isLte(radioTechnology)
+            && TelephonyManager.getLteOnCdmaModeStatic() == PhoneConstants.LTE_ON_CDMA_TRUE)
+            return false;
         return radioTechnology == RIL_RADIO_TECHNOLOGY_GPRS
                 || radioTechnology == RIL_RADIO_TECHNOLOGY_EDGE
                 || radioTechnology == RIL_RADIO_TECHNOLOGY_UMTS
@@ -1187,6 +1191,9 @@ public class ServiceState implements Parcelable {
 
     /** @hide */
     public static boolean isCdma(int radioTechnology) {
+        if(isLte(radioTechnology)
+            && TelephonyManager.getLteOnCdmaModeStatic() == PhoneConstants.LTE_ON_CDMA_TRUE)
+            return true;
         return radioTechnology == RIL_RADIO_TECHNOLOGY_IS95A
                 || radioTechnology == RIL_RADIO_TECHNOLOGY_IS95B
                 || radioTechnology == RIL_RADIO_TECHNOLOGY_1xRTT
