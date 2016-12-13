@@ -22,9 +22,9 @@ public class ClockController implements TunerService.Tunable {
 
     private static final String TAG = "ClockController";
 
-    public static final int STYLE_CLOCK_RIGHT = 1;
-    public static final int STYLE_CLOCK_CENTER = 2;
-    public static final int STYLE_CLOCK_LEFT = 3;
+    public static final int STYLE_CLOCK_RIGHT = 0;
+    public static final int STYLE_CLOCK_CENTER = 1;
+    public static final int STYLE_CLOCK_LEFT = 2;
 
     public static final String CLOCK_POSITION = "cmsystem:status_bar_clock";
     public static final String CLOCK_STYLE = "cmsystem:status_bar_am_pm";
