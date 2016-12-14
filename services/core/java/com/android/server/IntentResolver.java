@@ -700,7 +700,7 @@ public abstract class IntentResolver<F extends IntentFilter, R extends Object> {
         final Uri data = intent.getData();
         final String packageName = intent.getPackage();
 
-        final boolean excludingStopped = intent.isExcludingStopped();
+        final boolean excludingStopped = com.android.server.am.PreventRunningUtils.isExcludingStopped(intent);
 
         final Printer logPrinter;
         final PrintWriter logPrintWriter;
@@ -754,7 +754,7 @@ public abstract class IntentResolver<F extends IntentFilter, R extends Object> {
                 continue;
             }
 
-            match = filter.match(action, resolvedType, scheme, data, categories, TAG);
+            match = com.android.server.am.PreventRunningUtils.match(filter, action, resolvedType, scheme, data, categories, TAG);
             if (match >= 0) {
                 if (debug) Slog.v(TAG, "  Filter matched!  match=0x" +
                         Integer.toHexString(match) + " hasDefault="
