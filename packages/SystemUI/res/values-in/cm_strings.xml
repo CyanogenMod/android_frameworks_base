@@ -34,6 +34,36 @@
   <string name="quick_settings_tile_flashlight_not_title">Senter aktif</string>
   <string name="quick_settings_tile_flashlight_not_summary">Ketuk untuk mematikan</string>
   <!-- [CHAR LIMIT=NONE] Importance Tuner setting title -->
+  <string name="cm_power_notification_controls_description">Dengan kontrol kekuatan pemberitahuan, anda dapat mengatur tingkat kepentingan dari 0 sampai 6 untuk pemberitahuan aplikasi ini.
+        \n\n<b>Tingkat 6</b>
+        \n- Tampilkan di bagian atas daftar pemberitahuan
+        \n- Memungkinkan interupsi dilayar manapun
+        \n- Selalu mengintip
+        \n\n<b>Tingkat 5</b>
+        \n- Mencegah gangguan dilayar manapun
+        \n- Selalu mengintip
+        \n\n<b>Tingkat 4</b>
+        \n- Mencegah gangguan dilayar manapun
+        \n- Tidak pernah mengintip
+        \n\n<b>Tingkat 3</b>
+        \n- Mencegah gangguan dilayar manapun
+        \n- Tidak pernah mengintip
+        \n- Tidak pernah membuat suara dan getaran
+        \n\n<b>Tingkat 2</b>
+        \n- Mencegah gangguan dilayar manapun
+        \n- Tidak pernah mengintip
+        \n- Tidak pernah membuat suara atau getar
+        \n- Sembunyikan dari layar kunci
+        \n- Tampilkan di bagian bawah daftar pemberitahuan
+        \n\n<b>Tingkat 1</b>
+        \n- Mencegah gangguan dilayar manapun
+        \n- Tidak pernah mengintip
+        \n- Tidak pernah membuat suara atau getar
+        \n- Tersembunyi dari layar kunci dan status bar
+        \n- Tampilkan di bagian bawah daftar pemberitahuan
+        \n\n<b>Tingkat 0</b>
+        \n- Blokir semua pemberitahuan dari aplikasi
+    </string>
   <!-- Notification importance level title-->
   <string name="importance_level_title">Penting: Tingkat %1$d</string>
   <!-- [CHAR LIMIT=100] Notification Importance slider: very low importance level description -->
