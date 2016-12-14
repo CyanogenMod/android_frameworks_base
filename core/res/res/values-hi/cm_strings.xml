@@ -30,6 +30,7 @@
   <!-- label for item that restarts the phone in phone options dialog -->
   <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">वर्तमान</string>
+  <!-- status message in phone options dialog for screenshot action -->
   <!-- Restart menu -->
   <!-- Button to restart the phone, within the Restart Options dialog -->
   <!-- Button to restart the phone into recovery, within the Restart Options dialog -->

@@ -31,6 +31,8 @@
   <string name="global_action_reboot">Genstart</string>
   <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Aktuel</string>
+  <!-- status message in phone options dialog for screenshot action -->
+  <string name="global_actions_screenshot_status">Langt tryk for delvist screenshot</string>
   <!-- Restart menu -->
   <!-- Button to restart the phone, within the Restart Options dialog -->
   <string name="reboot_reboot">Genstart</string>

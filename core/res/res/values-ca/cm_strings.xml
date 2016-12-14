@@ -31,6 +31,8 @@
   <string name="global_action_reboot">Reinicia</string>
   <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Actual</string>
+  <!-- status message in phone options dialog for screenshot action -->
+  <string name="global_actions_screenshot_status">Pulsació llarga per a fer una captura de pantalla parcial</string>
   <!-- Restart menu -->
   <!-- Button to restart the phone, within the Restart Options dialog -->
   <string name="reboot_reboot">Reinicia</string>

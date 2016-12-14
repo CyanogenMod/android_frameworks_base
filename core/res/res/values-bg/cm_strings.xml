@@ -31,6 +31,8 @@
   <string name="global_action_reboot">Рестартиране</string>
   <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Текущ</string>
+  <!-- status message in phone options dialog for screenshot action -->
+  <string name="global_actions_screenshot_status">Продължително натискане за частична екранна снимка</string>
   <!-- Restart menu -->
   <!-- Button to restart the phone, within the Restart Options dialog -->
   <string name="reboot_reboot">Рестартиране</string>
@@ -55,7 +57,7 @@
   <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ADB над USB &amp; мрежата е активирана</string>
   <!-- ADB notification message-->
-  <string name="adb_active_generic_notification_message">Докосване за да забранете отстраняване на грешки.</string>
+  <string name="adb_active_generic_notification_message">Докоснете, за да забраните отстраняването на грешки.</string>
   <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">Активира или деактивира Защитен режим</string>
   <string name="permdesc_changePrivacyGuardState">Разрешава на приложението да променя статута на поверителност на друго приложение. Когато едно приложение се използва с защита на поверителността, не може да има достъп до персонални данни, като контакти, регистри с повиквания или съобщения.</string>
