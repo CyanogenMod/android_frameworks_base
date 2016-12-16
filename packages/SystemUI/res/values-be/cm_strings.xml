@@ -35,7 +35,7 @@
   <string name="lockscreen_choose_action_title">Выбар дзеяння</string>
   <string name="lockscreen_none_target">Нічога</string>
   <!-- Dialog title for navigation bar button selection -->
-  <string name="navbar_dialog_title">Выберыце дзеянне</string>
+  <string name="navbar_dialog_title">Абяры дзеяньне</string>
   <string name="navbar_home_button">Дамоў</string>
   <string name="navbar_recent_button">Запушчаныя дадаткі</string>
   <string name="navbar_search_button">Пошук</string>

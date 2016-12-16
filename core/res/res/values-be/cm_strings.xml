@@ -102,7 +102,7 @@
   <!-- App ops requests -->
   <string name="app_ops_access_camera">атрымаць доступ да камеры</string>
   <string name="app_ops_access_location">атрымаць доступ да месцазнаходжання прылады</string>
-  <string name="app_ops_access_notifications">атрымаць доступ да апавяшчэнняў</string>
+  <string name="app_ops_access_notifications">чытаньне паведамленьняў</string>
   <string name="app_ops_activate_vpn">актываваць VPN</string>
   <string name="app_ops_auto_start">прызначыць запуск пры ўлучэнні прылады</string>
   <string name="app_ops_delete_call_log">выдаліць часопіс званкоў</string>
