@@ -39,7 +39,6 @@
          charged, say that it is charged. -->
   <!-- When the lock screen is showing and the phone plugged in, and the battery
          is not fully charged, say that it's charging.  -->
-  <string name="keyguard_plugged_in">Ŝarĝado</string>
   <!-- When the lock screen is showing and the battery is low, warn user to plug
          in the phone soon. -->
   <!-- On the keyguard screen, when pattern lock is disabled, only tell them to press menu to unlock.  This is shown in small font at the bottom. -->
@@ -68,7 +67,6 @@
   <!-- Accessibility description of a lock screen widget. [CHAR_LIMIT=none] -->
   <!-- Accessibility description of the lock screen user selector widget. [CHAR_LIMIT=none] -->
   <!-- Accessibility description of the camera widget. [CHAR_LIMIT=none] -->
-  <string name="keyguard_accessibility_camera">Fotilo</string>
   <!-- Accessibility description of the lock media control widget. [CHAR_LIMIT=none] -->
   <!-- Accessibility description of widget reordering start. [CHAR_LIMIT=none] -->
   <!-- Accessibility description of widget reordering end. [CHAR_LIMIT=none] -->
@@ -101,27 +99,24 @@
   <!-- Accessibility description for the text view that indicates when the next alarm is set (not shown on screen). [CHAR_LIMIT=none] -->
   <!-- Password keyboard strings. Used by LockScreen and Settings -->
   <!-- Label for "switch to symbols" key.  Must be short to fit on key! -->
+  <string name="password_keyboard_label_symbol_key">\?123</string>
   <!-- Label for "switch to alphabetic" key.  Must be short to fit on key! -->
+  <string name="password_keyboard_label_alpha_key">ABC</string>
   <!-- Label for ALT modifier key.  Must be short to fit on key! -->
   <!-- KeyboardView - accessibility support -->
   <!-- Description of the Alt button in a KeyboardView. [CHAR LIMIT=NONE] -->
-  <string name="keyboardview_keycode_alt">Alt-klavo</string>
   <!-- Description of the Cancel button in a KeyboardView. [CHAR LIMIT=NONE] -->
   <string name="keyboardview_keycode_cancel">Nuligi</string>
   <!-- Description of the Delete button in a KeyboardView. [CHAR LIMIT=NONE] -->
   <string name="keyboardview_keycode_delete">Forigi</string>
   <!-- Description of the Done button in a KeyboardView. [CHAR LIMIT=NONE] -->
-  <string name="keyboardview_keycode_done">Farite</string>
   <!-- Description of the Mode change button in a KeyboardView. [CHAR LIMIT=NONE] -->
   <!-- Description of the Shift button in a KeyboardView. [CHAR LIMIT=NONE] -->
-  <string name="keyboardview_keycode_shift">Majuskliga klavo</string>
   <!-- Description of the Enter button in a KeyboardView. [CHAR LIMIT=NONE] -->
   <!-- Description of the unlock target in the Slide unlock screen. [CHAR LIMIT=NONE] -->
   <string name="description_target_unlock">Malŝlosi</string>
   <!-- Description of the camera target in the Slide unlock screen. [CHAR LIMIT=NONE] -->
-  <string name="description_target_camera">Fotilo</string>
   <!-- Description of the silent target in the Slide unlock screen. [CHAR LIMIT=NONE] -->
-  <string name="description_target_silent">Silenta</string>
   <!-- Description of the sound on target in the Slide unlock screen. [CHAR LIMIT=NONE] -->
   <!-- Description of the unlock target in the Slide unlock screen. [CHAR LIMIT=NONE] -->
   <string name="description_target_search">Serĉi</string>
@@ -131,7 +126,6 @@
   <!-- Description of the right direction in which one can to slide the handle in the Slide unlock screen. [CHAR LIMIT=NONE] -->
   <!-- Text spoken when the current user is switched if accessibility is enabled. [CHAR LIMIT=none] -->
   <!-- Label shown on emergency call button in keyguard -->
-  <string name="kg_emergency_call_label">Urĝa alvoko</string>
   <!-- Message shown in pattern unlock after some number of unsuccessful attempts -->
   <!-- Message shown when user enters wrong pattern -->
   <!-- Message shown when user enters wrong password -->
@@ -154,16 +148,13 @@
   <!-- Message shown when the user exceeds the maximum number of pattern attempts -->
   <!-- Instructions show in account unlock screen allowing user to enter their email password -->
   <!-- Hint shown in TextView in account unlock screen of keyguard -->
-  <string name="kg_login_username_hint">Uzantnomo (retmesaĝo)</string>
   <!-- Hint shown in TextView in account unlock screen of keyguard -->
   <string name="kg_login_password_hint">Pasvorto</string>
   <!-- Label shown on sign in button on account unlock screen of keyguard -->
   <string name="kg_login_submit_button">Aliĝi</string>
   <!-- Message shown when the user enters an invalid username/password combination in account unlock screen of keyguard -->
-  <string name="kg_login_invalid_input">Nevalida uzantnomo aŭ pasvorto.</string>
   <!-- Hint text shown when user has too many failed password attempts in account unlock screen of keyguard -->
   <!-- Message shown while device checks username/password in account unlock screen of keyguard -->
-  <string name="kg_login_checking_password">Kontrolado de konto\u2026</string>
   <!-- Message shown in dialog when max number of attempts are reached for PIN screen of keyguard -->
   <!-- Message shown in dialog when max number of attempts are reached for password screen of keyguard -->
   <!-- Message shown when user is almost at the limit of password attempts where the device will be wiped. [CHAR LIMIT=none] -->
@@ -201,11 +192,8 @@
   <!-- Shown on transport control of lockscreen. Pressing button goes to previous track. -->
   <!-- Shown on transport control of lockscreen. Pressing button goes to next track. -->
   <!-- Shown on transport control of lockscreen. Pressing button pauses playback -->
-  <string name="keyguard_transport_pause_description">Paŭzi Butono</string>
   <!-- Shown on transport control of lockscreen. Pressing button pauses playback -->
-  <string name="keyguard_transport_play_description">Ludi Butono</string>
   <!-- Shown on transport control of lockscreen. Pressing button pauses playback -->
-  <string name="keyguard_transport_stop_description">Halti Butono</string>
   <!-- On the keyguard screen, it shows the carrier the phone is connected to.
         This is displayed if the phone is not connected to a carrier.-->
   <string name="keyguard_carrier_default">Neniu servo.</string>

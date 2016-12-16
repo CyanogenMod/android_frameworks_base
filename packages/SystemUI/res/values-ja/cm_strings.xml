@@ -18,7 +18,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- The text for the button in the notification window-shade that clears
          all of the currently visible notifications. [CHAR LIMIT=10]-->
-  <string name="clear_recents">すべての最近使ったアプリを閉じる</string>
+  <string name="clear_recents">最近の通知をすべて閉じる</string>
   <!-- Screenshot delete -->
   <string name="screenshot_delete_action">削除</string>
   <string name="screenshot_delete_confirmation">スクリーンショットを削除しました。</string>
@@ -43,13 +43,13 @@
   <!-- Announcement made when network adb changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_network_adb_changed_on">ネットワーク経由のADBがONになりました。</string>
   <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_ambient_display_off">アンビエント表示はOFFです。</string>
+  <string name="accessibility_quick_settings_ambient_display_off">常に画面表示ディスプレイはOFFです。</string>
   <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_ambient_display_on">アンビエント表示はONです。</string>
+  <string name="accessibility_quick_settings_ambient_display_on">常に画面表示ディスプレイはONです。</string>
   <!-- Announcement made when ambient display changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_ambient_display_changed_off">アンビエント表示がOFFになりました。</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">常に画面表示ディスプレイがOFFになりました。</string>
   <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_ambient_display_changed_on">アンビエント表示がONになりました。</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">常に画面表示ディスプレイがONになりました。</string>
   <!-- Content description of the color inversion tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_color_inversion_off">色反転はOFFです。</string>
   <!-- Content description of the color inversion tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -222,7 +222,7 @@
   <string name="quick_settings_screen_timeout_detail_title">画面のタイムアウト</string>
   <string name="quick_settings_usb_tether_label">USBテザリング</string>
   <string name="quick_settings_heads_up_label">ヘッドアップ</string>
-  <string name="quick_settings_ambient_display_label">アンビエント表示</string>
+  <string name="quick_settings_ambient_display_label">常に画面表示ディスプレイ</string>
   <string name="quick_settings_sync_label">同期</string>
   <string name="quick_settings_battery_saver_label">バッテリーセーバー</string>
   <string name="quick_settings_custom_tile_detail_title">カスタムタイル</string>
@@ -234,7 +234,7 @@
   <!-- Dialog title for navigation bar button selection -->
   <string name="navbar_dialog_title">設定する動作を選択</string>
   <string name="navbar_home_button">ホームボタン</string>
-  <string name="navbar_recent_button">最近使ったアプリボタン</string>
+  <string name="navbar_recent_button">履歴ボタン</string>
   <string name="navbar_search_button">検索ボタン</string>
   <string name="navbar_back_button">戻るボタン</string>
   <string name="navbar_empty_button">ボタンなし</string>

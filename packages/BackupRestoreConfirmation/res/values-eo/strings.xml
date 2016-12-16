@@ -18,14 +18,12 @@
   <!-- Title of the activity when a full backup has been requested and must be confirmed -->
   <string name="backup_confirm_title">Kompleta savkopio</string>
   <!-- Title of the activity when a full restore has been requested and must be confirmed -->
-  <string name="restore_confirm_title">Kompleta restaŭro</string>
   <!-- Text for message to user that a full backup has been requested, and must be confirmed. -->
   <!-- Button to allow a requested full backup to occur -->
   <!-- Button to refuse to allow the requested full backup -->
   <!-- Text for message to user that a full restore has been requested, and must be confirmed. -->
   <!-- Button to allow a requested full restore to occur -->
   <!-- Button to refuse to allow the requested full restore -->
-  <string name="deny_restore_button_label">Ne restaŭri</string>
   <!-- Text for message to user that they must enter their predefined backup password in order to perform this operation. -->
   <!-- Text for message to user that they must enter their device encryption password in order to perform this restore operation. -->
   <!-- Text for message to user that they must enter their device encryption password in order to perform this backup operation. -->

@@ -245,7 +245,7 @@
   <string name="navigation_ring_title">Abio azkar lasterbideak</string>
   <string name="navring_target_reset_message">Ezabatu erabiltzaileak sortutako nabigazio-barrako lasterbideak eta berrezarri balio lehenetsiak?</string>
   <string name="navring_target_reset">Nabigazio-barrako lasterbideak leheneratu dira</string>
-  <string name="navring_action_open_ime_switcher">Ireki IME hautatzailea</string>
+  <string name="navring_action_open_ime_switcher">Ireki IME aldatzailea</string>
   <string name="navring_action_kill_app">Hil aplikazioa</string>
   <string name="navring_action_none">Bat ere ez</string>
   <string name="navring_action_take_screenshot">Egin pantaila-argazkia</string>

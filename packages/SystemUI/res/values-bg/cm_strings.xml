@@ -43,13 +43,13 @@
   <!-- Announcement made when network adb changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_network_adb_changed_on">ADB през мрежата е включен.</string>
   <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_ambient_display_off">Атмосферен екран изключен.</string>
+  <string name="accessibility_quick_settings_ambient_display_off">Активен дисплей е изключен.</string>
   <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_ambient_display_on">Атмосферен екран включен.</string>
+  <string name="accessibility_quick_settings_ambient_display_on">Активен дисплей е включен.</string>
   <!-- Announcement made when ambient display changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_ambient_display_changed_off">Атмосферен екран е изключен.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">Активен дисплей е изключен.</string>
   <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_ambient_display_changed_on">Атмосферен екран е включен.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">Активен дисплей е включен.</string>
   <!-- Content description of the color inversion tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_color_inversion_off">Инверсия на цвета изключена.</string>
   <!-- Content description of the color inversion tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -222,7 +222,7 @@
   <string name="quick_settings_screen_timeout_detail_title">Изключване на дисплея</string>
   <string name="quick_settings_usb_tether_label">Тетъринг през USB</string>
   <string name="quick_settings_heads_up_label">Изскачащи известия</string>
-  <string name="quick_settings_ambient_display_label">Атмосферен екран</string>
+  <string name="quick_settings_ambient_display_label">Активен дисплей</string>
   <string name="quick_settings_sync_label">Синхронизация</string>
   <string name="quick_settings_battery_saver_label">Пестене на батерия</string>
   <string name="quick_settings_custom_tile_detail_title">Персонализирана плочка</string>

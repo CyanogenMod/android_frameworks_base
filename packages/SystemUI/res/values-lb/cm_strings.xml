@@ -272,6 +272,7 @@
   <string name="dynamic_qs_tile_su_label">Root-Zougrëff</string>
   <!-- Fingerprint -->
   <string name="fingerprint_try_again_hint">W.e.g. scann nees</string>
+  <string name="fingerprint_try_again_hint_too_many">Ze vill Fangerofdréck-Versich. Probéier méi spéit nach emol.</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Dockakku <xliff:g id="number">%d</xliff:g> Prozent.</string>
   <!-- Empty view text for CustomQSTile -->

@@ -232,7 +232,7 @@
   <string name="left_shortcut_hint">Правядзіце направа, каб адкрыць дадатак %1$s</string>
   <string name="right_shortcut_hint">Правядзіце налева, каб адкрыць дадатак %1$s</string>
   <!-- Dialog title for navigation bar button selection -->
-  <string name="navbar_dialog_title">Выберыце дзеянне</string>
+  <string name="navbar_dialog_title">Абяры дзеяньне</string>
   <string name="navbar_home_button">Дамоў</string>
   <string name="navbar_recent_button">Запушчаныя дадаткі</string>
   <string name="navbar_search_button">Пошук</string>
@@ -243,8 +243,8 @@
   <string name="navbar_menu_big_button">Меню</string>
   <!-- Navigation ring shortcuts -->
   <string name="navigation_ring_title">Цэтлікі хуткага запуску</string>
-  <string name="navring_target_reset_message">Выдаліць карыстальніцкія налады цэтлікаў панэлі навігацыі і аднавіць стандартныя?</string>
-  <string name="navring_target_reset">Адноўлены стандартныя цэтлікі панэлі навігацыі</string>
+  <string name="navring_target_reset_message">Выдаліць карыстальніцкія налады значыкаў радка навігацыі і аднавіць першапачатковыя?</string>
+  <string name="navring_target_reset">Адноўлены першапачатковыя значыкі радку навігацыі</string>
   <string name="navring_action_open_ime_switcher">Выбар спосабу ўводу</string>
   <string name="navring_action_kill_app">Зачыніць дадатак</string>
   <string name="navring_action_none">Нічога</string>
@@ -263,7 +263,7 @@
   <!-- Interruption level: None. [CHAR LIMIT=20] -->
   <string name="interruption_level_silent">Без гуку</string>
   <!-- Zen mode: No interruptions title, with a warning about alarms. [CHAR LIMIT=60] -->
-  <string name="zen_silent_with_warning">Ніякіх апавяшчэнняў, апроч будзільніка.</string>
+  <string name="zen_silent_with_warning">Ніякіх паведамленьняў, апрача будзільніку.</string>
   <string name="quick_settings_remove">Выдаліць плітку</string>
   <!-- Dynamic tiles -->
   <string name="quick_settings_dynamic_tile_detail_title">Дынамічная плітка</string>

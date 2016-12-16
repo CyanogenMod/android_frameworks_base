@@ -65,7 +65,7 @@
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">imposta sfondo sblocco schermo</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_setKeyguardWallpaper">Consente all\'app di cambiare lo sfondo della schermata di sblocco.</string>
+  <string name="permdesc_setKeyguardWallpaper">Consente all\'app di cambiare lo sfondo del blocco schermo.</string>
   <string name="privacy_guard_dialog_title">Privacy Guard</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> vorrebbe <xliff:g id="op">%2$s</xliff:g>.</string>
   <!-- label for item that reboots the phone in phone options dialog -->
@@ -295,7 +295,7 @@
   <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">Spegni Wi-Fi</string>
   <!-- Third party keyguard permission label -->
-  <string name="permlab_thirdPartyKeyguard">schermata di blocco di terze parti</string>
+  <string name="permlab_thirdPartyKeyguard">blocco schermo di terze parti</string>
   <!-- Third party keyguard permission description -->
-  <string name="permdesc_thirdPartyKeyguard">Consente ad un\'app di essere usata come schermata di blocco non sicura.</string>
+  <string name="permdesc_thirdPartyKeyguard">Consente ad un\'app di essere usata come blocco schermo non sicuro.</string>
 </resources>

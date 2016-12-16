@@ -19,6 +19,7 @@
   <!-- Title of notification indicating a bugreport has been successfully captured. [CHAR LIMIT=50] -->
   <string name="bugreport_finished_title">خاتالىق دوكلاتى تۇتۇلدى</string>
   <!-- Text of notification indicating that swipe left will share the captured bugreport. [CHAR LIMIT=100] -->
+  <string name="bugreport_finished_text" product="watch">سولغا سىيرىسىڭىز خاتالىق دوكلاتىڭىزنى ھەمبەھىرلەيدۇ</string>
   <!-- Text of notification indicating that touching will share the captured bugreport. [CHAR LIMIT=100] -->
   <string name="bugreport_finished_text" product="default">چېكىپلا خاتالىق دوكلاتىنى ھەمبەھىرلىيەلەيسىز</string>
   <!-- Body of dialog informing user about contents of a bugreport. [CHAR LIMIT=NONE] -->

@@ -24,7 +24,7 @@
   <!-- Dismiss button text in SIM pin/puk unlock view -->
   <string name="kg_dismiss">Hilangkan</string>
   <!-- Slot id in SIM pin/puk unlock view -->
-  <string name="kg_slot_name">Slot <xliff:g id="number">%d</xliff:g>: Kartu Sim Baru\u0020</string>
+  <string name="kg_slot_name">Slot <xliff:g id="number">%d</xliff:g>: Kartu Sim baru\u0020</string>
   <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Kartu tidak valid.</string>
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->

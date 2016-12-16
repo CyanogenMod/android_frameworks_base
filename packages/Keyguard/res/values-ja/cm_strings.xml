@@ -33,6 +33,6 @@
   </plurals>
   <!-- Instructions telling the user remaining times when enter SIM PUK view.  -->
   <plurals name="kg_password_default_puk_message">
-    <item quantity="other">SIMが無効になっています。続けるにはPUKコードを入力してください。SIMが恒久的に使用不能になるまで残り<xliff:g id="number">%d</xliff:g>回試行することができます。詳細についてはキャリアにお問い合わせください。</item>
+    <item quantity="other">SIMが無効になっています。続けるにはPUKコードを入力してください。SIMが完全に使用不能になるまで残り<xliff:g id="number">%d</xliff:g>回試行することができます。詳細についてはキャリアにお問い合わせください。</item>
   </plurals>
 </resources>

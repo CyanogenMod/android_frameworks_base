@@ -40,7 +40,7 @@
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessThemeService">Få tilgang til tematjeneste</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessThemeService">Tillater en app å få tilgang til tematjenesten. Skal aldri være nødvendig for normale apps.</string>
+  <string name="permdesc_accessThemeService">Tillater en app å få tilgang til tematjenesten. Skal aldri være nødvendig for normale apper.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readThemes">les temainformasjon</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -113,7 +113,7 @@
   <!-- App ops requests -->
   <string name="app_ops_access_camera">tilgang til kameraet</string>
   <string name="app_ops_access_location">tilgang til din plassering</string>
-  <string name="app_ops_access_notifications">lese dine notifikasjoner</string>
+  <string name="app_ops_access_notifications">lese dine varsler</string>
   <string name="app_ops_activate_vpn">aktiver en VPN</string>
   <string name="app_ops_alarm_wakeup">Våkne opp enheten</string>
   <string name="app_ops_su">få root-tilgang</string>
@@ -147,10 +147,10 @@
   <string name="app_ops_send_sms">sende en tekstmelding</string>
   <string name="app_ops_start_at_bootup">starte under oppstart</string>
   <string name="app_ops_toast_window">vis toast meldinger</string>
-  <string name="app_ops_toggle_bluetooth">aktivere/deaktivere bluetooth</string>
-  <string name="app_ops_toggle_mobile_data">aktivere/deaktivere mobildata</string>
-  <string name="app_ops_toggle_nfc">NFC av/på</string>
-  <string name="app_ops_toggle_wifi">aktivere/deaktivere Wifi</string>
+  <string name="app_ops_toggle_bluetooth">slå av/på Bluetooth</string>
+  <string name="app_ops_toggle_mobile_data">slå av/på mobildata</string>
+  <string name="app_ops_toggle_nfc">slå av/på NFC</string>
+  <string name="app_ops_toggle_wifi">slå av/på WiFi</string>
   <string name="app_ops_use_alarm_volume">styre alarmvolum</string>
   <string name="app_ops_use_audio_focus">styre lydfokus</string>
   <string name="app_ops_use_bluetooth_volume">styre bluetooth volum</string>
@@ -263,7 +263,7 @@
   <string name="live_display_day">Dag</string>
   <string name="live_display_day_summary">Bruk kun dag innstillinger</string>
   <string name="live_display_night">Natt</string>
-  <string name="live_display_night_summary">Bruk kun natt instillinger</string>
+  <string name="live_display_night_summary">Bruk kun natt innstillinger</string>
   <string name="live_display_outdoor">Utendørs (sterkt sollys)</string>
   <string name="live_display_outdoor_summary">Bruk kun utendørs innstillinger</string>
   <string name="live_display_hint">LiveDisplay kan hjelpe deg med å redusere belastningen på øynene og hjelpe deg med å sove om natten. Trykk her for å prøve det ut!</string>

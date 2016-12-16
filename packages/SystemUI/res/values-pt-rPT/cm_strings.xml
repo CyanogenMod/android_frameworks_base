@@ -97,13 +97,13 @@
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Localização: poupança de bateria.</string>
   <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_location_gps_only">Localização: apenas dispositivo.</string>
+  <string name="accessibility_quick_settings_location_gps_only">Localização: apenas no dispositivo.</string>
   <!-- Content description of the location tile in quick settings when on, high accuracy mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_high_accuracy">Localização: alta precisão.</string>
   <!-- Announcement made when the location tile changes to battery saving (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_battery_saving">Modo de localização alterado para poupança de bateria.</string>
   <!-- Announcement made when the location tile changes to sensors only (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_location_changed_gps_only">Modo de localização alterado para apenas dispositivo.</string>
+  <string name="accessibility_quick_settings_location_changed_gps_only">Modo de localização alterado para apenas no dispositivo.</string>
   <!-- Announcement made when the location tile changes to high accuracy (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Modo de localização alterado para alta precisão.</string>
   <!-- Content description of the lock screen tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -131,7 +131,7 @@
   <!-- Announcement made when NFC changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_nfc_changed_on">NFC foi ligado.</string>
   <!-- Content description of the battery mode tile in quick settings when on, power save mode (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_perf_profile_pwrsv">Modo de bateria: modo de poupança de energia.</string>
+  <string name="accessibility_quick_settings_perf_profile_pwrsv">Modo de bateria: modo de poupança de bateria.</string>
   <!-- Content description of the battery mode tile in quick settings when on, balanced mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bal">Modo de bateria: modo equilibrado.</string>
   <!-- Content description of the battery mode tile in quick settings when on, performance mode (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -141,7 +141,7 @@
   <!-- Content description of the battery mode tile in quick settings when on, quick mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bias_perf">Modo de bateria: modo rápido.</string>
   <!-- Announcement made when the battery mode tile changes to power save (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Modo de bateria alterado para o modo de poupança de energia.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Modo de bateria alterado para o modo de poupança de bateria.</string>
   <!-- Announcement made when the battery mode tile changes to balanced (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Modo de bateria alterado para o modo equilibrado.</string>
   <!-- Announcement made when the battery mode tile changes to performance (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -206,7 +206,7 @@
   <!-- QuickSettings: Location (On, low-power) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_battery_saving_label">Poupança de bateria</string>
   <!-- QuickSettings: Location (On, gps-only) [CHAR LIMIT=NONE] -->
-  <string name="quick_settings_location_gps_only_label">Apenas dispositivo</string>
+  <string name="quick_settings_location_gps_only_label">Apenas no dispositivo</string>
   <!-- QuickSettings: Location (On, high-accuracy) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_high_accuracy_label">Alta precisão</string>
   <string name="quick_settings_nfc_label">NFC</string>
@@ -233,10 +233,10 @@
   <string name="right_shortcut_hint">Deslizar para a esquerda para %1$s</string>
   <!-- Dialog title for navigation bar button selection -->
   <string name="navbar_dialog_title">Escolha uma ação para atribuir</string>
-  <string name="navbar_home_button">Botão Home</string>
-  <string name="navbar_recent_button">Botão Recentes</string>
-  <string name="navbar_search_button">Botão Pesquisa</string>
-  <string name="navbar_back_button">Botão Voltar</string>
+  <string name="navbar_home_button">Botão Página Inicial</string>
+  <string name="navbar_recent_button">Botão de Visão geral</string>
+  <string name="navbar_search_button">Botão de pesquisa</string>
+  <string name="navbar_back_button">Botão Anterior</string>
   <string name="navbar_empty_button">Botão vazio</string>
   <string name="navbar_menu_conditional_button">Botão Menu (esconder auto)</string>
   <string name="navbar_menu_always_button">Botão Menu (sempre visível)</string>
@@ -259,7 +259,7 @@
   <string name="select_application">Selecionar aplicação</string>
   <string name="lockscreen_target_empty">Vazio</string>
   <!-- Screen pinning dialog description (for devices without navbar) -->
-  <string name="screen_pinning_description_no_navbar">Irá ficar visível até que o solte. Toque e segure o botão Voltar para soltar.</string>
+  <string name="screen_pinning_description_no_navbar">Irá ficar visível até que o solte. Toque e segure o botão Anterior para soltar.</string>
   <!-- Interruption level: None. [CHAR LIMIT=20] -->
   <string name="interruption_level_silent">Silêncio</string>
   <!-- Zen mode: No interruptions title, with a warning about alarms. [CHAR LIMIT=60] -->

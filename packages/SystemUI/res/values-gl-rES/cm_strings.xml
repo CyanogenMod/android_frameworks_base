@@ -272,6 +272,7 @@
   <string name="dynamic_qs_tile_su_label">Acceso de superusuario</string>
   <!-- Fingerprint -->
   <string name="fingerprint_try_again_hint">Volve a buscar</string>
+  <string name="fingerprint_try_again_hint_too_many">Demasiados intentos usando a pegada dixital. Téntao máis tarde.</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Batería do conector <xliff:g id="number">%d</xliff:g> %.</string>
   <!-- Empty view text for CustomQSTile -->

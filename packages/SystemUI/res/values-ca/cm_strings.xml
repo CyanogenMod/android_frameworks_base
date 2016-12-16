@@ -244,7 +244,7 @@
   <!-- Navigation ring shortcuts -->
   <string name="navigation_ring_title">Dreceres de llançament ràpid</string>
   <string name="navring_target_reset_message">Vols esborrar totes les dreceres de la barra de navegació creades per l\'usuari i restaurar les predeterminades?</string>
-  <string name="navring_target_reset">Reinicia les dreceres de la barra de navegació a les predeterminades</string>
+  <string name="navring_target_reset">Restableix les dreceres de la barra de navegació a les predeterminades</string>
   <string name="navring_action_open_ime_switcher">Obre el commutador IME</string>
   <string name="navring_action_kill_app">Mata l\'aplicació</string>
   <string name="navring_action_none">Cap</string>

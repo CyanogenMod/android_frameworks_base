@@ -272,6 +272,7 @@
   <string name="dynamic_qs_tile_su_label">Root prístup</string>
   <!-- Fingerprint -->
   <string name="fingerprint_try_again_hint">Prosím, nasnímajte znovu</string>
+  <string name="fingerprint_try_again_hint_too_many">Príliš veľa pokusov o odtlačok prsta. Skúste to neskôr.</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Batéria doku <xliff:g id="number">%d</xliff:g> percent.</string>
   <!-- Empty view text for CustomQSTile -->

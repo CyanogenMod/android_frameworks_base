@@ -24,7 +24,7 @@
   <!-- Dismiss button text in SIM pin/puk unlock view -->
   <string name="kg_dismiss">Sluiten</string>
   <!-- Slot id in SIM pin/puk unlock view -->
-  <string name="kg_slot_name">SIM <xliff:g id="number">%d</xliff:g>: Nieuwe simkaart\u0020</string>
+  <string name="kg_slot_name">SIM <xliff:g id="number">%d</xliff:g>: nieuwe simkaart\u0020</string>
   <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Ongeldige simkaart.</string>
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
@@ -34,7 +34,7 @@
   </plurals>
   <!-- Instructions telling the user remaining times when enter SIM PUK view.  -->
   <plurals name="kg_password_default_puk_message">
-    <item quantity="one">SIM is nu uitgeschakeld. Pukcode invoeren om door te gaan. U heeft <xliff:g id="number">%d</xliff:g> resterende poging voordat uw SIM permanent onbruikbaar wordt. Neem contact op met uw provider voor meer informatie.</item>
-    <item quantity="other">SIM is nu uitgeschakeld. Pukcode invoeren om door te gaan. U heeft <xliff:g id="number">%d</xliff:g> resterende pogingen voordat uw SIM permanent onbruikbaar wordt. Neem contact op met uw provider voor meer informatie.</item>
+    <item quantity="one">SIM is nu uitgeschakeld. Pukcode invoeren om door te gaan. U hebt <xliff:g id="number">%d</xliff:g> resterende poging voordat uw SIM permanent onbruikbaar wordt. Neem contact op met uw provider voor meer informatie.</item>
+    <item quantity="other">SIM is nu uitgeschakeld. Pukcode invoeren om door te gaan. U hebt <xliff:g id="number">%d</xliff:g> resterende pogingen voordat uw SIM permanent onbruikbaar wordt. Neem contact op met uw provider voor meer informatie.</item>
   </plurals>
 </resources>

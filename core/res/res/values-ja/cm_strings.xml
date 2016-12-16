@@ -182,7 +182,7 @@
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>
   <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
-  <string name="permission_remember_choice">選択を記憶</string>
+  <string name="permission_remember_choice">選択を保存</string>
   <!-- Default wi-fi hotspot ssid -->
   <!-- Default wi-fi hotspot pass -->
   <!-- Default wi-fi direct name -->
@@ -266,7 +266,7 @@
   <string name="live_display_night_summary">夜の設定のみを使用する</string>
   <string name="live_display_outdoor">屋外（日光）</string>
   <string name="live_display_outdoor_summary">屋外の設定のみを使用する</string>
-  <string name="live_display_hint">LiveDisplayは目を疲れにくくし、夜の睡眠を邪魔しません。ここをタップして試してみてください。</string>
+  <string name="live_display_hint">LiveDisplayは目の疲れを軽減し、夜の睡眠を邪魔しません。ここをタップして試してみてください。</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">この画面の固定を解除するには、戻るボタンを長押しします。</string>
   <!-- Notification which notifies user flashlight is enabled -->
