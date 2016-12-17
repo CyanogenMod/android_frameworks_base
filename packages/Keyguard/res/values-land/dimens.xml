@@ -39,5 +39,14 @@
     due to the appearance of the IME), then drop the multiuser selector.
     Landscape's layout allows this to be smaller than for portrait. -->
     <dimen name="kg_squashed_layout_threshold">400dp</dimen>
-
+    
+    <!-- Diameter resized. it's too big in Landscape Mode-->
+    <dimen name="keyguard_lockscreen_outerring_diameter">240dp</dimen>
+    
+    <!-- it resized as diameter. it's too big in Landscape Mode-->
+    <dimen name="glowpadview_target_placement_radius">120dp</dimen>
+    
+    <!-- icons (shortcut app lockscreen) resized a  little bit. They are too big in Landscape Mode-->
+    <dimen name="lockscreen_target_inset">30dp</dimen>
+    
 </resources>
