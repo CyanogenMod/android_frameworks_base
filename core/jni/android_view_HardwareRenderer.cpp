@@ -125,9 +125,11 @@ static void android_view_HardwareRenderer_beginFrame(JNIEnv* env, jobject clazz,
 }
 
 static jlong android_view_HardwareRenderer_getSystemTime(JNIEnv* env, jobject clazz) {
+#ifndef STE_HARDWARE
     if (uirenderer::Extensions::getInstance().hasNvSystemTime()) {
         return eglGetSystemTimeNV();
     }
+#endif
     return systemTime(SYSTEM_TIME_MONOTONIC);
 }
 
