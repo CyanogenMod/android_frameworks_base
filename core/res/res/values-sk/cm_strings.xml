@@ -135,7 +135,9 @@
   <string name="app_ops_start_at_bootup">spustiť pri štaťte</string>
   <string name="app_ops_toast_window">zobraziť vyskakovacie oznámenia</string>
   <string name="app_ops_toggle_bluetooth">prepnúť bluetooth</string>
+  <string name="app_ops_toggle_mobile_data">prepnúť mobilné dáta</string>
   <string name="app_ops_toggle_nfc">prepnúť NFC</string>
+  <string name="app_ops_toggle_wifi">prepnúť Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">ovládať hlasitosť budíka</string>
   <string name="app_ops_use_audio_focus">ovládať zvukové zdroje</string>
   <string name="app_ops_use_bluetooth_volume">ovládať hlasitosť bluetooh</string>
@@ -148,6 +150,21 @@
   <string name="app_ops_use_voice_volume">ovládať hlasitosť hovoru</string>
   <string name="app_ops_write_mms">napísať správu MMS</string>
   <string name="app_ops_write_sms">napísať správu SMS</string>
+  <string name="app_ops_use_fingerprint">použiť odtlačok prsta</string>
+  <string name="app_ops_add_voicemail">pridať hlasovú poštu</string>
+  <string name="app_ops_read_phone_state">pristupovať k stavu telefónu</string>
+  <string name="app_ops_scan_wifi">prehľadať Wi-Fi siete</string>
+  <string name="app_ops_change_wallpaper">zmeniť tapetu</string>
+  <string name="app_ops_assist_structure">použiť asistovanú štruktúru</string>
+  <string name="app_ops_assist_screenshot">urobiť snímok obrazovky</string>
+  <string name="app_ops_use_body_sensors">použiť telové senzory</string>
+  <string name="app_ops_read_cell_broadcasts">čítať bunkové vysielanie</string>
+  <string name="app_ops_mock_location">falšovať vašu polohu</string>
+  <string name="app_ops_read_external_storage">čítať externé úložisko</string>
+  <string name="app_ops_write_external_storage">zapisovať do externého úložiska</string>
+  <string name="app_ops_turn_on_screen">zapnúť obrazovku</string>
+  <string name="app_ops_get_accounts">získať účty zariadenia</string>
+  <string name="app_ops_wifi_change">zmeniť stav Wi-Fi</string>
   <string name="app_ops_su">získať root prístup</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Na odopnutie tejto obrazovky stlačte a podržte tlačidlo Späť.</string>
@@ -159,7 +176,11 @@
   <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
          with spaces on either side. [CHAR LIMIT=3] -->
   <!-- Protected Apps Notification -->
+  <string name="notify_package_component_protected_title">Spustenie aktivity zablokované</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> je chránená proti spusteniu. Kliknite na overenie a spustenie aplikácie.</string>
   <!-- Battery fully charged notification -->
+  <string name="notify_battery_fully_charged_title">Batéria plne nabitá</string>
+  <string name="notify_battery_fully_charged_text">Odpojte zariadenie od nabíjačky pre zlepšenie životnosti batérie.</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
          whether they want to allow the application to do this. -->
   <string name="permlab_resetBatteryStats">obnoviť štatistiky batérie</string>
@@ -167,4 +188,6 @@
          whether they want to allow the application to do this. -->
   <string name="permdesc_resetBatteryStats">Umožňuje aplikácii obnoviť aktuálne nízkoúrovňové údaje o využití batérie.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">SIM karty sa zmenili</string>
+  <string name="uicc_hot_swapped_event_text">Kliknite na nastavenie redvolieb SIM karty</string>
 </resources>
