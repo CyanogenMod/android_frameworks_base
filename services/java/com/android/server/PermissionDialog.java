@@ -135,6 +135,7 @@ class PermissionDialog extends BasePermissionDialog {
             }
             mService.notifyOperation(mCode, mUid, mPackageName, mode,
                 remember);
+            mHandler.removeMessages(ACTION_IGNORED_TIMEOUT);
             dismiss();
         }
     };
