@@ -32,6 +32,7 @@
   <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Huidige</string>
   <!-- status message in phone options dialog for screenshot action -->
+  <string name="global_actions_screenshot_status">Lang drukken voor gedeeltelijke schermafbeelding</string>
   <!-- Restart menu -->
   <!-- Button to restart the phone, within the Restart Options dialog -->
   <string name="reboot_reboot">Herstarten</string>

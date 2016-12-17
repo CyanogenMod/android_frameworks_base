@@ -28,11 +28,14 @@
   <!-- label for item that opens the profile choosing dialog -->
   <string name="global_action_choose_profile">Profil</string>
   <!-- label for item that restarts the phone in phone options dialog -->
+  <string name="global_action_reboot">Reštartovať</string>
   <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Aktuálny</string>
   <!-- status message in phone options dialog for screenshot action -->
+  <string name="global_actions_screenshot_status">Dlhé stlačenie pre získanie čiastočnej snímky obrazovky</string>
   <!-- Restart menu -->
   <!-- Button to restart the phone, within the Restart Options dialog -->
+  <string name="reboot_reboot">Reštart</string>
   <!-- Button to restart the phone into recovery, within the Restart Options dialog -->
   <string name="reboot_recovery">Recovery</string>
   <!-- Button to restart the phone into bootloader, within the Restart Options dialog -->
@@ -40,10 +43,15 @@
   <!-- Button to restart the phone into download, within the Restart Options dialog -->
   <string name="reboot_download">Download</string>
   <!-- Button to soft restart the device, within the Restart Options dialog -->
+  <string name="reboot_soft">Soft reštart</string>
   <!-- Title of dialog to confirm restarting. -->
+  <string name="reboot_title">Reštart</string>
   <!-- Restart Confirmation Dialog.  When the user chooses to restart the device, there will
          be a confirmation dialog.  This is the message. -->
+  <string name="reboot_confirm" product="tablet">Tablet bude reštartovaný.</string>
+  <string name="reboot_confirm" product="default">Telefón bude reštartovaný.</string>
   <!-- Restart Progress Dialog. This is shown if the user chooses to restart the phone. -->
+  <string name="reboot_progress">Reštartovanie\u2026</string>
   <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ADB cez sieť povolené</string>
   <!-- ADB over USB and network notification -->
@@ -95,7 +103,9 @@
   <string name="app_ops_start_at_bootup">spustiť pri štaťte</string>
   <string name="app_ops_toast_window">zobraziť vyskakovacie oznámenia</string>
   <string name="app_ops_toggle_bluetooth">prepnúť bluetooth</string>
+  <string name="app_ops_toggle_mobile_data">zapnúť/vypnúť mobilné dáta</string>
   <string name="app_ops_toggle_nfc">prepnúť NFC</string>
+  <string name="app_ops_toggle_wifi">zapnúť/vypnúť Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">ovládať hlasitosť budíka</string>
   <string name="app_ops_use_audio_focus">ovládať zvukové zdroje</string>
   <string name="app_ops_use_bluetooth_volume">ovládať hlasitosť bluetooh</string>
@@ -108,8 +118,26 @@
   <string name="app_ops_use_voice_volume">ovládať hlasitosť hovoru</string>
   <string name="app_ops_write_mms">napísať správu MMS</string>
   <string name="app_ops_write_sms">napísať správu SMS</string>
+  <string name="app_ops_use_fingerprint">použiť odtlačok prsta</string>
+  <string name="app_ops_add_voicemail">pridať hlasovú poštu</string>
+  <string name="app_ops_read_phone_state">prístup k stavu telefónu</string>
+  <string name="app_ops_scan_wifi">prehľadávanie Wi\u2011Fi sietí</string>
+  <string name="app_ops_change_wallpaper">zmeniť tapetu</string>
+  <string name="app_ops_assist_structure">použiť asistenčnú štruktúru</string>
+  <string name="app_ops_assist_screenshot">urobiť snímku obrazovky</string>
+  <string name="app_ops_use_body_sensors">použiť telové senzory</string>
+  <string name="app_ops_read_cell_broadcasts">čítať správy od GSM bunky</string>
+  <string name="app_ops_mock_location">falšovať polohu</string>
+  <string name="app_ops_read_external_storage">prečítať externé úložisko</string>
+  <string name="app_ops_write_external_storage">zapisovať do externého úložiska</string>
+  <string name="app_ops_turn_on_screen">zapnúť obrazovku</string>
+  <string name="app_ops_get_accounts">získať účty zariadenia</string>
+  <string name="app_ops_run_in_background">spustiť na pozadí</string>
+  <string name="app_ops_wifi_change">zmeniť stav Wi-Fi</string>
   <string name="app_ops_su">získať root prístup</string>
   <!-- Protected Apps Notification -->
+  <string name="notify_package_component_protected_title">Spustenie aktivity zablokované</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> je chránená proti spusteniu. Kliknite na overenie a spustenie aplikácie.</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Na odopnutie tejto obrazovky stlačte a podržte tlačidlo Späť.</string>
 </resources>

@@ -20,30 +20,78 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_data_connection_hspap">HSPA+</string>
   <!-- Weather string format in expanded statusbar header -->
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <!-- Content description of the light brightness slider (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_notification_brightness">Nastavenie jasu</string>
   <!-- Lights settings, LED notification -->
+  <string name="led_notification_title">Nastavenia svetla</string>
+  <string name="led_notification_text">LED svetlo je povolené nastaveniach</string>
   <!-- Content description of the superuser tile -->
+  <string name="accessibility_su_active">Aktivna relácia Superuser</string>
   <!-- Notification which notifies user flashlight is enabled -->
+  <string name="quick_settings_tile_flashlight_not_title">Baterka je zapnutá</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Dotykom vypnúť</string>
   <!-- [CHAR LIMIT=NONE] Importance Tuner setting title -->
+  <string name="cm_power_notification_controls_description">S ovládaním upozornení môžete pre notifikácie aplikácií vybrať úroveň dôležitosti od 0 do 6.
+        \n\n<b>Úroveň 6</b>
+        \n- Zobraziť úplne hore v zozname upozornení
+        \n- Umožniť prerušenia obrazovky
+        \n- Vždy upozorniť
+        \n\n<b>Úroveň 5</b>
+        \n- Zabrániť prerušeniam obrazovky
+        \n- Vždy upozorniť
+        \n\n<b>Úroveň 4</b>
+        \n- Zabrániť prerušeniam obrazovky
+        \n- Neupozorňovať
+        \n\n<b>Úroveň 3</b>
+        \n- Zabrániť prerušeniam obrazovky
+        \n- Neupozorňovať
+        \n- Neprehrávať zvuky a nevibrovať
+        \n\n<b>Úroveň 2</b>
+        \n- Zabrániť prerušeniam obrazovky
+        \n- Neupozorňovať
+        \n- Neprehrávať zvuky a nevibrovať
+        \n- Skryť zo zámky obrazovky
+        \n- Zobraziť úplne dole na zozname upozornení
+        \n\n<b>Úroveň 1</b>
+        \n- Zabrániť prerušeniu obrazovky
+        \n- Neupozorňovať
+        \n- Neprehrávať zvuky a nevibrovať
+        \n- Skryť zo zámky obrazovky
+        \n- Zobraziť úplne dole na zozname upozornení
+        \n\n<b>Úroveň 0</b>
+        \n- Blokovať všetky upozornenia z aplikácie</string>
   <!-- Notification importance level title-->
+  <string name="importance_level_title">Dôležitosť: úroveň %1$d</string>
   <!-- [CHAR LIMIT=100] Notification Importance slider: very low importance level description -->
+  <string name="notification_importance_very_low">Žiadne prerušenia na obrazovke, upozorňovanie, zvuk či vibrácie. Skryť z obrazovky uzamknutia.</string>
   <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">Zobrazenie aktuálnej obrazovky je zaistené, dokým ju neuvoľníte. Dotknite a podržte tlačidlo Späť pre uvoľnenie.</string>
   <!-- Strings for lockscreen shortcut hints -->
   <string name="left_shortcut_hint">Potiahnite doprava pre %1$s</string>
   <string name="right_shortcut_hint">Potiahnite doľava pre %1$s</string>
+  <string name="lockscreen_message">Kliknutím na ikonu na ľavej alebo pravej strane obrazovky uzamknutia zmeňte rozmiestnenie zástupcov.</string>
+  <string name="lockscreen_default_target">Predvolené</string>
   <string name="select_application">Vyberte aplikáciu</string>
   <string name="lockscreen_choose_action_title">Vyberte akciu</string>
   <string name="lockscreen_none_target">Žiadna</string>
   <!-- Play queue -->
   <string name="play_queue_extension">Zobraziť poradie prehrávania</string>
   <!-- Weather string format in keyguard -->
+  <string name="keyguard_status_view_weather_format"><xliff:g id="temp">%1$s</xliff:g> <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="accessibility_dpad_left">Kurzor vľavo</string>
   <string name="accessibility_dpad_right">Kurzor vpravo</string>
   <!-- NavBar Tuner -->
+  <string name="menu_ime_always_show">Menu / Prepínač klávesnice (vždy zobrazovať)</string>
+  <string name="search">Vyhľadať</string>
   <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d klient</item>
+    <item quantity="few">%1$d klienti</item>
+    <item quantity="other">%1$d klientov</item>
+  </plurals>
   <!-- Path data for portrait battery -->
   <!-- Path data for landscape battery -->
   <!-- Path data for circle battery -->
