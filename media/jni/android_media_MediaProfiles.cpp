@@ -91,9 +91,12 @@ android_media_MediaProfiles_native_get_video_encoder_cap(JNIEnv *env, jobject th
     int maxFrameWidth = sProfiles->getVideoEncoderParamByName("enc.vid.width.max", encoder);
     int minFrameHeight = sProfiles->getVideoEncoderParamByName("enc.vid.height.min", encoder);
     int maxFrameHeight = sProfiles->getVideoEncoderParamByName("enc.vid.height.max", encoder);
-    int maxHFRFrameWidth = sProfiles->getVideoEncoderParamByName("enc.vid.hfr.width.max", encoder);
-    int maxHFRFrameHeight = sProfiles->getVideoEncoderParamByName("enc.vid.hfr.height.max", encoder);
-    int maxHFRMode = sProfiles->getVideoEncoderParamByName("enc.vid.hfr.mode.max", encoder);
+    //int maxHFRFrameWidth = sProfiles->getVideoEncoderParamByName("enc.vid.hfr.width.max", encoder);
+    //int maxHFRFrameHeight = sProfiles->getVideoEncoderParamByName("enc.vid.hfr.height.max", encoder);
+    //int maxHFRMode = sProfiles->getVideoEncoderParamByName("enc.vid.hfr.mode.max", encoder);
+    int maxHFRFrameWidth = 0;
+    int maxHFRFrameHeight = 0;
+    int maxHFRMode = 0;
 
     // Check on the values retrieved
     if ((minBitRate == -1 || maxBitRate == -1) ||
