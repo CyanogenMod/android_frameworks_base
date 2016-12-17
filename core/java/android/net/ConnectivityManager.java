@@ -1402,6 +1402,20 @@ public class ConnectivityManager {
         return false;
     }
 
+     /**
+     * Sets the persisted value for enabling/disabling Mobile data.
+     *
+     * @param enabled Whether the user wants the mobile data connection used
+     *            or not.
+     * @hide
+     */
+    public void setMobileDataEnabled(boolean enabled) {
+        try {
+            mService.setMobileDataEnabled(enabled);
+        } catch (RemoteException e) {
+        }
+    }
+
     /**
      * Callback for use with {@link ConnectivityManager#addDefaultNetworkActiveListener}
      * to find out when the system default network has gone in to a high power state.
