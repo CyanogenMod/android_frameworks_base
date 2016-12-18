@@ -34,7 +34,7 @@
   <string name="quick_settings_tile_flashlight_not_title">Фонарик включён</string>
   <string name="quick_settings_tile_flashlight_not_summary">Нажмите, чтобы отключить</string>
   <!-- [CHAR LIMIT=NONE] Importance Tuner setting title -->
-  <string name="cm_power_notification_controls_description">С помощью этой функции вы можете устанавливать уровень важности уведомлений от 0 до 5 для каждого приложения.
+  <string name="cm_power_notification_controls_description">С помощью этой функции вы можете устанавливать уровень важности уведомлений от 0 до 6 для каждого приложения.
         \n\n<b>Уровень 6</b>
         \n‒ Помещать уведомления в начало списка.
         \n‒ Показывать полноэкранные уведомления.
