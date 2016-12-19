@@ -28,11 +28,14 @@
   <!-- label for item that opens the profile choosing dialog -->
   <string name="global_action_choose_profile">פרופיל</string>
   <!-- label for item that restarts the phone in phone options dialog -->
+  <string name="global_action_reboot">הפעלה מחדש</string>
   <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">נוכחי</string>
   <!-- status message in phone options dialog for screenshot action -->
+  <string name="global_actions_screenshot_status">לחיצה ארוכה לצילום מסך חלקי</string>
   <!-- Restart menu -->
   <!-- Button to restart the phone, within the Restart Options dialog -->
+  <string name="reboot_reboot">הפעלה מחדש</string>
   <!-- Button to restart the phone into recovery, within the Restart Options dialog -->
   <string name="reboot_recovery">שחזור</string>
   <!-- Button to restart the phone into bootloader, within the Restart Options dialog -->
@@ -41,9 +44,13 @@
   <string name="reboot_download">הורדה</string>
   <!-- Button to soft restart the device, within the Restart Options dialog -->
   <!-- Title of dialog to confirm restarting. -->
+  <string name="reboot_title">הפעלה מחדש</string>
   <!-- Restart Confirmation Dialog.  When the user chooses to restart the device, there will
          be a confirmation dialog.  This is the message. -->
+  <string name="reboot_confirm" product="tablet">הטאבלט יופעל מחדש.</string>
+  <string name="reboot_confirm" product="default">המכשיר יופעל מחדש.</string>
   <!-- Restart Progress Dialog. This is shown if the user chooses to restart the phone. -->
+  <string name="reboot_progress">מאתחל\u2026</string>
   <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ADB דרך רשת מופעל</string>
   <!-- ADB over USB and network notification -->
@@ -113,6 +120,7 @@
   <string name="app_ops_use_fingerprint">שימוש בטביעת אצבע</string>
   <string name="app_ops_add_voicemail">הוסף תא קולי</string>
   <string name="app_ops_read_phone_state">גש למצב הטלפון</string>
+  <string name="app_ops_scan_wifi">סרוק רשתות Wi-Fi</string>
   <string name="app_ops_change_wallpaper">החלף טפט</string>
   <string name="app_ops_assist_structure">שימוש בתבנית המידע ליישום הסיוע</string>
   <string name="app_ops_assist_screenshot">צלם מסך</string>
@@ -123,6 +131,7 @@
   <string name="app_ops_write_external_storage">כתוב לאחסון חיצוני</string>
   <string name="app_ops_turn_on_screen">הפעל המסך</string>
   <string name="app_ops_get_accounts">קבל חשבונות מכשיר</string>
+  <string name="app_ops_run_in_background">הרץ ברקע</string>
   <string name="app_ops_wifi_change">שנה מצב Wi-Fi</string>
   <string name="app_ops_su">קבלת גישת שורש (Root)</string>
   <!-- Protected Apps Notification -->
