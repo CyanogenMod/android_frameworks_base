@@ -32,6 +32,7 @@
   <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Atual</string>
   <!-- status message in phone options dialog for screenshot action -->
+  <string name="global_actions_screenshot_status">Pressão longa para captura de ecrã parcial</string>
   <!-- Restart menu -->
   <!-- Button to restart the phone, within the Restart Options dialog -->
   <string name="reboot_reboot">Reiniciar</string>
