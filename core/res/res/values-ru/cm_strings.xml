@@ -28,13 +28,14 @@
   <!-- label for item that opens the profile choosing dialog -->
   <string name="global_action_choose_profile">Профиль</string>
   <!-- label for item that restarts the phone in phone options dialog -->
-  <string name="global_action_reboot">Перезагрузка</string>
+  <string name="global_action_reboot">Перезапуск</string>
   <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Текущий</string>
   <!-- status message in phone options dialog for screenshot action -->
+  <string name="global_actions_screenshot_status">Удерживайте для скриншота выделенной области</string>
   <!-- Restart menu -->
   <!-- Button to restart the phone, within the Restart Options dialog -->
-  <string name="reboot_reboot">Перезагрузка</string>
+  <string name="reboot_reboot">Перезапуск</string>
   <!-- Button to restart the phone into recovery, within the Restart Options dialog -->
   <string name="reboot_recovery">Режим восстановления</string>
   <!-- Button to restart the phone into bootloader, within the Restart Options dialog -->
@@ -44,13 +45,13 @@
   <!-- Button to soft restart the device, within the Restart Options dialog -->
   <string name="reboot_soft">Перезапуск интерфейса</string>
   <!-- Title of dialog to confirm restarting. -->
-  <string name="reboot_title">Перезагрузка</string>
+  <string name="reboot_title">Перезапуск</string>
   <!-- Restart Confirmation Dialog.  When the user chooses to restart the device, there will
          be a confirmation dialog.  This is the message. -->
-  <string name="reboot_confirm" product="tablet">Ваш планшет будет перезагружен.</string>
-  <string name="reboot_confirm" product="default">Ваш телефон будет перезагружен.</string>
+  <string name="reboot_confirm" product="tablet">Ваш планшет будет перезапущен.</string>
+  <string name="reboot_confirm" product="default">Ваш телефон будет перезапущен.</string>
   <!-- Restart Progress Dialog. This is shown if the user chooses to restart the phone. -->
-  <string name="reboot_progress">Перезагрузка\u2026</string>
+  <string name="reboot_progress">Перезапуск\u2026</string>
   <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">Отладка по сети разрешена</string>
   <!-- ADB over USB and network notification -->
