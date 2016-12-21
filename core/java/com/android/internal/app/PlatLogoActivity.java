@@ -141,7 +141,9 @@ public class PlatLogoActivity extends Activity {
                                             .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                                                     | Intent.FLAG_ACTIVITY_CLEAR_TASK
                                                     | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
-                                            .addCategory("com.android.internal.category.PLATLOGO"));
+                                            .addCategory(mIsCm ?
+                                                    "org.cyanogenmod.cmparts.category.PLATLOGO" :
+                                                    "com.android.internal.category.PLATLOGO"));
                                 } catch (ActivityNotFoundException ex) {
                                     Log.e("PlatLogoActivity", "No more eggs.");
                                 }
