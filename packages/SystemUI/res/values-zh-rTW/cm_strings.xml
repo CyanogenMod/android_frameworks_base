@@ -62,7 +62,7 @@
   <!-- Announcement made when the profiles tile changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_changed_off">設定檔已關閉</string>
   <!-- Announcement made when the profiles tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_profiles_changed">設定檔已更改為 <xliff:g id="profile"example="Default">%s </xliff:g></string>
+  <string name="accessibility_quick_settings_profiles_changed">設定檔已更改為<xliff:g id="profile" example="Default">%s</xliff:g>。</string>
   <string name="quick_settings_compass_init">正在初始化\u2026</string>
   <!-- Lights settings, LED notification -->
   <string name="led_notification_title">指示燈設定</string>
