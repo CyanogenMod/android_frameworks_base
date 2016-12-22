@@ -29,7 +29,7 @@
   <!-- Strings for lockscreen shortcut hints -->
   <string name="left_shortcut_hint">向右滑動即可%1$s</string>
   <string name="right_shortcut_hint">向左滑動即可%1$s</string>
-  <string name="lockscreen_message">輕觸左側或右側的圖示以設定鎖定畫面捷徑</string>
+  <string name="lockscreen_message">輕觸左側或右側的圖示即可設定鎖定螢幕捷徑</string>
   <string name="lockscreen_default_target">預設</string>
   <string name="select_application">選取應用程式</string>
   <string name="lockscreen_choose_action_title">選取操作</string>
@@ -56,14 +56,18 @@
   <!-- Content description of the light brightness slider (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_notification_brightness">亮度</string>
   <!-- Content description of the profiles tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_profiles_off">設定檔關閉</string>
   <!-- Content description of the profiles tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_profiles">設定檔：<xliff:g id="profile" example="Default">%s</xliff:g></string>
   <!-- Announcement made when the profiles tile changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_profiles_changed_off">設定檔已關閉</string>
   <!-- Announcement made when the profiles tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_profiles_changed">設定檔已更改為 <xliff:g id="profile"example="Default">%s </xliff:g></string>
   <string name="quick_settings_compass_init">正在初始化\u2026</string>
   <!-- Lights settings, LED notification -->
   <string name="led_notification_title">指示燈設定</string>
   <string name="led_notification_text">已透過設定啟用 LED 指示燈</string>
-  <string name="qs_tile_edit_header_instruction">按住瓷磚以重新排列</string>
+  <string name="qs_tile_edit_header_instruction">按住瓷磚即可重新排列</string>
   <string name="quick_settings_edit_label">編輯瓷磚</string>
   <string name="quick_settings_cannot_delete_edit_tile">無法刪除編輯瓷磚</string>
   <string name="qs_tiles_reset_confirmation">將快速設定瓷磚還原至預設配置？</string>
@@ -74,6 +78,7 @@
   <string name="quick_settings_title_show_brightness_slider">顯示亮度滑桿</string>
   <string name="quick_settings_title_enlarge_first_row">擴大首行</string>
   <!-- Screen pinning dialog description (for devices without navbar) -->
+  <string name="screen_pinning_description_no_navbar">此功能會固定螢幕顯示直到您取消固定。觸控並長按返回鍵即可解除固定。</string>
   <string name="quick_settings_custom_tile_detail_title">自訂瓷磚</string>
   <string name="quick_settings_remove">移除瓷磚</string>
   <string name="quick_settings_network_adb_label">網路 ADB</string>
@@ -82,8 +87,9 @@
   <string name="quick_settings_profiles">系統設定檔</string>
   <string name="quick_settings_profiles_off">已停用設定檔</string>
   <string name="quick_settings_heads_up_label">浮動通知</string>
+  <string name="quick_settings_battery_saver_label">省電模式</string>
   <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
-  <string name="quick_settings_battery_saver_label_charging">省電模式（充電中）</string>
+  <string name="quick_settings_battery_saver_label_charging">省電模式 (充電中)</string>
   <string name="quick_settings_caffeine_label">暫停休眠</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">同步關閉</string>
@@ -94,28 +100,47 @@
   <!-- Announcement made when sync changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_changed_on">同步已開啟</string>
   <string name="quick_settings_sync_label">同步</string>
-  <string name="quick_settings_usb_tether_label">USB 網路共用</string>
-  <string name="quick_settings_screen_timeout_detail_title">螢幕閒置時間</string>
-  <string name="quick_settings_lockscreen_label">鎖定畫面</string>
+  <string name="quick_settings_volume_panel_label">音量面板</string>
+  <string name="quick_settings_usb_tether_label">USB 網路共享</string>
+  <string name="quick_settings_screen_timeout_detail_title">螢幕逾時</string>
+  <string name="quick_settings_lockscreen_label">鎖定螢幕</string>
   <string name="quick_settings_ambient_display_label">環境顯示</string>
-  <string name="quick_settings_lockscreen_label_enforced">強制執行鎖定畫面</string>
-  <string name="quick_settings_lockscreen_label_locked_by_profile">已由設定檔禁用</string>
+  <string name="quick_settings_lockscreen_label_enforced">強制執行鎖定螢幕</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">已由設定檔停用</string>
   <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_screen_timeout">螢幕逾時：<xliff:g id="timeout" example="30 seconds">%s</xliff:g></string>
   <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_screen_timeout_changed">螢幕逾時即可更改為 <xliff:g id="timeout" example="30 seconds">%s</xliff:g></string>
+  <string name="qs_tile_performance">電池模式</string>
   <!-- Content description of the battery mode tile in quick settings when on, power save mode (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_perf_profile_pwrsv">電池模式：省電模式。</string>
   <!-- Content description of the battery mode tile in quick settings when on, balanced mode (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_perf_profile_bal">電池模式：平衡模式。</string>
   <!-- Content description of the battery mode tile in quick settings when on, performance mode (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_perf_profile_perf">電池模式：高效能模式。</string>
   <!-- Content description of the battery mode tile in quick settings when on, efficiency mode (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_perf_profile_bias_power">電池模式：效率模式。</string>
   <!-- Content description of the battery mode tile in quick settings when on, quick mode (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">電池模式：快速模式。</string>
   <!-- Announcement made when the battery mode tile changes to power save (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">電池模式已更改為省電模式。</string>
   <!-- Announcement made when the battery mode tile changes to balanced (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_perf_profile_changed_bal">電池模式已更改為平衡模式。</string>
   <!-- Announcement made when the battery mode tile changes to performance (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_perf_profile_changed_perf">電池模式已更改為高效能模式。</string>
   <!-- Announcement made when the battery mode tile changes to efficiency (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">電池模式已更改為效率模式。</string>
   <!-- Announcement made when the battery mode tile changes to quick (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">電池模式已更改為快速模式。</string>
+  <string name="quick_settings_performance_profile_detail_title">電池模式</string>
   <!-- Content description of the lock screen tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_lock_screen_off">鎖定螢幕關閉</string>
   <!-- Content description of the lock screen tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_lock_screen_on">鎖定螢幕開啟</string>
   <!-- Announcement made when lock screen changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_lock_screen_changed_off">鎖定螢幕已關閉</string>
   <!-- Announcement made when lock screen changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_lock_screen_changed_on">鎖定螢幕已開啟</string>
   <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_off">環境顯示關閉</string>
   <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -137,14 +162,19 @@
   <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_caffeine_on">暫停休眠開啟</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_battery_saver_off">省電模式關閉</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_battery_saver_on">省電模式開啟</string>
   <!-- Announcement made when battery saver changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_battery_saver_changed_off">省電模式已關閉</string>
   <!-- Announcement made when battery saver changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_battery_saver_changed_on">省電模式已開啟</string>
   <!-- Dynamic tiles -->
   <string name="quick_settings_dynamic_tile_detail_title">動態磚</string>
   <string name="dynamic_qs_tile_next_alarm_label">下一個鬧鐘</string>
   <string name="dynamic_qs_tile_ime_selector_label">輸入法選擇器</string>
   <string name="dynamic_qs_tile_su_label">Root 權限</string>
+  <string name="dynamic_qs_tile_themes_label">主題</string>
   <string name="quick_settings_title_advanced_location">定位模式</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">位置回報：節約耗電量</string>
@@ -161,26 +191,35 @@
   <!-- QuickSettings: Location (On, high-accuracy) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_high_accuracy_label">高精確度</string>
   <!-- Announcement made when the location tile changes to battery saving (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_location_changed_battery_saving">定位服務已更改為省電模式。</string>
   <!-- Announcement made when the location tile changes to sensors only (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_location_changed_gps_only">定位服務已更改為僅感應器模式。</string>
   <!-- Announcement made when the location tile changes to high accuracy (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_location_changed_high_accuracy">定位服務已更改為高精確度模式。</string>
   <string name="quick_settings_tiles_category_system">系統瓷磚</string>
   <!-- detail header when adding a tile -->
   <string name="quick_settings_tiles_add_tiles">新增瓷磚</string>
   <!-- Hotspot dialog message -->
-  <string name="hotspot_apm_message">飛航模式啟用時無法連接行動網路，請停用飛航模式後再嘗試。</string>
+  <string name="hotspot_apm_message">飛航模式啟用時無法連線行動網路，請停用飛航模式後再嘗試。</string>
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">手電筒已經開啟</string>
   <string name="quick_settings_tile_flashlight_not_summary">點擊關閉</string>
   <!-- Wi-Fi hotspot label when enabled -->
   <plurals name="wifi_hotspot_connected_clients_label">
-    <item quantity="other">%1$d 用戶</item>
+    <item quantity="other">%1$d 客戶端</item>
   </plurals>
   <!-- CellularTile data sim not configured state string -->
   <string name="data_sim_not_configured">沒有數據資料傳輸的 SIM 卡</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">座架電池百分之 <xliff:g id="number">%d</xliff:g>。</string>
   <!-- Play queue -->
+  <string name="play_queue_extention">顯示播放佇列</string>
   <!-- Path data for portrait battery -->
   <!-- Path data for landscape battery -->
   <!-- Path data for circle battery -->
   <!-- Weather string format in keyguard -->
+  <string name="keyguard_status_view_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
+  <string name="expand_hint">向下滑動即可以展開</string>
+  <string name="swipe_left_hint">向左滑動即可 <xliff:g id="app_name">%1$s</xliff:g></string>
+  <string name="swipe_right_hint">向右滑動即可查看通知</string>
 </resources>
