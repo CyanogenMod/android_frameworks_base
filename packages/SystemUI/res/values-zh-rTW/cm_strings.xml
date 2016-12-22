@@ -29,29 +29,67 @@
   <string name="led_notification_title">指示燈設定</string>
   <string name="led_notification_text">已透過設定啟用 LED 指示燈</string>
   <!-- Content description of the superuser tile -->
+  <string name="accessibility_su_active">超級使用者會話處於活動狀態</string>
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">手電筒已經開啟</string>
   <string name="quick_settings_tile_flashlight_not_summary">點擊關閉</string>
   <!-- [CHAR LIMIT=NONE] Importance Tuner setting title -->
+  <string name="cm_power_notification_controls_description">使用電源通知控制項，您可以設定重要性級別從 0 到 6 的應用程式的通知。
+        \n\n<b>級別 6</b>
+        \n- 顯示在通知清單的下方
+        \n- 允許全螢幕中斷
+        \n- 一律窺視
+        \n\n<b>級別 5</b>
+        \n- 防止全螢幕中斷
+        \n- 一律窺視
+        \n\n<b>級別 4</b>
+        \n- 防止全螢幕中斷
+        \n- 永不窺視
+        \n\n<b>級別 3</b>
+        \n- 防止全螢幕中斷
+        \n- 永不窺視
+        \n- 永不發出音效或震動
+        \n\n<b>級別 2</b>
+        \n- 防止全螢幕中斷
+        \n- 永不窺視
+        \n- 永不發出音效或震動
+        \n- 從鎖定螢幕中隱藏
+        \n- 顯示在通知清單的下方
+        \n\n<b>級別 1</b>
+        \n- 防止全螢幕中斷
+        \n- 永不窺視
+        \n- 永不發出音效或震動
+        \n- 從鎖定螢幕和狀態列隱藏
+        \n- 顯示在通知清單的下方
+        \n\n<b>級別 0</b>
+        \n- 封鎖來自應用程式的所有通知
+    </string>
   <!-- Notification importance level title-->
+  <string name="importance_level_title">重要性︰級別 %1$d</string>
   <!-- [CHAR LIMIT=100] Notification Importance slider: very low importance level description -->
+  <string name="notification_importance_very_low">無全螢幕中斷、窺視、聲音或震動。 從螢幕鎖定中隱藏。</string>
   <!-- Screen pinning dialog description (for devices without navbar) -->
+  <string name="screen_pinning_description_no_navbar">此功能會固定螢幕顯示直到您取消固定。觸控並長按返回鍵即可解除固定。</string>
   <!-- Strings for lockscreen shortcut hints -->
   <string name="left_shortcut_hint">向右滑動即可%1$s</string>
   <string name="right_shortcut_hint">向左滑動即可%1$s</string>
-  <string name="lockscreen_message">輕觸左側或右側的圖示以設定鎖定畫面捷徑</string>
+  <string name="lockscreen_message">輕觸左側或右側的圖示即可設定鎖定螢幕捷徑</string>
   <string name="lockscreen_default_target">預設</string>
   <string name="select_application">選取應用程式</string>
   <string name="lockscreen_choose_action_title">選取操作</string>
   <string name="lockscreen_none_target">無</string>
   <!-- Play queue -->
+  <string name="play_queue_extension">顯示播放佇列</string>
   <!-- Weather string format in keyguard -->
+  <string name="keyguard_status_view_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="accessibility_dpad_left">游標左移</string>
   <string name="accessibility_dpad_right">游標右移</string>
   <!-- NavBar Tuner -->
+  <string name="menu_ime_always_show">選單 / 鍵盤切換器 (一律顯示)</string>
+  <string name="search">搜尋</string>
   <!-- Wi-Fi hotspot label when enabled -->
   <plurals name="wifi_hotspot_connected_clients_label">
-    <item quantity="other">%1$d 用戶</item>
+    <item quantity="other">%1$d 客戶端</item>
   </plurals>
   <!-- Path data for portrait battery -->
   <!-- Path data for landscape battery -->
