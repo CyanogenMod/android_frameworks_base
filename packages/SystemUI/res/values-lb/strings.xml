@@ -591,6 +591,8 @@
   <!-- Recents: MultiStack add stack split vertical radio button. [CHAR LIMIT=NONE] -->
   <!-- Recents: MultiStack add stack split custom radio button. [CHAR LIMIT=NONE] -->
   <!-- Fully qualified activity class names to be blacklisted in Recents, add package names into overlay as needed -->
+  <string-array name="recents_blacklist_array">
+    </string-array>
   <!-- Expanded Status Bar Header: Battery Charged [CHAR LIMIT=40] -->
   <string name="expanded_header_battery_charged">Opgelueden</string>
   <!-- Expanded Status Bar Header: Charging, no known time [CHAR LIMIT=40] -->
@@ -641,6 +643,7 @@ iwwerwaacht sinn</string>
   <!-- Indication on the keyguard that is shown when the device is charging slowly. Should match keyguard_plugged_in_charging_slowly [CHAR LIMIT=40]-->
   <string name="keyguard_indication_charging_time_slowly">Gëtt lues opgelueden (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> bis e voll ass)</string>
   <!-- Related to user switcher -->
+  <skip></skip>
   <!-- Accessibility label for the button that opens the user switcher. -->
   <string name="accessibility_multi_user_switch_switcher">Benotzer wiesselen</string>
   <!-- Accessibility label for the button that opens the user switcher and announces the current user. -->
@@ -776,15 +779,15 @@ iwwerwaacht sinn</string>
     <!-- STREAM_MUSIC -->
     <item>Alarm</item>
     <!-- STREAM_ALARM -->
-    <item/>
+    <item></item>
     <!-- STREAM_NOTIFICATION -->
     <item>Bluetooth</item>
     <!-- STREAM_BLUETOOTH_SCO -->
-    <item/>
+    <item></item>
     <!-- STREAM_SYSTEM_ENFORCED -->
-    <item/>
+    <item></item>
     <!-- STREAM_DTMF -->
-    <item/>
+    <item></item>
     <!-- STREAM_TTS -->
   </string-array>
   <!-- Name of special SystemUI debug settings -->

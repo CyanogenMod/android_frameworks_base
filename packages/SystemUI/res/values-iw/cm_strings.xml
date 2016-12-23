@@ -34,6 +34,7 @@
   <string name="quick_settings_tile_flashlight_not_summary">הקש לכיבוי</string>
   <!-- [CHAR LIMIT=NONE] Importance Tuner setting title -->
   <!-- Notification importance level title-->
+  <string name="importance_level_title">מידת חשיבות: %1$d</string>
   <!-- [CHAR LIMIT=100] Notification Importance slider: very low importance level description -->
   <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">הפעולה שומרת זאת בתצוגה עד שתבטל את ההצמדה. גע והחזק את לחצן \"הקודם\" כדי לבטל את ההצמדה.</string>
@@ -52,6 +53,8 @@
   <string name="accessibility_dpad_left">סמן שמאלה</string>
   <string name="accessibility_dpad_right">סמן ימינה</string>
   <!-- NavBar Tuner -->
+  <string name="menu_ime_always_show">תפריט / בוחר מקלדת (הצג תמיד)</string>
+  <string name="search">חיפוש</string>
   <!-- Wi-Fi hotspot label when enabled -->
   <plurals name="wifi_hotspot_connected_clients_label">
     <item quantity="one">לקוח %1$d</item>
