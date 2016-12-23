@@ -350,6 +350,7 @@
   <!-- Indication on the keyguard that is shown when the device is charging rapidly. Should match keyguard_plugged_in_charging_fast [CHAR LIMIT=40]-->
   <!-- Indication on the keyguard that is shown when the device is charging slowly. Should match keyguard_plugged_in_charging_slowly [CHAR LIMIT=40]-->
   <!-- Related to user switcher -->
+  <skip></skip>
   <!-- Accessibility label for the button that opens the user switcher. -->
   <!-- Accessibility label for the button that opens the user switcher and announces the current user. -->
   <!-- Accessibility label for the user icon on the lock screen. -->

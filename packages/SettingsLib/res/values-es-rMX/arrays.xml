@@ -21,7 +21,9 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Wi-Fi settings -->
   <!-- Match this with the order of NetworkInfo.DetailedState. -->
+  <skip></skip>
   <!-- Wi-Fi settings. The status messages when the network is unknown. -->
   <!-- Match this with the order of NetworkInfo.DetailedState. -->
+  <skip></skip>
   <!-- Wi-Fi settings. The status messages when the network is known. -->
 </resources>
