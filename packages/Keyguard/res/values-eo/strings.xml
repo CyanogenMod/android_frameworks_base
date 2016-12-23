@@ -43,6 +43,7 @@
          in the phone soon. -->
   <!-- On the keyguard screen, when pattern lock is disabled, only tell them to press menu to unlock.  This is shown in small font at the bottom. -->
   <!-- SIM messages -->
+  <skip></skip>
   <!-- When the user inserts a sim card from an unsupported network, it becomes network locked -->
   <!-- Shown when there is no SIM card. -->
   <!-- Shown when there is no SIM card. -->
@@ -98,12 +99,14 @@
   <!-- Accessibility description announced when user drags widget away from delete drop target [CHAR LIMIT=NONE] -->
   <!-- Accessibility description for the text view that indicates when the next alarm is set (not shown on screen). [CHAR_LIMIT=none] -->
   <!-- Password keyboard strings. Used by LockScreen and Settings -->
+  <skip></skip>
   <!-- Label for "switch to symbols" key.  Must be short to fit on key! -->
   <string name="password_keyboard_label_symbol_key">\?123</string>
   <!-- Label for "switch to alphabetic" key.  Must be short to fit on key! -->
   <string name="password_keyboard_label_alpha_key">ABC</string>
   <!-- Label for ALT modifier key.  Must be short to fit on key! -->
   <!-- KeyboardView - accessibility support -->
+  <skip></skip>
   <!-- Description of the Alt button in a KeyboardView. [CHAR LIMIT=NONE] -->
   <!-- Description of the Cancel button in a KeyboardView. [CHAR LIMIT=NONE] -->
   <string name="keyboardview_keycode_cancel">Nuligi</string>

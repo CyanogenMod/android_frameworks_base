@@ -606,6 +606,7 @@
   <!-- Indication on the keyguard that is shown when the device is charging. [CHAR LIMIT=40]-->
   <string name="keyguard_indication_charging_time">Cargando (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> pa completar)</string>
   <!-- Related to user switcher -->
+  <skip></skip>
   <!-- Accessibility label for the button that opens the user switcher. -->
   <string name="accessibility_multi_user_switch_switcher">Camudar usuariu</string>
   <!-- Accessibility label for the button that opens the user switcher and announces the current user. -->

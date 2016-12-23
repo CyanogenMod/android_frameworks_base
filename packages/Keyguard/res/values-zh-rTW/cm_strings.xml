@@ -29,7 +29,7 @@
   <string name="lockscreen_sim_error_message_short">無效的 SIM 卡。</string>
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
-    <item quantity="other">輸入 SIM 卡的 PIN，您剩餘 <xliff:g id="number">%d </xliff:g> 次嘗試機會。</item>
+    <item quantity="other">輸入 SIM 卡的 PIN 碼，您剩餘 <xliff:g id="number">%d </xliff:g> 次嘗試機會。</item>
   </plurals>
   <!-- Instructions telling the user remaining times when enter SIM PUK view.  -->
   <plurals name="kg_password_default_puk_message">

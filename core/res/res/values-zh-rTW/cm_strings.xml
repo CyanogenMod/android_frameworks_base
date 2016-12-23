@@ -24,7 +24,7 @@
   <!-- The item label for the no profile selection item. -->
   <string name="profile_none">無</string>
   <!-- label for item that screenshots in phone options dialog -->
-  <string name="global_action_screenshot">螢幕擷取</string>
+  <string name="global_action_screenshot">螢幕截圖</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">接收受保護的簡訊</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -54,18 +54,18 @@
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">允許應用程式讀取關於被封鎖來電或訊息的電話號碼的資訊。</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_changePhoneBlacklist">變更手機黑名單</string>
+  <string name="permlab_changePhoneBlacklist">更改手機黑名單</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_changePhoneBlacklist">允許應用程式變更被封鎖來電或訊息的電話號碼。</string>
+  <string name="permdesc_changePhoneBlacklist">允許應用程式更改被封鎖來電或訊息的電話號碼。</string>
   <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">啟用或停用隱私守衛</string>
-  <string name="permdesc_changePrivacyGuardState">允許應用程式變更其他應用程式執行時是否啟用隱私守衛。當應用程式執行時啟用了隱私守衛，它將無法存取個人資料，例如聯絡人、通話記錄或訊息。</string>
+  <string name="permdesc_changePrivacyGuardState">允許應用程式更改其他應用程式執行時是否啟用隱私守衛。當應用程式執行時啟用了隱私守衛，它將無法存取個人資料，例如聯絡人、通話記錄或訊息。</string>
   <string name="privacy_guard_notification">隱私守衛正在運作</string>
   <string name="privacy_guard_notification_detail">「<xliff:g id="app">%1$s</xliff:g>」將無法存取個人資料</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
-  <string name="permlab_setKeyguardWallpaper">設定鎖定畫面桌布</string>
+  <string name="permlab_setKeyguardWallpaper">設定鎖定螢幕桌布</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_setKeyguardWallpaper">允許應用程式變更鎖定畫面桌布。</string>
+  <string name="permdesc_setKeyguardWallpaper">允許應用程式更改鎖定螢幕桌布。</string>
   <string name="privacy_guard_dialog_title">隱私守衛</string>
   <string name="privacy_guard_dialog_summary">「<xliff:g id="app">%1$s</xliff:g>」想要<xliff:g id="op">%2$s</xliff:g>。</string>
   <!-- label for item that reboots the phone in phone options dialog -->
@@ -82,7 +82,7 @@
   <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">Download</string>
   <!-- Button to soft reboot the device, within the Reboot Options dialog -->
-  <string name="reboot_soft">軟件重新啟動</string>
+  <string name="reboot_soft">軟體重新啟動</string>
   <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">重新啟動</string>
   <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
@@ -96,14 +96,14 @@
   <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">已啟用網路 ADB</string>
   <!-- ADB over USB and network notification -->
-  <string name="adb_both_active_notification_title">已啟用 USB 及網路 ADB</string>
+  <string name="adb_both_active_notification_title">ADB 透過 USB 和網路已啟用</string>
   <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">輕觸即可停用偵錯。</string>
   <!-- USB_PREFERENCES: Notification for when no USB options chosen.  This is the title -->
   <string name="usb_choose_notification_title">輕觸即可選擇 USB 選項。</string>
   <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
-  <string name="adb_active_custom_tile_both">USB和網路</string>
+  <string name="adb_active_custom_tile_both">USB 和網路</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">網路</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
@@ -119,7 +119,7 @@
   <string name="app_ops_su">取得 Root 權限</string>
   <string name="app_ops_auto_start">開機時啟動</string>
   <string name="app_ops_delete_call_log">刪除您的通話紀錄</string>
-  <string name="app_ops_delete_contacts">刪除您的連絡人</string>
+  <string name="app_ops_delete_contacts">刪除您的聯絡人</string>
   <string name="app_ops_delete_mms">刪除您的多媒體訊息</string>
   <string name="app_ops_delete_sms">刪除您的簡訊</string>
   <string name="app_ops_draw_on_top">在頂層繪製視窗</string>
@@ -147,7 +147,7 @@
   <string name="app_ops_send_sms">傳送簡訊</string>
   <string name="app_ops_start_at_bootup">開機時啟動</string>
   <string name="app_ops_toast_window">顯示彈出信息</string>
-  <string name="app_ops_toggle_bluetooth">開關藍牙</string>
+  <string name="app_ops_toggle_bluetooth">切換至藍牙</string>
   <string name="app_ops_toggle_mobile_data">開關行動數據</string>
   <string name="app_ops_toggle_nfc">開關 NFC</string>
   <string name="app_ops_toggle_wifi">開關 Wi-Fi</string>
@@ -155,7 +155,7 @@
   <string name="app_ops_use_audio_focus">控制音訊焦點</string>
   <string name="app_ops_use_bluetooth_volume">控制藍牙音量</string>
   <string name="app_ops_use_master_volume">控制主音量</string>
-  <string name="app_ops_use_media_buttons">使用媒體按鈕</string>
+  <string name="app_ops_use_media_buttons">使用媒體鍵</string>
   <string name="app_ops_use_media_volume">控制媒體音量</string>
   <string name="app_ops_use_notification_volume">控制通知音量</string>
   <string name="app_ops_use_ring_volume">控制鈴聲音量</string>
@@ -190,11 +190,13 @@
   <string name="perf_profile_pwrsv">省電</string>
   <string name="perf_profile_bal">平衡</string>
   <string name="perf_profile_perf">效能</string>
+  <string name="perf_profile_bias_power">效率</string>
+  <string name="perf_profile_bias_perf">快速</string>
   <!-- Theme installation error notification -->
   <string name="theme_install_error_title">主題安裝失敗</string>
   <string name="theme_install_error_message">「%s」安裝失敗</string>
   <string name="theme_reset_notification_title">重設主題</string>
-  <string name="theme_reset_notification_body">基於多個應用程式發生錯誤所以已還原至預設主題</string>
+  <string name="theme_reset_notification_body">根據多個應用程式發生錯誤所以已還原至預設主題</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">未安裝 %s</string>
   <string name="permlab_interceptSmsSent">攔截送出簡訊</string>
@@ -208,7 +210,7 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_preventpower">允許應用程式無視電源鍵。</string>
   <!-- See EXTMEDIA_FORMAT.   This is the message. [CHAR LIMIT=NONE] -->
-  <string name="usb_extmedia_format_message">USB 儲存空間上所有資料將會被清除 (路徑 「%1$s」)。這個動作無法還原。</string>
+  <string name="usb_extmedia_format_message">USB 儲存裝置上所有資料將會被清除 (路徑 「%1$s」)。這個動作無法還原。</string>
   <!-- See EXTMEDIA_FORMAT.   This is the message. -->
   <string name="sd_extmedia_format_message">SD 卡上所有資料將會被清除 (路徑 「%1$s」)。這個動作無法還原。</string>
   <!-- Strings for ExternalStorageFormatter service (SD card). -->
@@ -257,14 +259,14 @@
   <string name="live_display_auto">自動</string>
   <string name="live_display_auto_summary">在白天和夜晚自動調節螢幕顏色溫度</string>
   <string name="live_display_off">關閉</string>
-  <string name="live_display_off_summary">禁用所有的調整</string>
+  <string name="live_display_off_summary">停用所有調整</string>
   <string name="live_display_day">白天</string>
-  <string name="live_display_day_summary">僅使用白天設定</string>
+  <string name="live_display_day_summary">僅限使用白天設定</string>
   <string name="live_display_night">夜間</string>
-  <string name="live_display_night_summary">僅使用夜間設定</string>
+  <string name="live_display_night_summary">僅限使用夜間設定</string>
   <string name="live_display_outdoor">戶外 (陽光)</string>
-  <string name="live_display_outdoor_summary">僅使用戶外設定</string>
-  <string name="live_display_hint">LiveDisplay 可以幫助減少眼睛的疲勞及睡前使用造成的不適。輕觸此處來試試！</string>
+  <string name="live_display_outdoor_summary">僅限使用戶外設定</string>
+  <string name="live_display_hint">LiveDisplay 可以幫助減少眼睛疲勞及睡前使用造成的不適。按一下此處來試試！</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">要解鎖此螢幕，觸摸並按住返回鍵。</string>
   <!-- Notification which notifies user flashlight is enabled -->
@@ -289,7 +291,11 @@
   <string name="silent_mode_priority">優先度</string>
   <string name="silent_mode_none">無</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">由於 SIM 卡資訊更改，已停用 Wi-Fi 熱點</string>
   <!-- WiFi turn off notification action text -->
+  <string name="notify_turn_wifi_off_title">關閉 Wi-Fi</string>
   <!-- Third party keyguard permission label -->
+  <string name="permlab_thirdPartyKeyguard">第三方鎖定螢幕</string>
   <!-- Third party keyguard permission description -->
+  <string name="permdesc_thirdPartyKeyguard">允許應用程式用作不安全的鎖定螢幕。</string>
 </resources>

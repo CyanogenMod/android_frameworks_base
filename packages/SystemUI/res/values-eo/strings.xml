@@ -344,6 +344,7 @@
   <!-- Interruption level: All. [CHAR LIMIT=20] -->
   <!-- Indication on the keyguard that is shown when the device is charging. [CHAR LIMIT=40]-->
   <!-- Related to user switcher -->
+  <skip></skip>
   <!-- Accessibility label for the button that opens the user switcher. -->
   <!-- Accessibility label for the button that opens the user switcher and announces the current user. -->
   <!-- Accessibility label for the button that opens the quick contact of the user. -->

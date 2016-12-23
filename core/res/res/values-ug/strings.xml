@@ -60,6 +60,7 @@
   <!-- What the UI should display for "Msisdn" unless overridden by the SIM-->
   <string name="defaultMsisdnAlphaTag">MSISDN1</string>
   <!-- For GsmMmiCode.java -->
+  <skip></skip>
   <!-- Displayed when the user dialed an MMI code whose function
          could not be performed. This will be displayed in a toast. -->
   <string name="mmiError">باغلىنىشتا مەسىلە كۆرۈلدى ياكى MMI كودى خاتا.</string>
@@ -160,6 +161,7 @@
   <string name="RestrictedOnAll">بارلىق ئاۋاز/سانلىق مەلۇمات/قىسقا ئۇچۇر مۇلازىمىتى توختىتىلدى.</string>
   <!-- Displayed to tell the user that peer changed TTY mode -->
   <!-- Mappings between TS 27.007 +CFCC/+CLCK "service classes" and human-readable strings-->
+  <skip></skip>
   <!-- Example: Service was enabled for: Voice, Data -->
   <string name="serviceClassVoice">ئاۋاز</string>
   <!-- Example: Service was enabled for: Voice, Data -->
@@ -177,6 +179,7 @@
   <!-- Meaning: unknown.  Example: Service was enabled for: Voice, PAD -->
   <string name="serviceClassPAD">PAD</string>
   <!-- CDMA Roaming Indicator Strings (non ERI)-->
+  <skip></skip>
   <!-- Default roaming indicator text -->
   <string name="roamingText0">كەزمە كۆرسەتكۈچ ئوچۇق</string>
   <string name="roamingText1">كەزمە كۆرسەتكۈچ تاقاق</string>
@@ -200,6 +203,7 @@
         cfTemplateRegistered and cfTemplateRegisteredTime mean that a phone number
         has been set but forwarding is not on.
     -->
+  <skip></skip>
   <!-- Displayed when the call forwarding query was not able to be forwarded. -->
   <string name="cfTemplateNotForwarded"><xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>:ئۇلاپ يۆتكىيەلمىدى</string>
   <!-- Displayed when the call forwarding query was forwarded. -->
@@ -211,11 +215,13 @@
   <!-- Displayed when the call forwarding query was set but forwarding is not enabled. -->
   <string name="cfTemplateRegisteredTime"><xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>:ئۇلاپ يۆتكىيەلمىدى</string>
   <!-- android.net.http Error strings -->
+  <skip></skip>
   <!-- Displayed when a feature code (non-phone number) is dialed and completes successfully. -->
   <string name="fcComplete">ئىقتىدار كودى تاماملاندى.</string>
   <!-- Displayed when a feature code (non-phone number) is dialed and completes unsuccessfully. -->
   <string name="fcError">باغلىنىشتا مەسىلە كۆرۈلدى ياكى ئىقتىدار كودى ئىناۋەتسىز.</string>
   <!-- android.net.http Error strings -->
+  <skip></skip>
   <!-- Displayed when a web request was successful. -->
   <string name="httpErrorOk">جەزملە</string>
   <!-- Displayed when a web request failed with a generic network error. -->
@@ -249,12 +255,14 @@
   <!-- Displayed when a request failed because there are too many requests right now. -->
   <string name="httpErrorTooManyRequests">بىر تەرەپ قىلىۋاتقان ئىلتىماس بەك كۆپ. سەل تۇرۇپ قايتا سىناڭ.</string>
   <!-- Account notifications -->
+  <skip></skip>
   <!-- A notification is shown when the AccountManager is unable to
     supply an auth token without prompting the user to re-enter the
     password.  This is the text that will scroll through the
     notification bar (will be seen by the user as he uses another application). -->
   <string name="notification_title"><xliff:g id="ACCOUNT">%1$s</xliff:g> نىڭ تىزىمغا كىرىش خاتالىقى</string>
   <!-- Sync notifications -->
+  <skip></skip>
   <!-- A notification is shown when there is a sync error.  This is the text that will scroll through the notification bar (will be seen by the user as he uses another application). -->
   <string name="contentServiceSync">قەدەمداش</string>
   <!-- A notification is shown when there is a sync error.  This is the title of the notification.  It will be seen in the pull-down notification tray. -->
@@ -268,6 +276,7 @@
   <!-- If MMS discovers there isn't much space left on the device, it will show a toast with this message. -->
   <string name="low_memory" product="default">تېلېفون ساقلىغۇچىسى توشتى. بەزى ھۆججەتلەرنى ئۆچۈرۈپ بوشلۇق بىكارلاڭ.</string>
   <!-- SSL CA cert notification -->
+  <skip></skip>
   <!-- Shows up when there is a user SSL CA Cert installed on the
          device.  Indicates to the user that SSL traffic can be intercepted.  [CHAR LIMIT=NONE] -->
   <string name="ssl_ca_cert_warning">تور نازارەت قىلىنغان بولۇشى مۇمكىن</string>
@@ -283,6 +292,7 @@
          [CHAR LIMIT=100]-->
   <string name="ssl_ca_cert_noti_managed"><xliff:g id="MANAGING_DOMAIN">%s</xliff:g> نازارىتىدە</string>
   <!-- Work profile deleted notification-->
+  <skip></skip>
   <!-- Shows up in the notification's title when the system deletes the work profile. [CHAR LIMIT=NONE] -->
   <!-- Content text for a notification. The Title of the notification is "work_profile_deleted",
          i.e. "Work profile deleted". This says that the profile is deleted by the system as a result of
@@ -291,12 +301,14 @@
          i.e. "Work profile deleted". This further explains that the profile is deleted by the system
          as a result of the current profile admin gone missing. [CHAR LIMIT=NONE]-->
   <!-- Factory reset warning dialog strings-->
+  <skip></skip>
   <!-- Shows up in the dialog's title to warn about an impeding factory reset. [CHAR LIMIT=NONE] -->
   <!-- Text message in the factory reset warning dialog. This says that the the device admin app
          is missing or corrupted. As a result the device will be erased. [CHAR LIMIT=NONE]-->
   <!-- Display name for any time a piece of data refers to the owner of the phone. For example, this could be used in place of the phone's phone number. -->
   <string name="me">مەن</string>
   <!-- Power Dialog -->
+  <skip></skip>
   <!-- Title for the Phone Options dialog to lock the screen, turn off the phone etc. -->
   <string name="power_dialog" product="tablet">تاختا كومپيۇتېر تاللانمىلار</string>
   <!-- Title for the Phone Options dialog to lock the screen, turn off the phone etc. -->
@@ -1535,6 +1547,7 @@
   <!-- Description of policy access to disable all device cameras [CHAR LIMIT=110]-->
   <string name="policydesc_disableKeyguardFeatures">ئېكراننى قۇلۇپلىغاندا بەزى ئىقتىدارلارنى ئىشلىتىشنى چەكلەيدۇ</string>
   <!-- The order of these is important, don't reorder without changing Contacts.java -->
+  <skip></skip>
   <!-- Phone number types from android.provider.Contacts. This could be used when adding a new phone number for a contact, for example. -->
   <string-array name="phoneTypes">
     <item>ئۆي</item>
@@ -1547,6 +1560,7 @@
     <item>ئىختىيارىي</item>
   </string-array>
   <!-- The order of these is important, don't reorder without changing Contacts.java -->
+  <skip></skip>
   <!-- Email address types from android.provider.Contacts. This could be used when adding a new e-mail address for a contact, for example. -->
   <string-array name="emailAddressTypes">
     <item>ئۆي</item>
@@ -1555,6 +1569,7 @@
     <item>ئىختىيارىي</item>
   </string-array>
   <!-- The order of these is important, don't reorder without changing Contacts.java -->
+  <skip></skip>
   <!-- Postal address types from android.provider.Contacts. This could be used when adding a new address for a contact, for example. -->
   <string-array name="postalAddressTypes">
     <item>ئۆي</item>
@@ -1563,6 +1578,7 @@
     <item>ئىختىيارىي</item>
   </string-array>
   <!-- The order of these is important, don't reorder without changing Contacts.java -->
+  <skip></skip>
   <!-- Instant Messenger ID types from android.provider.Contacts. This could be used when adding a new IM for a contact, for example. -->
   <string-array name="imAddressTypes">
     <item>ئۆي</item>
@@ -1571,6 +1587,7 @@
     <item>ئىختىيارىي</item>
   </string-array>
   <!-- The order of these is important, don't reorder without changing Contacts.java -->
+  <skip></skip>
   <!-- Organization types from android.provider.Contacts. This could be used when adding a new organization for a contact, for example. -->
   <string-array name="organizationTypes">
     <item>ئىش</item>
@@ -1578,6 +1595,7 @@
     <item>ئىختىيارىي</item>
   </string-array>
   <!-- The order of these is important, don't reorder without changing Contacts.java -->
+  <skip></skip>
   <!-- Instant Message protocols/providers from android.provider.Contacts -->
   <string-array name="imProtocols">
     <item>AIM</item>
@@ -1760,6 +1778,7 @@
   <!--
        *** touch based lock / unlock ***
                                           -->
+  <skip></skip>
   <!-- On the keyguard screen, it shows the carrier the phone is connected to.  This is displayed if the phone is not connected to a carrier.-->
   <string name="lockscreen_carrier_default">مۇلازىمەت يوق</string>
   <!-- Shown in the lock screen to tell the user that the screen is locked. -->
@@ -1935,6 +1954,7 @@
   <!-- Accessibility description of the unlock slide area. [CHAR_LIMIT=none] -->
   <string name="keyguard_accessibility_slide_area">سۈرۈش دائىرىسى</string>
   <!-- Password keyboard strings. Used by LockScreen and Settings -->
+  <skip></skip>
   <!-- Label for "switch to symbols" key.  Must be short to fit on key! -->
   <string name="password_keyboard_label_symbol_key">\?123</string>
   <!-- Label for "switch to alphabetic" key.  Must be short to fit on key! -->
@@ -2192,6 +2212,7 @@
   <!-- Displayed in place of the regular shortcut letter when a menu item has Menu+delete for the shortcut. -->
   <string name="menu_delete_shortcut_label">ئۆچۈر</string>
   <!-- Strings used for search bar -->
+  <skip></skip>
   <!-- This is the default button label in the system-wide search UI.
          It is also used by the home screen's search "widget". It should be short -->
   <string name="search_go">ئىزدە</string>
@@ -2444,11 +2465,13 @@
          activity chooser. See the "Select an action" title. -->
   <string name="noApplications">بۇ مەشغۇلاتنى ئىجرا قىلىدىغان ئەپ يوق.</string>
   <!-- Title of the alert when an application has crashed. -->
+  <string name="aerr_title"></string>
   <!-- Text of the alert that is displayed when an application has crashed. -->
   <string name="aerr_application">ناھايىتى ئەپسۇس، <xliff:g id="APPLICATION">%1$s</xliff:g> توختىدى.</string>
   <!-- Text of the alert that is displayed when an application has crashed. -->
   <string name="aerr_process">ناھايىتى ئەپسۇس، <xliff:g id="PROCESS">%1$s</xliff:g> جەريان توختىدى.</string>
   <!-- Title of the alert when an application is not responding. -->
+  <string name="anr_title"></string>
   <!-- Text of the alert that is displayed when an application is not responding. -->
   <string name="anr_activity_application"><xliff:g id="APPLICATION">%2$s</xliff:g> ئىنكاس يوق.\n\nئۇنى تاقامسىز؟</string>
   <!-- Text of the alert that is displayed when an application is not responding. -->
@@ -2537,6 +2560,7 @@
   <!-- Content description for notification volume icon [CHAR LIMIT=100] -->
   <string name="volume_icon_description_notification">ئۇقتۇرۇش ئاۋازى</string>
   <!-- Ringtone picker strings -->
+  <skip></skip>
   <!-- Choice in the ringtone picker.  If chosen, the default ringtone will be used. -->
   <string name="ringtone_default">كۆڭۈلدىكى قوڭغۇراق ئاۋازى</string>
   <!-- Choice in the ringtone picker.  If chosen, the default ringtone will be used. This fills in the actual ringtone's title into the message. -->
@@ -2584,6 +2608,7 @@
   <!-- Name of the dialog that lets the user choose an accented character to insert -->
   <string name="select_character">ھەرپ قىستۇر</string>
   <!-- SMS per-application rate control Dialog -->
+  <skip></skip>
   <!-- SMS_DIALOG: An SMS dialog is shown if an application tries to send too many SMSes.  This is the title of that dialog. -->
   <string name="sms_control_title">قىسقا ئۇچۇر يوللاۋاتىدۇ</string>
   <!-- See SMS_DIALOG.  This is the message shown in that dialog. [CHAR LIMIT=NONE] -->
@@ -2593,6 +2618,7 @@
   <!-- See SMS_DIALOG.  This is a button choice to disallow sending the SMSes. [CHAR LIMIT=30] -->
   <string name="sms_control_no">رەت قىل</string>
   <!-- SMS short code verification dialog. -->
+  <skip></skip>
   <!-- The message text for the SMS short code confirmation dialog. [CHAR LIMIT=NONE] -->
   <string name="sms_short_code_confirm_message">بىر ئۇچۇرنى &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ئۆزى &lt;b&gt;<xliff:g id="DEST_ADDRESS">%2$s</xliff:g>&lt;/b&gt; غا يوللىماقچى.</string>
   <!-- Message details for the SMS short code confirmation dialog (possible premium short code). [CHAR LIMIT=NONE] -->
@@ -2610,6 +2636,7 @@
   <!-- Text of the cancel button for the SMS short code confirmation dialog when checkbox is checked. [CHAR LIMIT=30] -->
   <string name="sms_short_code_confirm_never_allow">ھەرگىز يول قويما</string>
   <!-- SIM swap and device reboot Dialog -->
+  <skip></skip>
   <!-- See SIM_REMOVED_DIALOG.  This is the title of that dialog. -->
   <string name="sim_removed_title">SIM كارتا چىقىرىۋېتىلدى</string>
   <!-- See SIM_REMOVED_DIALOG.  This is the message of that dialog. -->
@@ -2823,6 +2850,7 @@
   <string name="ime_action_default">ئىجرا قىل</string>
   <!-- Strings for search suggestions. These are going here because they are referenced by both
          ContactsProvider and GoogleContactsProvider -->
+  <skip></skip>
   <!-- This string appears (on two lines) when you type a number into contacts search, to let you dial the phone number you typed.  The first line will be in bigger type than the second. -->
   <string name="dial_number_using"><xliff:g id="NUMBER">%s</xliff:g> دا نومۇر بۇرا</string>
   <!-- This string appears (on two lines) when you type a number into contacts search, to let you create a contact whose phone number is the number you typed.  The first line will be in bigger type than the second. -->
