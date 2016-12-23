@@ -4692,6 +4692,11 @@ public class TelephonyManager {
         if (SubscriptionManager.isValidPhoneId(phoneId)) {
             String prop = TelephonyProperties.PROPERTY_BASEBAND_VERSION +
                     ((phoneId == 0) ? "" : Integer.toString(phoneId));
+            if (version.length() > SystemProperties.PROP_VALUE_MAX) {
+                Log.e(TAG, "setBasebandVersionForPhone(): version length=" +
+                    Integer.toString(version.length()));
+                version = version.substring(0, SystemProperties.PROP_VALUE_MAX);
+            }
             SystemProperties.set(prop, version);
         }
     }
