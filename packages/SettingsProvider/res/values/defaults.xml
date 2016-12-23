@@ -229,9 +229,6 @@
     <!-- Default for Settings.Secure.NFC_PAYMENT_COMPONENT -->
     <string name="def_nfc_payment_component"></string>
 
-    <!-- Default for Settings.System.STATUS_BAR_NOTIF_COUNT. -->
-    <integer name="def_notif_count">0</integer>
-
     <!-- Default protected sms originating address values of Settings.Secure.PROTECTED_SMS_ADDRESSES -->
     <string-array name="def_protected_sms_list_values"></string-array>
 
