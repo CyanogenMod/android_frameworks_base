@@ -349,11 +349,6 @@ ES 3.1. Key new functionality provided in OpenGL ES 3.1 includes:</p>
 <li>Backward compatibility with OpenGL ES 2.0 and 3.0
 </ul>
 
-<p>The Java interface for OpenGL ES 3.1 on Android is provided with
-  {@link android.opengl.GLES31}. When using OpenGL ES 3.1, be sure that you
-  declare it in your manifest file with the
-  <a href="{@docRoot}guide/topics/manifest/uses-feature-element.html">{@code &lt;uses-feature&gt;}</a> tag and the {@code android:glEsVersion} attribute. For example:</p>
-
 <pre>
 &lt;manifest&gt;
     &lt;uses-feature android:glEsVersion="0x00030001" /&gt;
@@ -384,11 +379,6 @@ features with a single {@code #extension} statement.)</p>
 <li>Per-sample interpolation and shading</li>
 <li>Different blend modes for each color attachment in a frame buffer</li>
 </ul>
-
-<p>The Java interface for the extension pack is provided with
-  {@link android.opengl.GLES31Ext}. In your app manifest, you can declare that
-  your app must be installed only on devices that support the extension pack.
-  For example:</p>
 
 <pre>
 &lt;manifest&gt;
