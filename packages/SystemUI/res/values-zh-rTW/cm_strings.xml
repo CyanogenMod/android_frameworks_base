@@ -70,7 +70,7 @@
   <string name="qs_tile_edit_header_instruction">按住瓷磚即可重新排列</string>
   <string name="quick_settings_edit_label">編輯瓷磚</string>
   <string name="quick_settings_cannot_delete_edit_tile">無法刪除編輯瓷磚</string>
-  <string name="qs_tiles_reset_confirmation">將快速設定瓷磚還原至預設配置？</string>
+  <string name="qs_tiles_reset_confirmation">是否將快速設定瓷磚還原至預設配置？</string>
   <string name="quick_settings_tile_reset_to_default">還原至預設布局</string>
   <string name="quick_settings_title_header">標題</string>
   <string name="quick_settings_title_tiles">瓷磚</string>
@@ -200,7 +200,7 @@
   <!-- detail header when adding a tile -->
   <string name="quick_settings_tiles_add_tiles">新增瓷磚</string>
   <!-- Hotspot dialog message -->
-  <string name="hotspot_apm_message">飛航模式啟用時無法連線行動網路，請停用飛航模式後再嘗試。</string>
+  <string name="hotspot_apm_message">飛航模式啟用時無法連線行動網路，請停用飛航模式後再試一次。</string>
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">手電筒已經開啟</string>
   <string name="quick_settings_tile_flashlight_not_summary">點擊關閉</string>
