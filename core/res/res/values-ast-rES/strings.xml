@@ -78,6 +78,7 @@
   <!-- What the UI should display for "Msisdn" unless overridden by the SIM-->
   <string name="defaultMsisdnAlphaTag">MSISDN1</string>
   <!-- For GsmMmiCode.java -->
+  <skip></skip>
   <!-- Displayed when the user dialed an MMI code whose function
          could not be performed. This will be displayed in a toast. -->
   <string name="mmiError">Hebo un fallu de conexón o\'l códigu MMI nun ye válidu.</string>
@@ -183,6 +184,7 @@
   <string name="peerTtyModeVco">El preséu solicitó\'l mou TTY VCO.</string>
   <string name="peerTtyModeOff">El preséu solicitó\'l mou TTY OFF.</string>
   <!-- Mappings between TS 27.007 +CFCC/+CLCK "service classes" and human-readable strings-->
+  <skip></skip>
   <!-- Example: Service was enabled for: Voice, Data -->
   <string name="serviceClassVoice">Voz</string>
   <!-- Example: Service was enabled for: Voice, Data -->
@@ -200,6 +202,7 @@
   <!-- Meaning: unknown.  Example: Service was enabled for: Voice, PAD -->
   <string name="serviceClassPAD">PAD</string>
   <!-- CDMA Roaming Indicator Strings (non ERI)-->
+  <skip></skip>
   <!-- Default roaming indicator text -->
   <string name="roamingText0">Indicador d\'itinerancia activáu</string>
   <string name="roamingText1">Indicador d\'itinerancia desactiváu</string>
@@ -240,6 +243,7 @@
         cfTemplateRegistered and cfTemplateRegisteredTime mean that a phone number
         has been set but forwarding is not on.
     -->
+  <skip></skip>
   <!-- Displayed when the call forwarding query was not able to be forwarded. -->
   <string name="cfTemplateNotForwarded"><xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>: Non esviada</string>
   <!-- Displayed when the call forwarding query was forwarded. -->
@@ -251,11 +255,13 @@
   <!-- Displayed when the call forwarding query was set but forwarding is not enabled. -->
   <string name="cfTemplateRegisteredTime"><xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>: Non esviada</string>
   <!-- android.net.http Error strings -->
+  <skip></skip>
   <!-- Displayed when a feature code (non-phone number) is dialed and completes successfully. -->
   <string name="fcComplete">Códigu de función completu</string>
   <!-- Displayed when a feature code (non-phone number) is dialed and completes unsuccessfully. -->
   <string name="fcError">Hebo un fallu de conexón o\'l códigu de la función nun ye válidu.</string>
   <!-- android.net.http Error strings -->
+  <skip></skip>
   <!-- Displayed when a web request was successful. -->
   <string name="httpErrorOk">Aceutar</string>
   <!-- Displayed when a web request failed with a generic network error. -->
@@ -289,12 +295,14 @@
   <!-- Displayed when a request failed because there are too many requests right now. -->
   <string name="httpErrorTooManyRequests">Tán procesándose abondes solicitúes. Vuelvi a intentalo dempués.</string>
   <!-- Account notifications -->
+  <skip></skip>
   <!-- A notification is shown when the AccountManager is unable to
     supply an auth token without prompting the user to re-enter the
     password.  This is the text that will scroll through the
     notification bar (will be seen by the user as he uses another application). -->
   <string name="notification_title">Error d\'aniciu de sesión de <xliff:g id="account" example="foo@gmail.com">%1$s</xliff:g></string>
   <!-- Sync notifications -->
+  <skip></skip>
   <!-- A notification is shown when there is a sync error.  This is the text that will scroll through the notification bar (will be seen by the user as he uses another application). -->
   <string name="contentServiceSync">Sincronización</string>
   <!-- A notification is shown when there is a sync error.  This is the title of the notification.  It will be seen in the pull-down notification tray. -->
@@ -310,6 +318,7 @@
   <!-- If MMS discovers there isn't much space left on the device, it will show a toast with this message. -->
   <string name="low_memory" product="default">Escosó l\'espaciu d\'almacenamientu del teléfonu. Desanicia dalgunos ficheros pa lliberar espaciu.</string>
   <!-- SSL CA cert notification -->
+  <skip></skip>
   <!-- Shows up when there is a user SSL CA Cert installed on the
          device.  Indicates to the user that SSL traffic can be intercepted.  [CHAR LIMIT=NONE] -->
   <!-- Content text for a notification. The Title of the notification is "ssl_ca_cert_warning".
@@ -322,6 +331,7 @@
          This indicates who is doing the monitoring. [CHAR LIMIT=100]-->
   <string name="ssl_ca_cert_noti_managed">Por <xliff:g id="MANAGING_DOMAIN">%s</xliff:g></string>
   <!-- Work profile deleted notification-->
+  <skip></skip>
   <!-- Shows up in the notification's title when the system deletes the work profile. [CHAR LIMIT=NONE] -->
   <string name="work_profile_deleted">Perfil de trabayu desaniciáu</string>
   <!-- Content text for a notification. The Title of the notification is "work_profile_deleted",
@@ -337,6 +347,7 @@
         This indicates that a work profile has been deleted. [CHAR LIMIT=NONE]-->
   <string name="work_profile_deleted_description_dpm_wipe">El to perfil de trabayu yá nun ta disponible nesti preséu.</string>
   <!-- Factory reset warning dialog strings-->
+  <skip></skip>
   <!-- Shows up in the dialog's title to warn about an impeding factory reset. [CHAR LIMIT=NONE] -->
   <string name="factory_reset_warning">Van desaniciase los datos del preséu</string>
   <!-- Text message in the factory reset warning dialog. This says that the the device admin app
@@ -346,6 +357,7 @@
   <!-- Display name for any time a piece of data refers to the owner of the phone. For example, this could be used in place of the phone's phone number. -->
   <string name="me">Yo</string>
   <!-- Power Dialog -->
+  <skip></skip>
   <!-- Title for the Phone Options dialog to lock the screen, turn off the phone etc. -->
   <string name="power_dialog" product="tablet">Opciones de la tablet</string>
   <!-- Title for the Phone Options dialog to lock the screen, turn off the phone etc. -->
@@ -846,6 +858,8 @@
   <!-- Message shown during fingerprint acquisision when the user moves their finger too slowly -->
   <string name="fingerprint_acquired_too_slow">Movisti\'l deu mui lento. Vuelvi intentalo.</string>
   <!-- Array containing custom messages shown during fingerprint acquisision from vendor.  Vendor is expected to add and translate these strings -->
+  <string-array name="fingerprint_acquired_vendor">
+    </string-array>
   <!-- Error message shown when the fingerprint hardware can't be accessed -->
   <string name="fingerprint_error_hw_not_available">El hardware pa buelgues dixitales nun ta disponible.</string>
   <!-- Error message shown when the fingerprint hardware has run out of room for storing fingerprints -->
@@ -861,6 +875,8 @@
   <!-- Template to be used to name enrolled fingerprints by default. -->
   <string name="fingerprint_name_template">Deu <xliff:g id="fingerId" example="1">%d</xliff:g></string>
   <!-- Array containing custom error messages from vendor.  Vendor is expected to add and translate these strings -->
+  <string-array name="fingerprint_error_vendor">
+    </string-array>
   <!-- Content description which should be used for the fingerprint icon. -->
   <string name="fingerprint_icon_content_description">Iconu de buelga</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -1034,6 +1050,7 @@
   <!-- Description of policy access to disable keyguard features. [CHAR LIMIT=110]-->
   <string name="policydesc_disableKeyguardFeatures">Evita l\'usu de dalgunes funciones de bloquéu de pantalla.</string>
   <!-- The order of these is important, don't reorder without changing Contacts.java -->
+  <skip></skip>
   <!-- Phone number types from android.provider.Contacts. This could be used when adding a new phone number for a contact, for example. -->
   <string-array name="phoneTypes">
     <item>Casa</item>
@@ -1046,6 +1063,7 @@
     <item>Personalizar</item>
   </string-array>
   <!-- The order of these is important, don't reorder without changing Contacts.java -->
+  <skip></skip>
   <!-- Email address types from android.provider.Contacts. This could be used when adding a new e-mail address for a contact, for example. -->
   <string-array name="emailAddressTypes">
     <item>Casa</item>
@@ -1054,6 +1072,7 @@
     <item>Personalizar</item>
   </string-array>
   <!-- The order of these is important, don't reorder without changing Contacts.java -->
+  <skip></skip>
   <!-- Postal address types from android.provider.Contacts. This could be used when adding a new address for a contact, for example. -->
   <string-array name="postalAddressTypes">
     <item>Casa</item>
@@ -1062,6 +1081,7 @@
     <item>Personalizar</item>
   </string-array>
   <!-- The order of these is important, don't reorder without changing Contacts.java -->
+  <skip></skip>
   <!-- Instant Messenger ID types from android.provider.Contacts. This could be used when adding a new IM for a contact, for example. -->
   <string-array name="imAddressTypes">
     <item>Casa</item>
@@ -1070,6 +1090,7 @@
     <item>Personalizar</item>
   </string-array>
   <!-- The order of these is important, don't reorder without changing Contacts.java -->
+  <skip></skip>
   <!-- Organization types from android.provider.Contacts. This could be used when adding a new organization for a contact, for example. -->
   <string-array name="organizationTypes">
     <item>Trabayu</item>
@@ -1077,6 +1098,7 @@
     <item>Personalizar</item>
   </string-array>
   <!-- The order of these is important, don't reorder without changing Contacts.java -->
+  <skip></skip>
   <!-- Instant Message protocols/providers from android.provider.Contacts -->
   <string-array name="imProtocols">
     <item>AIM</item>
@@ -1258,6 +1280,7 @@
   <!--
        *** touch based lock / unlock ***
                                           -->
+  <skip></skip>
   <!-- On the keyguard screen, it shows the carrier the phone is connected to.  This is displayed if the phone is not connected to a carrier.-->
   <!-- Shown in the lock screen to tell the user that the screen is locked. -->
   <string name="lockscreen_screen_locked">Pantalla bloquiada</string>
@@ -1440,6 +1463,7 @@
   <!-- Accessibility description of the unlock slide area. [CHAR_LIMIT=none] -->
   <string name="keyguard_accessibility_slide_area">Área pa eslizar</string>
   <!-- Password keyboard strings. Used by LockScreen and Settings -->
+  <skip></skip>
   <!-- Label for "switch to symbols" key.  Must be short to fit on key! -->
   <string name="password_keyboard_label_symbol_key">\?123</string>
   <!-- Label for "switch to alphabetic" key.  Must be short to fit on key! -->
@@ -1670,6 +1694,7 @@
   <!-- Displayed in place of the regular shortcut letter when a menu item has Menu+delete for the shortcut. -->
   <string name="menu_delete_shortcut_label">desaniciar</string>
   <!-- Strings used for search bar -->
+  <skip></skip>
   <!-- This is the default button label in the system-wide search UI.
          It is also used by the home screen's search "widget". It should be short -->
   <string name="search_go">Guetar</string>
@@ -1922,6 +1947,7 @@
   <string name="aerr_wait">Esperar</string>
   <!-- Button that closes an unresponsive application -->
   <!-- Title of the alert when an application is not responding. -->
+  <string name="anr_title"></string>
   <!-- Text of the alert that is displayed when an application is not responding. -->
   <!-- Text of the alert that is displayed when an application is not responding. -->
   <!-- Text of the alert that is displayed when an application is not responding. -->
@@ -2025,6 +2051,7 @@
   <!-- Content description for notification volume icon [CHAR LIMIT=100] -->
   <string name="volume_icon_description_notification">Volume de notificaciones</string>
   <!-- Ringtone picker strings -->
+  <skip></skip>
   <!-- Choice in the ringtone picker.  If chosen, the default ringtone will be used. -->
   <string name="ringtone_default">Tonu predetermináu</string>
   <!-- Choice in the ringtone picker.  If chosen, the default ringtone will be used. This fills in the actual ringtone's title into the message. -->
@@ -2095,6 +2122,7 @@
   <!-- Name of the dialog that lets the user choose an accented character to insert -->
   <string name="select_character">Inxertar carácter</string>
   <!-- SMS per-application rate control Dialog -->
+  <skip></skip>
   <!-- SMS_DIALOG: An SMS dialog is shown if an application tries to send too many SMSes.  This is the title of that dialog. -->
   <string name="sms_control_title">Unviando mensaxes SMS\u2026</string>
   <!-- See SMS_DIALOG.  This is the message shown in that dialog. [CHAR LIMIT=NONE] -->
@@ -2104,6 +2132,7 @@
   <!-- See SMS_DIALOG.  This is a button choice to disallow sending the SMSes. [CHAR LIMIT=30] -->
   <string name="sms_control_no">Refugar</string>
   <!-- SMS short code verification dialog. -->
+  <skip></skip>
   <!-- The message text for the SMS short code confirmation dialog. [CHAR LIMIT=NONE] -->
   <string name="sms_short_code_confirm_message">&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; quier unviar un mensaxe a &lt;b&gt;<xliff:g id="DEST_ADDRESS">%2$s</xliff:g>&lt;/b&gt;.</string>
   <!-- Message details for the SMS short code confirmation dialog (possible premium short code). [CHAR LIMIT=NONE] -->
@@ -2123,6 +2152,7 @@
   <!-- Text of the cancel button for the SMS short code confirmation dialog when checkbox is checked. [CHAR LIMIT=30] -->
   <string name="sms_short_code_confirm_never_allow">Nun permitir enxamás</string>
   <!-- SIM swap and device reboot Dialog -->
+  <skip></skip>
   <!-- See SIM_REMOVED_DIALOG.  This is the title of that dialog. -->
   <string name="sim_removed_title">Tarxeta SIM desaniciada</string>
   <!-- See SIM_REMOVED_DIALOG.  This is the message of that dialog. -->
@@ -2194,6 +2224,7 @@
   <string name="fast_scroll_alphabet"> ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
   <string name="fast_scroll_numeric_alphabet"> 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
   <!-- External media notification strings -->
+  <skip></skip>
   <!-- Notification title when external media is being checked [CHAR LIMIT=30] -->
   <string name="ext_media_checking_notification_title">Tresnando\'l mediu <xliff:g id="name" example="SD card">%s</xliff:g></string>
   <!-- Notification body when external media is being checked [CHAR LIMIT=NONE] -->
@@ -2298,6 +2329,7 @@
   <string name="ime_action_default">Executar</string>
   <!-- Strings for search suggestions. These are going here because they are referenced by both
          ContactsProvider and GoogleContactsProvider -->
+  <skip></skip>
   <!-- This string appears (on two lines) when you type a number into contacts search, to let you dial the phone number you typed.  The first line will be in bigger type than the second. -->
   <string name="dial_number_using">Marcar númberu\ncon <xliff:g id="NUMBER">%s</xliff:g></string>
   <!-- This string appears (on two lines) when you type a number into contacts search, to let you create a contact whose phone number is the number you typed.  The first line will be in bigger type than the second. -->

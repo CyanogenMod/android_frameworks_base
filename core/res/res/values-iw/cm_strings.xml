@@ -43,6 +43,7 @@
   <!-- Button to restart the phone into download, within the Restart Options dialog -->
   <string name="reboot_download">הורדה</string>
   <!-- Button to soft restart the device, within the Restart Options dialog -->
+  <string name="reboot_soft">הפעלה מחדש מהירה</string>
   <!-- Title of dialog to confirm restarting. -->
   <string name="reboot_title">הפעלה מחדש</string>
   <!-- Restart Confirmation Dialog.  When the user chooses to restart the device, there will

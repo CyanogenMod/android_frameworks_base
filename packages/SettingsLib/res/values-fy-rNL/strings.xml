@@ -123,6 +123,7 @@
   <!-- Launch defaults preference summary with some set [CHAR LIMIT=40] -->
   <!-- Launch defaults preference summary with none set [CHAR LIMIT=40] -->
   <!-- Text-To-Speech (TTS) settings -->
+  <skip></skip>
   <!-- Name of the TTS package as listed by the package manager. -->
   <!-- TTS option item name in the main settings screen -->
   <!-- On main TTS Settings screen, in default settings section, setting default speech rate for synthesized voice -->
@@ -173,6 +174,7 @@
   <!-- Header for items under the work user [CHAR LIMIT=30] -->
   <!-- Full package name of OEM preferred device feedback reporter. Leave this blank, overlaid in Settings/TvSettings [DO NOT TRANSLATE] -->
   <!-- Development settings -->
+  <skip></skip>
   <!-- Development Settings.  the title for the item to take the user to Development settings.  Development settings are settings meant for application developers.  -->
   <!-- Development settings enable title. -->
   <!-- Development Settings summary.  The summary of the item to take the user to Development settings.  Development settings are settings meant for application developers. -->
