@@ -2788,4 +2788,8 @@
 
     <!-- Boolean to enable stk functionality on Samsung phones -->
     <bool name="config_samsung_stk">false</bool>
+
+    <!-- Distance in pixels to offset the center of the screen -->
+    <integer name="config_offsetCenterX">0</integer>
+    <integer name="config_offsetCenterY">0</integer>
 </resources>
