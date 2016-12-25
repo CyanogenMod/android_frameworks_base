@@ -345,10 +345,10 @@ final class LogicalDisplay {
         mTempDisplayRect.set(displayRectLeft, displayRectTop,
                 displayRectLeft + displayRectWidth, displayRectTop + displayRectHeight);
 
-        mTempDisplayRect.left += mDisplayOffsetX;
-        mTempDisplayRect.right += mDisplayOffsetX;
-        mTempDisplayRect.top += mDisplayOffsetY;
-        mTempDisplayRect.bottom += mDisplayOffsetY;
+        mTempDisplayRect.left += rotated ? mDisplayOffsetY : mDisplayOffsetX;
+        mTempDisplayRect.right += rotated ? mDisplayOffsetY : mDisplayOffsetX;
+        mTempDisplayRect.top += rotated ? mDisplayOffsetX : mDisplayOffsetY;
+        mTempDisplayRect.bottom += rotated ? mDisplayOffsetX : mDisplayOffsetY;
         device.setProjectionInTransactionLocked(orientation, mTempLayerStackRect, mTempDisplayRect);
     }
 
