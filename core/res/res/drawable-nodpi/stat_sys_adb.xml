@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2016 The CyanogenMod Project
+Copyright (C) 2016 The Android Open Source Project
 
    Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -14,19 +14,23 @@ Copyright (C) 2016 The CyanogenMod Project
     limitations under the License.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="24dp"
-    android:height="24dp"
-    android:viewportWidth="24"
-    android:viewportHeight="24">
-
+        android:width="24dp"
+        android:height="24dp"
+        android:viewportWidth="48.0"
+        android:viewportHeight="48.0">
     <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M22,10.8v3.9v1v1.1c0,3.5-3.4,4.5-9.4,4.6h0c-0.2,0-0.4,0-0.6,0v0h0v0c-0.2,0-0.4,0-0.6,0h-0.4v0
-C5.3,21.3,2,20.3,2,16.8v-1.1v-1v-3.9C2,9,2.8,7.9,4.4,7.2v-4c0-0.4,0.3-0.7,0.7-0.7c0.4,0,0.7,0.3,0.7,0.7v3.5
-c1.4-0.4,3.2-0.5,5.4-0.6h0c0.3,0,0.6,0,0.9,0v0h0v0c2.8,0,5,0.2,6.7,0.7V3.2c0-0.4,0.3-0.7,0.7-0.7c0.4,0,0.7,0.3,0.7,0.7v4.2
-C21.3,8.1,22,9.2,22,10.8z
-M10.8,18C10.8,18,10.8,18,10.8,18c0,0.5,0.4,0.9,0.8,0.9h0.6c0.5,0,0.8-0.4,0.8-0.8c0,0,0,0,0-0.1H10.8z
-M4.1,13.3c-0.3,1.6,0.7,3.2,2.4,3.5c1.6,0.3,3.2-0.7,3.5-2.4c0.1-0.3,0.1-0.6,0-0.9l-5.6-1.1C4.2,12.7,4.1,13,4.1,13.3z
-M19.6,12.4
-L14,13.5c0,0.3,0,0.6,0,0.9c0.3,1.6,1.9,2.7,3.5,2.4c1.6-0.3,2.7-1.9,2.4-3.5C19.9,13,19.8,12.7,19.6,12.4z" />
+        android:fillColor="#A0FFFFFF"
+        android:pathData="M32.0,12.5l0.0,28.0l12.0,-5.0l0.0,-28.0z"/>
+    <path
+        android:fillColor="#A0FFFFFF"
+        android:pathData="M4.0,40.5l12.0,-5.0l0.0,-11.0l-12.0,-12.0z"/>
+    <path
+        android:fillColor="#40000000"
+        android:pathData="M44.0,35.5l-12.0,-12.0l0.0,-4.0z"/>
+    <path
+        android:fillColor="#40000000"
+        android:pathData="M4.0,12.5l12.0,12.0l0.0,4.0z"/>
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M32.0,23.5l-16.0,-16.0l-12.0,5.0l0.0,0.0l12.0,12.0l16.0,16.0l12.0,-5.0l0.0,0.0z"/>
 </vector>

@@ -1316,6 +1316,7 @@ public final class ActivityStackSupervisor implements DisplayListener {
                     new Configuration(task.mOverrideConfig), r.compat, r.launchedFromPackage,
                     task.voiceInteractor, app.repProcState, r.icicle, r.persistentState, results,
                     newIntents, !andResume, mService.isNextTransitionForward(), profilerInfo);
+            PreventRunningUtils.onLaunchActivity(r.appToken);
 
             if ((app.info.privateFlags&ApplicationInfo.PRIVATE_FLAG_CANT_SAVE_STATE) != 0) {
                 // This may be a heavy-weight process!  Note that the package
