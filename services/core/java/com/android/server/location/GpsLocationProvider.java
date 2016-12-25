@@ -1524,6 +1524,72 @@ public class GpsLocationProvider implements LocationProviderInterface {
         }
     }
 
+     /**
+     * Count number of GNSS satellites used in fix.
+     *
+     * We could not rely on Integer.bitCount as GNSS used-in-fix info is not
+     * represented as a bit-mask.
+     */
+    private int countGnssSvUsedInFix(final int gnssSvCount) {
+        int result = 0;
+
+        for (int i = 0; i < gnssSvCount; i++) {
+            if (mSvUsedInFix[i]) {
+                result++;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * called from native code to update GNSS SV info
+     */
+    private void reportGnssSvStatus() {
+        final int svCount = native_read_gnss_sv_status(
+                mSvs,
+                mSnrs,
+                mSvElevations,
+                mSvAzimuths,
+                mSvEphemerisPresences,
+                mSvAlmanacPresences,
+                mSvUsedInFix);
+        mListenerHelper.onGnssSvStatusChanged(
+                svCount,
+                mSvs,
+                mSnrs,
+                mSvElevations,
+                mSvAzimuths,
+                mSvEphemerisPresences,
+                mSvAlmanacPresences,
+                mSvUsedInFix);
+
+        if (VERBOSE) {
+            Log.v(TAG, "GNSS SV count: " + svCount);
+            for (int i = 0; i < svCount; i++) {
+                Log.v(TAG, "sv: " + mSvs[i] +
+                        " snr: " + mSnrs[i]/10 +
+                        " elev: " + mSvElevations[i] +
+                        " azimuth: " + mSvAzimuths[i] +
+                        (!mSvEphemerisPresences[i] ? "  " : " E") +
+                        (!mSvAlmanacPresences[i] ? "  " : " A") +
+                        (!mSvUsedInFix[i] ? "" : "U"));
+            }
+        }
+
+        // return number of sets used in fix instead of total
+        updateStatus(mStatus, countGnssSvUsedInFix(svCount));
+
+        if (mNavigating && mStatus == LocationProvider.AVAILABLE && mLastFixTime > 0 &&
+            System.currentTimeMillis() - mLastFixTime > RECENT_FIX_TIMEOUT) {
+            // send an intent to notify that the GPS is no longer receiving fixes.
+            Intent intent = new Intent(LocationManager.GPS_FIX_CHANGE_ACTION);
+            intent.putExtra(LocationManager.EXTRA_GPS_ENABLED, false);
+            mContext.sendBroadcastAsUser(intent, UserHandle.ALL);
+            updateStatus(LocationProvider.TEMPORARILY_UNAVAILABLE, mSvCount);
+        }
+    }
+
     /**
      * called from native code to update AGPS status
      */
@@ -2256,13 +2322,19 @@ public class GpsLocationProvider implements LocationProviderInterface {
     private static final int EPHEMERIS_MASK = 0;
     private static final int ALMANAC_MASK = 1;
     private static final int USED_FOR_FIX_MASK = 2;
+  
+    // GNSS extension
+    private static final int MAX_GNSS_SVS = 256;
 
     // preallocated arrays, to avoid memory allocation in reportStatus()
-    private int mSvs[] = new int[MAX_SVS];
-    private float mSnrs[] = new float[MAX_SVS];
-    private float mSvElevations[] = new float[MAX_SVS];
-    private float mSvAzimuths[] = new float[MAX_SVS];
+    private int mSvs[] = new int[MAX_GNSS_SVS];
+    private float mSnrs[] = new float[MAX_GNSS_SVS];
+    private float mSvElevations[] = new float[MAX_GNSS_SVS];
+    private float mSvAzimuths[] = new float[MAX_GNSS_SVS];
     private int mSvMasks[] = new int[3];
+    private boolean mSvEphemerisPresences[] = new boolean[MAX_GNSS_SVS];
+    private boolean mSvAlmanacPresences[] = new boolean[MAX_GNSS_SVS];
+    private boolean mSvUsedInFix[] = new boolean[MAX_GNSS_SVS];
     private int mSvCount;
     // preallocated to avoid memory allocation in reportNmea()
     private byte[] mNmeaBuffer = new byte[120];
@@ -2284,6 +2356,12 @@ public class GpsLocationProvider implements LocationProviderInterface {
     // mask[0] is ephemeris mask and mask[1] is almanac mask
     private native int native_read_sv_status(int[] svs, float[] snrs,
             float[] elevations, float[] azimuths, int[] masks);
+    // returns number of GNSS SVs
+    private native int native_read_gnss_sv_status(int[] svs, float[] snrs,
+            float[] elevations, float[] azimuths,
+            boolean[] ephemerisPresences,
+            boolean[] almanacPresences,
+            boolean[] usedInFix);
     private native int native_read_nmea(byte[] buffer, int bufferSize);
     private native void native_inject_location(double latitude, double longitude, float accuracy);
 
