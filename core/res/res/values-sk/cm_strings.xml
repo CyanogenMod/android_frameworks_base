@@ -132,7 +132,7 @@
   <string name="app_ops_record_audio">nahrať zvuk</string>
   <string name="app_ops_send_mms">odoslať správu MMS</string>
   <string name="app_ops_send_sms">odoslať správu SMS</string>
-  <string name="app_ops_start_at_bootup">spustiť pri štaťte</string>
+  <string name="app_ops_start_at_bootup">spustiť pri štarte</string>
   <string name="app_ops_toast_window">zobraziť vyskakovacie oznámenia</string>
   <string name="app_ops_toggle_bluetooth">prepnúť bluetooth</string>
   <string name="app_ops_toggle_mobile_data">prepnúť mobilné dáta</string>

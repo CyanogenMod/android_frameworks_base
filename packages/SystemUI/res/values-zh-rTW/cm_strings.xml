@@ -70,7 +70,7 @@
   <string name="qs_tile_edit_header_instruction">按住瓷磚即可重新排列</string>
   <string name="quick_settings_edit_label">編輯瓷磚</string>
   <string name="quick_settings_cannot_delete_edit_tile">無法刪除編輯瓷磚</string>
-  <string name="qs_tiles_reset_confirmation">將快速設定瓷磚還原至預設配置？</string>
+  <string name="qs_tiles_reset_confirmation">是否將快速設定瓷磚還原至預設配置？</string>
   <string name="quick_settings_tile_reset_to_default">還原至預設布局</string>
   <string name="quick_settings_title_header">標題</string>
   <string name="quick_settings_title_tiles">瓷磚</string>
@@ -175,7 +175,7 @@
   <string name="dynamic_qs_tile_ime_selector_label">輸入法選擇器</string>
   <string name="dynamic_qs_tile_su_label">Root 權限</string>
   <string name="dynamic_qs_tile_themes_label">主題</string>
-  <string name="quick_settings_title_advanced_location">定位模式</string>
+  <string name="quick_settings_title_advanced_location">三角定位</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">位置回報：節約耗電量</string>
   <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -191,16 +191,16 @@
   <!-- QuickSettings: Location (On, high-accuracy) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_high_accuracy_label">高精確度</string>
   <!-- Announcement made when the location tile changes to battery saving (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_location_changed_battery_saving">定位服務已更改為省電模式。</string>
+  <string name="accessibility_quick_settings_location_changed_battery_saving">位置回報已更改為省電模式。</string>
   <!-- Announcement made when the location tile changes to sensors only (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_location_changed_gps_only">定位服務已更改為僅感應器模式。</string>
+  <string name="accessibility_quick_settings_location_changed_gps_only">位置回報已更改為僅感應器模式。</string>
   <!-- Announcement made when the location tile changes to high accuracy (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_location_changed_high_accuracy">定位服務已更改為高精確度模式。</string>
+  <string name="accessibility_quick_settings_location_changed_high_accuracy">位置回報已更改為高精確度模式。</string>
   <string name="quick_settings_tiles_category_system">系統瓷磚</string>
   <!-- detail header when adding a tile -->
   <string name="quick_settings_tiles_add_tiles">新增瓷磚</string>
   <!-- Hotspot dialog message -->
-  <string name="hotspot_apm_message">飛航模式啟用時無法連線行動網路，請停用飛航模式後再嘗試。</string>
+  <string name="hotspot_apm_message">飛航模式啟用時無法連線行動網路，請停用飛航模式後再試一次。</string>
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">手電筒已經開啟</string>
   <string name="quick_settings_tile_flashlight_not_summary">點擊關閉</string>
