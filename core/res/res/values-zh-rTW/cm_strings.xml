@@ -30,7 +30,7 @@
   <!-- label for item that restarts the phone in phone options dialog -->
   <string name="global_action_reboot">重新啟動</string>
   <!-- label for current user in phone options dialog -->
-  <string name="global_action_current_user">現在</string>
+  <string name="global_action_current_user">目前</string>
   <!-- status message in phone options dialog for screenshot action -->
   <string name="global_actions_screenshot_status">長按即可部分螢幕截圖</string>
   <!-- Restart menu -->
@@ -119,7 +119,7 @@
   <string name="app_ops_write_mms">撰寫多媒體訊息</string>
   <string name="app_ops_write_sms">撰寫簡訊</string>
   <string name="app_ops_use_fingerprint">使用指紋</string>
-  <string name="app_ops_add_voicemail">新增語音訊息</string>
+  <string name="app_ops_add_voicemail">新增語音信箱</string>
   <string name="app_ops_read_phone_state">存取電話狀態</string>
   <string name="app_ops_scan_wifi">掃描 Wi-Fi 網路</string>
   <string name="app_ops_change_wallpaper">更改桌布</string>

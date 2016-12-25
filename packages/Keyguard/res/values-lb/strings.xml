@@ -61,6 +61,7 @@
   <!-- On the keyguard screen, when pattern lock is disabled, only tell them to press menu to unlock.  This is shown in small font at the bottom. -->
   <string name="keyguard_instructions_when_pattern_disabled">Menü drécke fir z\'entspären.</string>
   <!-- SIM messages -->
+  <skip></skip>
   <!-- When the user inserts a sim card from an unsupported network, it becomes network locked -->
   <string name="keyguard_network_locked_message">Netzwierk gespaart</string>
   <!-- Shown when there is no SIM card. -->
@@ -97,6 +98,7 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <!-- Accessibility description for the text view that indicates when the next alarm is set (not shown on screen). [CHAR_LIMIT=none] -->
   <string name="keyguard_accessibility_next_alarm">Nächste Wecker gesat fir <xliff:g id="alarm" example="Fri 8:30 AM">%1$s</xliff:g></string>
   <!-- KeyguardPinView - accessibility support -->
+  <skip></skip>
   <!-- Description of the Delete button in a KeyboardView. [CHAR LIMIT=NONE] -->
   <string name="keyboardview_keycode_delete">Läschen</string>
   <!-- Description of the Enter button in a KeyboardView. [CHAR LIMIT=NONE] -->

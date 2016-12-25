@@ -46,6 +46,7 @@
          in the phone soon. -->
   <!-- On the keyguard screen, when pattern lock is disabled, only tell them to press menu to unlock.  This is shown in small font at the bottom. -->
   <!-- SIM messages -->
+  <skip></skip>
   <!-- When the user inserts a sim card from an unsupported network, it becomes network locked -->
   <!-- Shown when there is no SIM card. -->
   <!-- Shown when there is no SIM card. -->
@@ -66,6 +67,7 @@
   <!-- Accessibility description of the SIM PUK password view. [CHAR_LIMIT=none] -->
   <!-- Accessibility description for the text view that indicates when the next alarm is set (not shown on screen). [CHAR_LIMIT=none] -->
   <!-- KeyguardPinView - accessibility support -->
+  <skip></skip>
   <!-- Description of the Delete button in a KeyboardView. [CHAR LIMIT=NONE] -->
   <string name="keyboardview_keycode_delete">Forigi</string>
   <!-- Description of the Enter button in a KeyboardView. [CHAR LIMIT=NONE] -->
