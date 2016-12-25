@@ -34,7 +34,7 @@
     <color name="qs_text">#FFFFFFFF</color>
     <color name="qs_tile_divider">#29ffffff</color><!-- 16% white -->
     <color name="qs_subhead">#99FFFFFF</color><!-- 60% white -->
-    <color name="qs_detail_button">@*android:color/quaternary_device_default_settings</color>
+    <color name="qs_detail_button">@*android:color/material_pixel_blue_bright</color>
     <color name="qs_detail_button_white">#B3FFFFFF</color><!-- 70% white -->
     <color name="qs_detail_transition">#66FFFFFF</color>
     <color name="data_usage_secondary">#99FFFFFF</color><!-- 60% white -->
