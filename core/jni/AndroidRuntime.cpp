@@ -73,13 +73,10 @@ extern int register_android_opengl_jni_GLES11(JNIEnv* env);
 extern int register_android_opengl_jni_GLES11Ext(JNIEnv* env);
 extern int register_android_opengl_jni_GLES20(JNIEnv* env);
 extern int register_android_opengl_jni_GLES30(JNIEnv* env);
-extern int register_android_opengl_jni_GLES31(JNIEnv* env);
-extern int register_android_opengl_jni_GLES31Ext(JNIEnv* env);
 
 extern int register_android_hardware_Camera(JNIEnv *env);
 extern int register_android_hardware_camera2_CameraMetadata(JNIEnv *env);
 extern int register_android_hardware_camera2_legacy_LegacyCameraDevice(JNIEnv *env);
-extern int register_android_hardware_camera2_legacy_PerfMeasurement(JNIEnv *env);
 extern int register_android_hardware_camera2_DngCreator(JNIEnv *env);
 extern int register_android_hardware_SensorManager(JNIEnv *env);
 extern int register_android_hardware_SerialPort(JNIEnv *env);
@@ -1288,8 +1285,6 @@ static const RegJNIRec gRegJNI[] = {
     REG_JNI(register_android_opengl_jni_GLES11Ext),
     REG_JNI(register_android_opengl_jni_GLES20),
     REG_JNI(register_android_opengl_jni_GLES30),
-    REG_JNI(register_android_opengl_jni_GLES31),
-    REG_JNI(register_android_opengl_jni_GLES31Ext),
 
     REG_JNI(register_android_graphics_Bitmap),
     REG_JNI(register_android_graphics_BitmapFactory),
@@ -1344,7 +1339,6 @@ static const RegJNIRec gRegJNI[] = {
     REG_JNI(register_android_hardware_Camera),
     REG_JNI(register_android_hardware_camera2_CameraMetadata),
     REG_JNI(register_android_hardware_camera2_legacy_LegacyCameraDevice),
-    REG_JNI(register_android_hardware_camera2_legacy_PerfMeasurement),
     REG_JNI(register_android_hardware_camera2_DngCreator),
     REG_JNI(register_android_hardware_SensorManager),
     REG_JNI(register_android_hardware_SerialPort),

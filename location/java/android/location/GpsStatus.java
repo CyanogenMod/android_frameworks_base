@@ -178,6 +178,36 @@ public final class GpsStatus {
         } 
     }
 
+    /**
+     * Used internally within {@link LocationManager} to copy GNSS status
+     * data from the Location Manager Service to its cached GnssStatus instance.
+     * Is synchronized to ensure that GNSS status updates are atomic.
+     */
+    synchronized void setGnssStatus(int svCount, int[] prns, float[] snrs,
+            float[] elevations, float[] azimuths, boolean[] ephemeris,
+            boolean[] almanac, boolean[] usedInFix) {
+        int i;
+
+        for (i = 0; i < mSatellites.length; i++) {
+            mSatellites[i].mValid = false;
+        }
+
+        for (i = 0; i < svCount; i++) {
+            int prn = prns[i] - 1;
+            if (prn >= 0 && prn < mSatellites.length) {
+                GpsSatellite satellite = mSatellites[prn];
+
+                satellite.mValid = true;
+                satellite.mSnr = snrs[i];
+                satellite.mElevation = elevations[i];
+                satellite.mAzimuth = azimuths[i];
+                satellite.mHasEphemeris = ephemeris[i];
+                satellite.mHasAlmanac = almanac[i];
+                satellite.mUsedInFix = usedInFix[i];
+            }
+        }
+    }
+
     void setTimeToFirstFix(int ttff) {
         mTimeToFirstFix = ttff;
     }
