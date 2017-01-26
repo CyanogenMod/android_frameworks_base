@@ -6202,6 +6202,7 @@ package android.bluetooth {
     method public int getType();
     method public android.os.ParcelUuid[] getUuids();
     method public boolean setPairingConfirmation(boolean);
+    method public boolean setPasskey(int);
     method public boolean setPin(byte[]);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final java.lang.String ACTION_ACL_CONNECTED = "android.bluetooth.device.action.ACL_CONNECTED";
@@ -6231,6 +6232,7 @@ package android.bluetooth {
     field public static final java.lang.String EXTRA_PREVIOUS_BOND_STATE = "android.bluetooth.device.extra.PREVIOUS_BOND_STATE";
     field public static final java.lang.String EXTRA_RSSI = "android.bluetooth.device.extra.RSSI";
     field public static final java.lang.String EXTRA_UUID = "android.bluetooth.device.extra.UUID";
+    field public static final int PAIRING_VARIANT_PASSKEY = 1; // 0x1
     field public static final int PAIRING_VARIANT_PASSKEY_CONFIRMATION = 2; // 0x2
     field public static final int PAIRING_VARIANT_PIN = 0; // 0x0
   }

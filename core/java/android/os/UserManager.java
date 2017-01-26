@@ -1114,9 +1114,16 @@ public class UserManager {
         // Don't allow multiple users on certain builds
         if (android.os.Build.ID.startsWith("JVP")) return 1;
         // Svelte devices don't get multi-user.
-        if (ActivityManager.isLowRamDeviceStatic()) return 1;
+        if (ActivityManager.isLowRamDeviceStatic() && !isforcedMultiUser()) return 1;
         return SystemProperties.getInt("fw.max_users",
                 Resources.getSystem().getInteger(R.integer.config_multiuserMaximumUsers));
+    }
+
+    /**
+     * @hide
+     */
+    public static boolean isforcedMultiUser() {
+        return SystemProperties.getBoolean("persist.sys.force_multiuser", false);
     }
 
     /**

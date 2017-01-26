@@ -29,6 +29,8 @@ import android.util.Log;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.UUID;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 /**
  * Represents a remote Bluetooth device. A {@link BluetoothDevice} lets you
@@ -272,6 +274,7 @@ public final class BluetoothDevice implements Parcelable {
      * intents to indicate pairing method used. Possible values are:
      * {@link #PAIRING_VARIANT_PIN},
      * {@link #PAIRING_VARIANT_PASSKEY_CONFIRMATION},
+     * {@link #PAIRING_VARIANT_PASSKEY},
      */
     public static final String EXTRA_PAIRING_VARIANT =
             "android.bluetooth.device.extra.PAIRING_VARIANT";
@@ -483,7 +486,6 @@ public final class BluetoothDevice implements Parcelable {
 
     /**
      * The user will be prompted to enter a passkey
-     * @hide
      */
     public static final int PAIRING_VARIANT_PASSKEY = 1;
 
@@ -1134,13 +1136,27 @@ public final class BluetoothDevice implements Parcelable {
         return false;
     }
 
-    /** @hide */
+    /**
+     * Set the passkey during pairing when the pairing method is
+     * {@link #PAIRING_VARIANT_PASSKEY}
+     * <p>Requires {@link android.Manifest.permission#BLUETOOTH_ADMIN}.
+     *
+     * @return true if passkey has been set
+     *         flase for error
+     */
     public boolean setPasskey(int passkey) {
-        //TODO(BT)
-        /*
+        if (sService == null) {
+            Log.e(TAG, "BT not enabled. Cannot set Remote Device passkey");
+            return false;
+        }
+        ByteBuffer buff = ByteBuffer.allocate(5);
+        buff.order(ByteOrder.nativeOrder());
+        buff.putInt(passkey);
+        byte[] passkeyByte = buff.array();
+
         try {
-            return sService.setPasskey(this, true, 4, passkey);
-        } catch (RemoteException e) {Log.e(TAG, "", e);}*/
+            return sService.setPasskey(this, true, passkeyByte.length, passkeyByte);
+        } catch (RemoteException e) {Log.e(TAG, "", e);}
         return false;
     }
 
