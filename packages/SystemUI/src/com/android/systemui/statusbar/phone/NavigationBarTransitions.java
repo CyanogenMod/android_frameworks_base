@@ -42,7 +42,7 @@ public final class NavigationBarTransitions extends BarTransitions {
 
     public NavigationBarTransitions(NavigationBarView view) {
         super(view, R.drawable.nav_background, R.color.navigation_bar_background_opaque,
-                R.color.navigation_bar_background_semi_transparent,
+                R.drawable.navigation_bar_background_semi_transparent,
                 R.color.navigation_bar_background_transparent,
                 com.android.internal.R.color.battery_saver_mode_color);
         mView = view;
