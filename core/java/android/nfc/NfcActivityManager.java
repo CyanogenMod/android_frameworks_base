@@ -254,11 +254,7 @@ public final class NfcActivityManager extends IAppCallback.Stub
             isResumed = state.resumed;
         }
         if (isResumed) {
-            // requestNfcServiceCallback() verifies permission also
             requestNfcServiceCallback();
-        } else {
-            // Crash API calls early in case NFC permission is missing
-            verifyNfcPermission();
         }
     }
 
@@ -272,11 +268,7 @@ public final class NfcActivityManager extends IAppCallback.Stub
             isResumed = state.resumed;
         }
         if (isResumed) {
-            // requestNfcServiceCallback() verifies permission also
             requestNfcServiceCallback();
-        } else {
-            // Crash API calls early in case NFC permission is missing
-            verifyNfcPermission();
         }
     }
 
@@ -289,11 +281,7 @@ public final class NfcActivityManager extends IAppCallback.Stub
             isResumed = state.resumed;
         }
         if (isResumed) {
-            // requestNfcServiceCallback() verifies permission also
             requestNfcServiceCallback();
-        } else {
-            // Crash API calls early in case NFC permission is missing
-            verifyNfcPermission();
         }
     }
 
@@ -307,11 +295,7 @@ public final class NfcActivityManager extends IAppCallback.Stub
             isResumed = state.resumed;
         }
         if (isResumed) {
-            // requestNfcServiceCallback() verifies permission also
             requestNfcServiceCallback();
-        } else {
-            // Crash API calls early in case NFC permission is missing
-            verifyNfcPermission();
         }
     }
 
@@ -324,11 +308,7 @@ public final class NfcActivityManager extends IAppCallback.Stub
             isResumed = state.resumed;
         }
         if (isResumed) {
-            // requestNfcServiceCallback() verifies permission also
             requestNfcServiceCallback();
-        } else {
-            // Crash API calls early in case NFC permission is missing
-            verifyNfcPermission();
         }
     }
 
@@ -339,14 +319,6 @@ public final class NfcActivityManager extends IAppCallback.Stub
     void requestNfcServiceCallback() {
         try {
             NfcAdapter.sService.setAppCallback(this);
-        } catch (RemoteException e) {
-            mAdapter.attemptDeadServiceRecovery(e);
-        }
-    }
-
-    void verifyNfcPermission() {
-        try {
-            NfcAdapter.sService.verifyNfcPermission();
         } catch (RemoteException e) {
             mAdapter.attemptDeadServiceRecovery(e);
         }
