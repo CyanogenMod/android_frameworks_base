@@ -38,7 +38,7 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
 
     public PhoneStatusBarTransitions(PhoneStatusBarView view) {
         super(view, R.drawable.status_background, R.color.status_bar_background_opaque,
-                R.color.status_bar_background_semi_transparent,
+                R.drawable.status_bar_background_semi_transparent,
                 R.color.status_bar_background_transparent,
                 com.android.internal.R.color.battery_saver_mode_color);
         mView = view;
