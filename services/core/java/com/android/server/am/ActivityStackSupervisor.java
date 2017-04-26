@@ -289,6 +289,10 @@ public final class ActivityStackSupervisor implements DisplayListener {
     /** Used to keep resumeTopActivityLocked() from being entered recursively */
     boolean inResumeTopActivity;
 
+    /** Used to block browser & mail app opening while opening/closing the smart cover */
+    private String browserPackageName;
+    private String mailPackageName;
+
     /**
      * Description of a request to start a new activity, which has been held
      * due to app switches being disabled.
@@ -1338,6 +1342,36 @@ public final class ActivityStackSupervisor implements DisplayListener {
                 Slog.w(TAG, "Unable to find app for caller " + caller
                       + " (pid=" + callingPid + ") when starting: "
                       + intent.toString());
+                err = ActivityManager.START_PERMISSION_DENIED;
+            }
+        }
+
+        /* Find default browser & mail app package name */
+        if (browserPackageName == null) {
+            try {
+                Intent browserIntent = new Intent("android.intent.action.VIEW", Uri.parse("http://"));
+                ResolveInfo browserResolveInfo = AppGlobals.getPackageManager().resolveIntent(browserIntent, intent.resolveTypeIfNeeded(mService.mContext.getContentResolver()), PackageManager.MATCH_DEFAULT_ONLY, callingUid);
+                if (browserResolveInfo != null) {
+                    browserPackageName = browserResolveInfo.activityInfo.packageName;
+                }
+            } catch (RemoteException e) {
+            }
+        }
+        if (mailPackageName == null) {
+            try {
+                Intent mailIntent = new Intent("android.intent.action.VIEW", Uri.parse("mailto:"));
+                ResolveInfo mailResolveInfo = AppGlobals.getPackageManager().resolveIntent(mailIntent, intent.resolveTypeIfNeeded(mService.mContext.getContentResolver()), PackageManager.MATCH_DEFAULT_ONLY, callingUid);
+                if (mailResolveInfo != null) {
+                    mailPackageName = mailResolveInfo.activityInfo.packageName;
+                }
+            } catch (RemoteException e) {
+            }
+        }
+
+        /* Block starting of browser or mail app while opening/closing the smart cover */
+        if (err == ActivityManager.START_SUCCESS && callingUid == 1000) {
+            if ((mailPackageName != null && intent.getComponent().flattenToShortString().contains(mailPackageName)) ||
+                    (browserPackageName != null && intent.getComponent().flattenToShortString().contains(browserPackageName))) {
                 err = ActivityManager.START_PERMISSION_DENIED;
             }
         }

@@ -35,8 +35,6 @@ LOCAL_SRC_FILES:= \
 	android_opengl_GLES11Ext.cpp \
 	android_opengl_GLES20.cpp \
 	android_opengl_GLES30.cpp \
-	android_opengl_GLES31.cpp \
-	android_opengl_GLES31Ext.cpp \
 	android_database_CursorWindow.cpp \
 	android_database_SQLiteCommon.cpp \
 	android_database_SQLiteConnection.cpp \
@@ -139,7 +137,6 @@ LOCAL_SRC_FILES:= \
 	android_hardware_Camera.cpp \
 	android_hardware_camera2_CameraMetadata.cpp \
 	android_hardware_camera2_legacy_LegacyCameraDevice.cpp \
-	android_hardware_camera2_legacy_PerfMeasurement.cpp \
 	android_hardware_camera2_DngCreator.cpp \
 	android_hardware_SensorManager.cpp \
 	android_hardware_SerialPort.cpp \
